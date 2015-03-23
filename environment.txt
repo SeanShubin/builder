@@ -25,6 +25,10 @@
       command deploy
     }
     {
+      name up-to-date
+      command deploy
+    }
+    {
       name utility
       command deploy
     }
@@ -90,10 +94,6 @@
     }
     {
       name types-of-loops
-      command verify
-    }
-    {
-      name up-to-date
       command verify
     }
     {
