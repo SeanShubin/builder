@@ -9,10 +9,6 @@ import com.seanshubin.utility.filesystem.FileSystemIntegration
 class ConfigurationFactoryImpl(fileSystem: FileSystemIntegration,
                                devonMarshaller: DevonMarshaller,
                                charset: Charset) extends ConfigurationFactory {
-  private val sampleConfiguration: Configuration = Configuration(
-    greetingTarget = "world"
-  )
-
   override def validate(args: Seq[String]): Either[Seq[String], Configuration] = {
     if (args.length == 1) {
       val configFilePath = Paths.get(args(0))
@@ -20,8 +16,7 @@ class ConfigurationFactoryImpl(fileSystem: FileSystemIntegration,
         if (fileSystem.exists(configFilePath)) {
           val bytes = fileSystem.readAllBytes(configFilePath)
           val text = new String(bytes, charset)
-          val devon = devonMarshaller.fromString(text)
-          val config = devonMarshaller.toValue(devon, classOf[Configuration])
+          val config = devonMarshaller.stringToValue(text, classOf[Configuration])
           Right(config)
         } else {
           Left(Seq(s"Configuration file named '$configFilePath' not found"))
@@ -31,7 +26,7 @@ class ConfigurationFactoryImpl(fileSystem: FileSystemIntegration,
           Left(Seq(s"There was a problem reading the configuration file '$configFilePath': ${ex.getMessage}"))
       }
     } else {
-      val sampleConfigDevon = devonMarshaller.fromValue(sampleConfiguration)
+      val sampleConfigDevon = devonMarshaller.fromValue(ConfigurationFactoryImpl.sampleConfiguration)
       val prettySampleLines = devonMarshaller.toPretty(sampleConfigDevon)
       Left(Seq(
         "Expected exactly one argument, the name of the configuration file",
@@ -39,4 +34,23 @@ class ConfigurationFactoryImpl(fileSystem: FileSystemIntegration,
         "") ++ prettySampleLines)
     }
   }
+}
+
+object ConfigurationFactoryImpl {
+  val sampleConfiguration: Configuration = Configuration(
+    githubUserName = "SeanShubin",
+    reportDirectory = Paths.get("generated", "reports"),
+    environmentByOsName = Map(
+      "Linux" -> Environment(
+        baseDirectory = Paths.get("/home/sshubin/temp/git"),
+        commandPrefix = "",
+        directoryListingCommand = "ls -1"),
+      "Windows 7" -> Environment(
+        baseDirectory = Paths.get("G:\\keep\\temp\\git"),
+        commandPrefix = "cmd /C ",
+        directoryListingCommand = "ls -1")
+    ),
+    projects = Seq(
+      ProjectConfig("my-library", CommandEnum.Deploy),
+      ProjectConfig("my-application", CommandEnum.Verify)))
 }

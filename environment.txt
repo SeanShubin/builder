@@ -1,3 +1,108 @@
 {
-  greetingTarget world
+  githubUserName SeanShubin
+  reportDirectory generated/reports
+  environmentByOsName {
+      Linux {
+        baseDirectory /home/sshubin/github/sean
+        commandPrefix ''
+        directoryListingCommand 'ls -1'
+      }
+      'Windows 7' {
+        baseDirectory g:\keep\github\sean
+        commandPrefix 'cmd /C '
+        directoryListingCommand 'dir /b'
+      }
+      'Mac OS X' {
+        baseDirectory /Users/seanshubin/github/sean
+        commandPrefix ''
+        directoryListingCommand 'ls -1'
+      }
+  }
+  projects
+  [
+    {
+      name dependency-analyzer
+      command deploy
+    }
+    {
+      name utility
+      command deploy
+    }
+    {
+      name developers-value-notation
+      command deploy
+    }
+    {
+      name http-values
+      command deploy
+    }
+    {
+      name web-sync
+      command deploy
+    }
+    {
+      name detangler
+      command verify
+    }
+    {
+      name cron-format
+      command verify
+    }
+    {
+      name duration-format
+      command verify
+    }
+    {
+      name generate-from-template
+      command verify
+    }
+    {
+      name iteration-tracker
+      command verify
+    }
+    {
+      name javascript-todo-samples
+      command verify
+    }
+    {
+      name learn-datomic
+      command verify
+    }
+    {
+      name learn-spark
+      command compile
+    }
+    {
+      name scala-training
+      command verify
+    }
+    {
+      name schulze
+      command verify
+    }
+    {
+      name template-scala-console
+      command verify
+    }
+    {
+      name template-scala-web
+      command verify
+    }
+    {
+      name types-of-loops
+      command verify
+    }
+    {
+      name up-to-date
+      command verify
+    }
+    {
+      name examples
+      command verify
+    }
+    {
+      name prototype
+      command verify
+    }
+  ]
 }
