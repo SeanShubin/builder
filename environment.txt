@@ -101,7 +101,7 @@
       command verify
     }
     {
-      name prototype
+      name builder
       command verify
     }
   ]
