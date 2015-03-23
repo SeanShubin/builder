@@ -4,7 +4,9 @@ import java.nio.charset.Charset
 import java.nio.file.Paths
 
 import com.seanshubin.devon.core.devon.DevonMarshaller
+import com.seanshubin.up_to_date.logic.{GroupArtifactVersion, GroupAndArtifact}
 import com.seanshubin.utility.filesystem.FileSystemIntegration
+import com.seanshubin.up_to_date.logic.{Configuration => UpToDateConfiguration}
 
 class ConfigurationFactoryImpl(fileSystem: FileSystemIntegration,
                                devonMarshaller: DevonMarshaller,
@@ -37,6 +39,21 @@ class ConfigurationFactoryImpl(fileSystem: FileSystemIntegration,
 }
 
 object ConfigurationFactoryImpl {
+  private val sampleUpToDateConfiguration = new UpToDateConfiguration(
+    pomFileName = "pom.xml",
+    directoryNamesToSkip = Set("target"),
+    directoriesToSearch = Seq(Paths.get(".")),
+    mavenRepositories = Seq(
+      "http://repo.maven.apache.org/maven2",
+      "http://onejar-maven-plugin.googlecode.com/svn/mavenrepo",
+      "http://oss.sonatype.org/content/groups/scala-tools"),
+    doNotUpgradeFrom = Set(GroupAndArtifact("groupIdToIgnore", "artifactIdToIgnore")),
+    doNotUpgradeTo = Set(GroupArtifactVersion("groupIdToIgnore", "artifactIdToIgnore", "1.2.3")),
+    automaticallyUpgrade = true,
+    reportDirectory = Paths.get("generated", "sample", "report"),
+    cacheDirectory = Paths.get("generated", "cache"),
+    cacheExpire = "5 days")
+
   val sampleConfiguration: Configuration = Configuration(
     githubUserName = "SeanShubin",
     reportDirectory = Paths.get("generated", "reports"),
@@ -52,5 +69,6 @@ object ConfigurationFactoryImpl {
     ),
     projects = Seq(
       ProjectConfig("my-library", CommandEnum.Deploy),
-      ProjectConfig("my-application", CommandEnum.Verify)))
+      ProjectConfig("my-application", CommandEnum.Verify)),
+    upToDateConfiguration = sampleUpToDateConfiguration)
 }

@@ -25,6 +25,10 @@
             <artifactId>utility-json</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.seanshubin</groupId>
+            <artifactId>up_to_date-console</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
         </dependency>
