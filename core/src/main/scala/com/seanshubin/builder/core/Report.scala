@@ -4,7 +4,7 @@ sealed trait Report {
   def hasError: Boolean
 }
 
-case class ExecutionReport(projectName: String, command: CommandEnum, executionResults: Seq[ExecutionResult]) extends Report {
+case class ExecutionReport(projectName: String, commandName: String, executionResults: Seq[ExecutionResult]) extends Report {
   override def hasError = executionResults.exists(_.hasError)
 }
 

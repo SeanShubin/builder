@@ -14,19 +14,19 @@ object CommandEnum {
   val Deploy = new CommandEnum("deploy") {
     override def execute(projectName: String, api: Api): Report = {
       val executionResult = api.deploy(projectName)
-      ExecutionReport(projectName, this, executionResult)
+      ExecutionReport(projectName, name, executionResult)
     }
   }
   val Verify = new CommandEnum("verify") {
     override def execute(projectName: String, api: Api): Report = {
       val executionResult = api.verify(projectName)
-      ExecutionReport(projectName, this, executionResult)
+      ExecutionReport(projectName, name, executionResult)
     }
   }
   val Compile = new CommandEnum("compile") {
     override def execute(projectName: String, api: Api): Report = {
       val executionResult = api.compile(projectName)
-      ExecutionReport(projectName, this, executionResult)
+      ExecutionReport(projectName, name, executionResult)
     }
   }
   val Ignore = new CommandEnum("ignore") {
