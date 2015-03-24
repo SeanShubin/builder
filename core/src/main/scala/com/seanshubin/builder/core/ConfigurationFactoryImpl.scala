@@ -4,9 +4,8 @@ import java.nio.charset.Charset
 import java.nio.file.Paths
 
 import com.seanshubin.devon.core.devon.DevonMarshaller
-import com.seanshubin.up_to_date.logic.{GroupArtifactVersion, GroupAndArtifact}
+import com.seanshubin.up_to_date.logic.{Configuration => UpToDateConfiguration, GroupAndArtifact, GroupArtifactVersion}
 import com.seanshubin.utility.filesystem.FileSystemIntegration
-import com.seanshubin.up_to_date.logic.{Configuration => UpToDateConfiguration}
 
 class ConfigurationFactoryImpl(fileSystem: FileSystemIntegration,
                                devonMarshaller: DevonMarshaller,

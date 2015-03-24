@@ -14,6 +14,12 @@ class ReporterImpl(reportDir: Path, fileSystem: FileSystemIntegration, devonMars
     reports.foreach(storeReport)
   }
 
+  override def storeUpgradeResults(upgradeResults: Seq[ExecutionResult]): Unit = {
+    val upgradeReportPath = reportDir.resolve("upgrade-results.txt")
+    val lines = devonMarshaller.valueToPretty(upgradeResults)
+    fileSystem.write(upgradeReportPath, JavaConversions.asJavaIterable(lines), charset)
+  }
+
   private def storeReport(report: Report): Unit = {
     report match {
       case x: ExecutionReport =>

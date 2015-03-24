@@ -12,15 +12,15 @@ class RunnerImpl(configuration: Configuration, api: Api, notifications: Notifica
     val projects = for {
       name <- allNames
     } yield {
-      Project(
-        name,
-        configuredMap.contains(name),
-        configuredMap.get(name).exists(p => p.command == CommandEnum.Ignore),
-        githubNames.contains(name),
-        localNames.contains(name),
-        api.pendingLocalEdits(name)
-      )
-    }
+        Project(
+          name,
+          configuredMap.contains(name),
+          configuredMap.get(name).exists(p => p.command == CommandEnum.Ignore),
+          githubNames.contains(name),
+          localNames.contains(name),
+          api.pendingLocalEdits(name)
+        )
+      }
     notifications.projects(projects)
 
     val okToBuild = projects.forall(p => p.isOkToBuild)
@@ -41,7 +41,16 @@ class RunnerImpl(configuration: Configuration, api: Api, notifications: Notifica
     notifications.highlightErrors(results)
   }
 
-  def upgradeDependencies(): Unit ={
+  def upgradeDependencies(): Unit = {
     RunnerWiring(configuration.upToDateConfiguration).runner.run()
+    def processProject(project: ProjectConfig): Seq[ExecutionResult] = {
+      if (api.pendingLocalEdits(project.name) && project.name != "learn-spark") {
+        api.addCommitPush(project.name, "Upgraded dependencies to latest")
+      } else {
+        Seq()
+      }
+    }
+    val upgradeResults = configuration.projects.flatMap(processProject)
+    reporter.storeUpgradeResults(upgradeResults)
   }
 }

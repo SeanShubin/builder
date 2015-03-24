@@ -2,8 +2,8 @@ package com.seanshubin.builder.console
 
 import java.nio.charset.{Charset, StandardCharsets}
 
-import com.seanshubin.devon.core.devon.DevonMarshaller
 import com.seanshubin.builder.core._
+import com.seanshubin.devon.core.devon.DevonMarshaller
 import com.seanshubin.utility.filesystem.{FileSystemIntegration, FileSystemIntegrationImpl}
 
 trait LauncherWiring {

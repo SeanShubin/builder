@@ -33,6 +33,34 @@ class SystemApiImpl(systemExecutor: SystemExecutor,
     maven("compile", projectName)
   }
 
+  override def gitAddCommitPush(projectName: String, commitMessage: String): Seq[ExecutionResult] = {
+    val addResult = gitAdd(projectName)
+    val commitResult = gitCommit(projectName, commitMessage)
+    val pushResult = gitPush(projectName)
+    Seq(addResult, commitResult, pushResult)
+  }
+
+  private def gitAdd(projectName: String): ExecutionResult = {
+    val command = environment.commandPrefix + "git add --all"
+    val directory = environment.baseDirectory.resolve(projectName)
+    val result = exec(command, directory)
+    result
+  }
+
+  private def gitCommit(projectName: String, commitMessage: String): ExecutionResult = {
+    val command = environment.commandPrefix + "git commit -m \"" + commitMessage + "\""
+    val directory = environment.baseDirectory.resolve(projectName)
+    val result = exec(command, directory)
+    result
+  }
+
+  private def gitPush(projectName: String): ExecutionResult = {
+    val command = environment.commandPrefix + "git push"
+    val directory = environment.baseDirectory.resolve(projectName)
+    val result = exec(command, directory)
+    result
+  }
+
   private def exec(command: String, directory: Path): ExecutionResult = {
     val result = systemExecutor.executeSynchronous(command, directory)
     result

@@ -2,9 +2,9 @@ package com.seanshubin.builder.console
 
 import java.nio.charset.{Charset, StandardCharsets}
 
+import com.seanshubin.builder.core._
 import com.seanshubin.devon.core.devon.DevonMarshaller
 import com.seanshubin.http.values.client.google.HttpSender
-import com.seanshubin.builder.core._
 import com.seanshubin.utility.filesystem.{FileSystemIntegration, FileSystemIntegrationImpl}
 import com.seanshubin.utility.json.{JsonMarshaller, JsonMarshallerImpl}
 

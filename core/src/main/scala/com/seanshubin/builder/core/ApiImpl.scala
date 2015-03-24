@@ -16,4 +16,8 @@ class ApiImpl(systemApi: SystemApi, githubApi: GithubApi, userName: String) exte
   override def pendingLocalEdits(projectName: String): Boolean = systemApi.hasPendingEdits(projectName)
 
   override def compile(name: String): Seq[ExecutionResult] = systemApi.compile(name)
+
+  override def addCommitPush(projectName: String, gitMessage: String): Seq[ExecutionResult] = {
+    systemApi.gitAddCommitPush(projectName, gitMessage)
+  }
 }
