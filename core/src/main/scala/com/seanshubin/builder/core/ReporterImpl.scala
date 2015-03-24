@@ -15,6 +15,7 @@ class ReporterImpl(reportDir: Path, fileSystem: FileSystemIntegration, devonMars
   }
 
   override def storeUpgradeResults(upgradeResults: Seq[ExecutionResult]): Unit = {
+    fileSystem.createDirectories(reportDir)
     val upgradeReportPath = reportDir.resolve("upgrade-results.txt")
     val lines = devonMarshaller.valueToPretty(upgradeResults)
     fileSystem.write(upgradeReportPath, JavaConversions.asJavaIterable(lines), charset)

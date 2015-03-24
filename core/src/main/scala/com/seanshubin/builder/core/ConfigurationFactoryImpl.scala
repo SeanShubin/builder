@@ -64,7 +64,7 @@ object ConfigurationFactoryImpl {
       "Windows 7" -> Environment(
         baseDirectory = Paths.get("G:\\keep\\temp\\git"),
         commandPrefix = Seq("cmd", "/C"),
-        directoryListingCommand = Seq("ls","-1"))
+        directoryListingCommand = Seq("ls", "-1"))
     ),
     projects = Seq(
       ProjectConfig("my-library", CommandEnum.Deploy),
