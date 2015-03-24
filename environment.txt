@@ -120,7 +120,7 @@
     [
       http://thoughtfulcraftsmanship.com/nexus/content/groups/public
     ]
-    automaticallyUpgrade false
+    automaticallyUpgrade true
     doNotUpgradeTo []
     doNotUpgradeFrom []
     reportDirectory generated/up-to-date/github/report
