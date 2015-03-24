@@ -123,8 +123,8 @@
     automaticallyUpgrade true
     doNotUpgradeTo []
     doNotUpgradeFrom []
-    reportDirectory generated/up-to-date/github/report
-    cacheDirectory generated/up-to-date/cache
+    reportDirectory generated/reports/up-to-date/github
+    cacheDirectory generated/reports/up-to-date/cache
     cacheExpire '5 days'
   }
 }

@@ -10,22 +10,27 @@ import scala.collection.JavaConversions
 
 class ReporterImpl(reportDir: Path, fileSystem: FileSystemIntegration, devonMarshaller: DevonMarshaller, charset: Charset) extends Reporter {
   override def storeAllReports(reports: Seq[Report]): Unit = {
-    fileSystem.createDirectories(reportDir)
-    reports.foreach(storeReport)
+    val buildDir = reportDir.resolve("build")
+    fileSystem.createDirectories(buildDir)
+    def storeReportInBuildDir(report: Report): Unit = {
+      storeReport(buildDir, report)
+    }
+    reports.foreach(storeReportInBuildDir)
   }
 
   override def storeUpgradeResults(upgradeResults: Seq[ExecutionResult]): Unit = {
-    fileSystem.createDirectories(reportDir)
-    val upgradeReportPath = reportDir.resolve("upgrade-results.txt")
+    val upgradeDir = reportDir.resolve("upgrade")
+    fileSystem.createDirectories(upgradeDir)
+    val upgradeReportPath = upgradeDir.resolve("upgrade-results.txt")
     val lines = devonMarshaller.valueToPretty(upgradeResults)
     fileSystem.write(upgradeReportPath, JavaConversions.asJavaIterable(lines), charset)
   }
 
-  private def storeReport(report: Report): Unit = {
+  private def storeReport(buildDir: Path, report: Report): Unit = {
     report match {
       case x: ExecutionReport =>
         val lines = devonMarshaller.valueToPretty(x)
-        val path = reportDir.resolve(x.projectName + ".txt")
+        val path = buildDir.resolve(x.projectName + ".txt")
         fileSystem.write(path, JavaConversions.asJavaIterable(lines), charset)
       case _ => //do nothing
     }
