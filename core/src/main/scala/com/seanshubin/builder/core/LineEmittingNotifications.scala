@@ -1,7 +1,5 @@
 package com.seanshubin.builder.core
 
-import java.io.{PrintWriter, StringWriter}
-
 import com.seanshubin.devon.core.devon.DevonMarshaller
 
 class LineEmittingNotifications(devonMarshaller: DevonMarshaller, emit: String => Unit) extends Notifications {
@@ -13,15 +11,6 @@ class LineEmittingNotifications(devonMarshaller: DevonMarshaller, emit: String =
 
   override def configurationError(lines: Seq[String]): Unit = {
     lines.foreach(emit)
-  }
-
-  private def exceptionLines(ex: Throwable): Seq[String] = {
-    val stringWriter = new StringWriter()
-    val printWriter = new PrintWriter(stringWriter)
-    ex.printStackTrace(printWriter)
-    val s = stringWriter.toString
-    val lines = s.split( """\r\n|\r|\n""").toSeq
-    lines
   }
 
   override def summarize(reports: Seq[Report]): Unit = {
@@ -78,5 +67,8 @@ class LineEmittingNotifications(devonMarshaller: DevonMarshaller, emit: String =
 
   override def execOutput(line: String): Unit = emit(line)
 
-  private def indent(s: String) = s"  $s"
+  override def totalMillisecondsElapsed(milliseconds: Long): Unit = {
+    val timeTakenString = DurationFormat.MillisecondsFormat.format(milliseconds)
+    emit(s"Time taken: $timeTakenString")
+  }
 }

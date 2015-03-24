@@ -12,4 +12,6 @@ trait Notifications {
   def projects(projects: Seq[Project])
 
   def execOutput(line: String)
+
+  def totalMillisecondsElapsed(milliseconds: Long)
 }

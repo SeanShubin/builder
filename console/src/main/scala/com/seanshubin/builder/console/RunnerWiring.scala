@@ -27,5 +27,7 @@ trait RunnerWiring {
   lazy val githubApi: GithubApi = new GithubApiImpl(httpSender, jsonMarshaller)
   lazy val systemApi: SystemApi = new SystemApiImpl(systemExecutor, environment, notifications)
   lazy val api: Api = new ApiImpl(systemApi, githubApi, configuration.githubUserName)
-  lazy val runner: Runner = new RunnerImpl(configuration, api, notifications, reporter)
+  lazy val systemClock: SystemClock = new SystemClockImpl()
+  lazy val timer: Timer = new TimerImpl(systemClock)
+  lazy val runner: Runner = new RunnerImpl(configuration, api, notifications, reporter, timer)
 }
