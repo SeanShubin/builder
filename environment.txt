@@ -4,18 +4,18 @@
   environmentByOsName {
       Linux {
         baseDirectory /home/sshubin/github/sean
-        commandPrefix ''
-        directoryListingCommand 'ls -1'
+        commandPrefix []
+        directoryListingCommand [ls -1]
       }
       'Windows 7' {
         baseDirectory g:\keep\github\sean
-        commandPrefix 'cmd /C '
-        directoryListingCommand 'dir /b'
+        commandPrefix [cmd /C]
+        directoryListingCommand [dir /b]
       }
       'Mac OS X' {
         baseDirectory /Users/seanshubin/github/sean
-        commandPrefix ''
-        directoryListingCommand 'ls -1'
+        commandPrefix []
+        directoryListingCommand [ls -1]
       }
   }
   projects

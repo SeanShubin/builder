@@ -6,7 +6,7 @@ class SystemApiImpl(systemExecutor: SystemExecutor,
                     environment: Environment,
                     notifications: Notifications) extends SystemApi {
   override def listLocalDirectoryNames(): Seq[String] = {
-    val command = environment.commandPrefix + environment.directoryListingCommand
+    val command = environment.commandPrefix ++ environment.directoryListingCommand
     val directory = environment.baseDirectory
     val result = exec(command, directory)
     result.throwIfError()
@@ -14,7 +14,7 @@ class SystemApiImpl(systemExecutor: SystemExecutor,
   }
 
   override def hasPendingEdits(projectName: String): Boolean = {
-    val command = environment.commandPrefix + "git status -s"
+    val command = environment.commandPrefix ++ Seq("git", "status", "-s")
     val directory = environment.baseDirectory.resolve(projectName)
     val result = exec(command, directory)
     result.throwIfError()
@@ -41,27 +41,27 @@ class SystemApiImpl(systemExecutor: SystemExecutor,
   }
 
   private def gitAdd(projectName: String): ExecutionResult = {
-    val command = environment.commandPrefix + "git add --all"
+    val command = environment.commandPrefix ++ Seq("git", "add", "--all")
     val directory = environment.baseDirectory.resolve(projectName)
     val result = exec(command, directory)
     result
   }
 
   private def gitCommit(projectName: String, commitMessage: String): ExecutionResult = {
-    val command = environment.commandPrefix + "git commit -m \"" + commitMessage + "\""
+    val command = environment.commandPrefix ++ Seq("git", "commit", "-m", commitMessage)
     val directory = environment.baseDirectory.resolve(projectName)
     val result = exec(command, directory)
     result
   }
 
   private def gitPush(projectName: String): ExecutionResult = {
-    val command = environment.commandPrefix + "git push"
+    val command = environment.commandPrefix ++ Seq("git", "push")
     val directory = environment.baseDirectory.resolve(projectName)
     val result = exec(command, directory)
     result
   }
 
-  private def exec(command: String, directory: Path): ExecutionResult = {
+  private def exec(command: Seq[String], directory: Path): ExecutionResult = {
     val result = systemExecutor.executeSynchronous(command, directory)
     result
   }
@@ -69,21 +69,21 @@ class SystemApiImpl(systemExecutor: SystemExecutor,
   private def maven(mavenCommand: String, projectName: String): Seq[ExecutionResult] = {
     val fetchResult = fetch(projectName)
     val rebaseResult = rebase(projectName)
-    val command = environment.commandPrefix + s"mvn clean $mavenCommand"
+    val command = environment.commandPrefix ++ Seq("mvn", "clean", mavenCommand)
     val directory = environment.baseDirectory.resolve(projectName)
     val mavenResult = exec(command, directory)
     Seq(fetchResult, rebaseResult, mavenResult)
   }
 
   private def fetch(projectName: String): ExecutionResult = {
-    val command = environment.commandPrefix + "git fetch"
+    val command = environment.commandPrefix ++ Seq("git", "fetch")
     val directory = environment.baseDirectory.resolve(projectName)
     val result = exec(command, directory)
     result
   }
 
   private def rebase(projectName: String): ExecutionResult = {
-    val command = environment.commandPrefix + "git rebase"
+    val command = environment.commandPrefix ++ Seq("git", "rebase")
     val directory = environment.baseDirectory.resolve(projectName)
     val result = exec(command, directory)
     result

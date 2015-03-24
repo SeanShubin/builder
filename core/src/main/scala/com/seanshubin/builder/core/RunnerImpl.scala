@@ -25,10 +25,10 @@ class RunnerImpl(configuration: Configuration, api: Api, notifications: Notifica
 
     val okToBuild = projects.forall(p => p.isOkToBuild)
 
-    if (okToBuild) {
+//    if (okToBuild) {
       upgradeDependencies()
-      doBuildProcess()
-    }
+//      doBuildProcess()
+//    }
   }
 
   def doBuildProcess(): Unit = {

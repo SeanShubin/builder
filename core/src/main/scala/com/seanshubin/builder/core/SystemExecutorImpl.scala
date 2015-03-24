@@ -6,7 +6,7 @@ import scala.collection.JavaConversions
 import scala.sys.process._
 
 class SystemExecutorImpl(processLoggerFactory: ProcessLoggerFactory) extends SystemExecutor {
-  override def executeSynchronous(command: String, directory: Path): ExecutionResult = {
+  override def executeSynchronous(command: Seq[String], directory: Path): ExecutionResult = {
     val env: Seq[(String, String)] = JavaConversions.mapAsScalaMap(System.getenv()).toSeq
     val processBuilder: ProcessBuilder = Process(command, directory.toFile, env: _*)
     val processLogger = processLoggerFactory.newProcessLogger(command, directory, env)

@@ -59,12 +59,12 @@ object ConfigurationFactoryImpl {
     environmentByOsName = Map(
       "Linux" -> Environment(
         baseDirectory = Paths.get("/home/sshubin/temp/git"),
-        commandPrefix = "",
-        directoryListingCommand = "ls -1"),
+        commandPrefix = Seq(""),
+        directoryListingCommand = Seq("ls", "-1")),
       "Windows 7" -> Environment(
         baseDirectory = Paths.get("G:\\keep\\temp\\git"),
-        commandPrefix = "cmd /C ",
-        directoryListingCommand = "ls -1")
+        commandPrefix = Seq("cmd", "/C"),
+        directoryListingCommand = Seq("ls","-1"))
     ),
     projects = Seq(
       ProjectConfig("my-library", CommandEnum.Deploy),
