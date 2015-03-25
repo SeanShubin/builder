@@ -2,7 +2,12 @@ package com.seanshubin.builder.core
 
 import com.seanshubin.up_to_date.console.RunnerWiring
 
-class RunnerImpl(configuration: Configuration, api: Api, notifications: Notifications, reporter: Reporter, timer: Timer) extends Runner {
+class RunnerImpl(configuration: Configuration,
+                 api: Api,
+                 notifications: Notifications,
+                 reporter: Reporter,
+                 timer: Timer,
+                 shouldUpgradeDependencies: Boolean) extends Runner {
 
   override def run(): Unit = {
     val elapsed = timer.elapsedTimeFor {
@@ -27,7 +32,9 @@ class RunnerImpl(configuration: Configuration, api: Api, notifications: Notifica
       val okToBuild = projects.forall(p => p.isOkToBuild)
 
       if (okToBuild) {
-        upgradeDependencies()
+        if (shouldUpgradeDependencies) {
+          upgradeDependencies()
+        }
         doBuildProcess()
       }
     }
