@@ -39,8 +39,9 @@ class LineEmittingNotifications(devonMarshaller: DevonMarshaller, emit: String =
   }
 
   private def summarizeExecutionResult(result: ExecutionResult): Seq[String] = {
-    if (result.exitCode == 0) Seq(s"(success) ${result.directory} ${result.command}")
-    else Seq(s"(failure) ${result.directory} ${result.command}")
+    val resultCommand = result.command.mkString(" ")
+    if (result.exitCode == 0) Seq(s"(success) ${result.directory} $resultCommand")
+    else Seq(s"(failure) ${result.directory} $resultCommand")
   }
 
   private def summarizeIgnoredReport(report: IgnoredReport): Seq[String] = {
