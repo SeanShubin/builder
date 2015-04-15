@@ -13,7 +13,7 @@ trait RunnerWiring {
 
   lazy val osName = System.getProperty("os.name")
   lazy val emitLine: String => Unit = println
-  lazy val devonMarshaller: DevonMarshaller = CustomDevonMarshaller
+  lazy val devonMarshaller: DevonMarshaller = CustomDevonMarshallerWiring.devonMarshaller
   lazy val fileSystem: FileSystemIntegration = new FileSystemIntegrationImpl
   lazy val charset: Charset = StandardCharsets.UTF_8
   lazy val reporter: Reporter = new ReporterImpl(configuration.reportDirectory, fileSystem, devonMarshaller, charset)
