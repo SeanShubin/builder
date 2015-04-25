@@ -16,7 +16,7 @@ class ConfigurationFactoryImpl(fileSystem: FileSystemIntegration,
       try {
         if (fileSystem.exists(configFilePath)) {
           val bytes = fileSystem.readAllBytes(configFilePath)
-          val text = new String(bytes, charset)
+          val text = new String(bytes.toArray, charset)
           val config = devonMarshaller.stringToValue(text, classOf[Configuration])
           Right(config)
         } else {
