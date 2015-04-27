@@ -128,6 +128,6 @@
     doNotUpgradeFrom []
     reportDirectory generated/reports/up-to-date/github
     cacheDirectory generated/reports/up-to-date/cache
-    cacheExpire '5 days'
+    cacheExpire '12 hours'
   }
 }
