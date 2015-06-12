@@ -107,6 +107,10 @@
       name builder
       command verify
     }
+    {
+      name learn-typescript
+      command ignore
+    }
   ]
   upToDateConfiguration {
     pomFileName pom.xml
