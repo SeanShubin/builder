@@ -111,6 +111,10 @@
       name learn-typescript
       command ignore
     }
+    {
+      name inliner
+      command verify
+    }
   ]
   upToDateConfiguration {
     pomFileName pom.xml
