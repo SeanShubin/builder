@@ -115,6 +115,10 @@
       name inliner
       command verify
     }
+    {
+      name liars-dice
+      command ignore
+    }
   ]
   upToDateConfiguration {
     pomFileName pom.xml
