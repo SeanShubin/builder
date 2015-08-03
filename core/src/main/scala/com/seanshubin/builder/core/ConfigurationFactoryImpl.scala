@@ -61,12 +61,15 @@ object ConfigurationFactoryImpl {
         baseDirectory = Paths.get("/home/sshubin/temp/git"),
         commandPrefix = Seq(""),
         directoryListingCommand = Seq("ls", "-1"),
-        shouldUpgradeDependencies = true),
+        shouldUpgradeDependencies = true,
+        mavenSettings = Some("/home/sshubin/bin/maven-settings/sean-settings.xml")
+      ),
       "Windows 7" -> Environment(
         baseDirectory = Paths.get("G:\\keep\\temp\\git"),
         commandPrefix = Seq("cmd", "/C"),
         directoryListingCommand = Seq("ls", "-1"),
-        shouldUpgradeDependencies = false)
+        shouldUpgradeDependencies = false,
+        mavenSettings = None)
     ),
     projects = Seq(
       ProjectConfig("my-library", CommandEnum.Deploy),

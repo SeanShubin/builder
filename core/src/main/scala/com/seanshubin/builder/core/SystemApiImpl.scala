@@ -69,7 +69,11 @@ class SystemApiImpl(systemExecutor: SystemExecutor,
   private def maven(mavenCommand: String, projectName: String): Seq[ExecutionResult] = {
     val fetchResult = fetch(projectName)
     val rebaseResult = rebase(projectName)
-    val command = environment.commandPrefix ++ Seq("mvn", "clean", mavenCommand)
+    val mavenSettings:Seq[String] = environment.mavenSettings match {
+      case Some(mavenSettingsFile) => Seq("--settings", mavenSettingsFile)
+      case None => Seq()
+    }
+    val command = environment.commandPrefix ++ Seq("mvn", "clean", mavenCommand) ++ mavenSettings
     val directory = environment.baseDirectory.resolve(projectName)
     val mavenResult = exec(command, directory)
     Seq(fetchResult, rebaseResult, mavenResult)
