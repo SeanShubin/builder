@@ -6,4 +6,4 @@ case class Environment(baseDirectory: Path,
                        commandPrefix: Seq[String],
                        directoryListingCommand: Seq[String],
                        shouldUpgradeDependencies: Boolean,
-                       mavenSettings:Option[String])
+                       mavenSettings: Option[String])
