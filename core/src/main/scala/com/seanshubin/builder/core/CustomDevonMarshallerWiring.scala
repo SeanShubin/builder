@@ -1,7 +1,7 @@
 package com.seanshubin.builder.core
 
 import com.seanshubin.devon.core.devon.DevonMarshallerWiring
-import com.seanshubin.utility.reflection.SimpleTypeConversion
+import com.seanshubin.devon.reflection.SimpleTypeConversion
 
 import scala.reflect.runtime._
 

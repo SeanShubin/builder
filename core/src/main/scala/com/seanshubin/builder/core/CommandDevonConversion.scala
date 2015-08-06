@@ -1,6 +1,6 @@
 package com.seanshubin.builder.core
 
-import com.seanshubin.utility.reflection.SimpleTypeConversion
+import com.seanshubin.devon.reflection.SimpleTypeConversion
 
 object CommandDevonConversion extends SimpleTypeConversion {
   override def toDynamic(x: Any): String = x.asInstanceOf[CommandEnum].name
