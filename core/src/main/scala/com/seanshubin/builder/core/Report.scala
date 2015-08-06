@@ -11,3 +11,7 @@ case class ExecutionReport(projectName: String, commandName: String, executionRe
 case class IgnoredReport(projectName: String) extends Report {
   override def hasError: Boolean = false
 }
+
+case class ExceptionReport(projectName: String, exception: Throwable) extends Report {
+  override def hasError: Boolean = true
+}

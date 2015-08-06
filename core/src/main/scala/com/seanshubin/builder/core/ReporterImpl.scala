@@ -32,6 +32,11 @@ class ReporterImpl(reportDir: Path, fileSystem: FileSystemIntegration, devonMars
         val lines = devonMarshaller.valueToPretty(x)
         val path = buildDir.resolve(x.projectName + ".txt")
         fileSystem.write(path, JavaConversions.asJavaIterable(lines), charset)
+      case ExceptionReport(projectName, exception) =>
+        val exceptionValue = ExceptionValue.fromException(exception)
+        val lines = devonMarshaller.valueToPretty(exceptionValue)
+        val path = buildDir.resolve(projectName + ".txt")
+        fileSystem.write(path, JavaConversions.asJavaIterable(lines), charset)
       case _ => //do nothing
     }
   }

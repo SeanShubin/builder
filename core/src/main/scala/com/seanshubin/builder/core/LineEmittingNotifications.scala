@@ -31,6 +31,7 @@ class LineEmittingNotifications(devonMarshaller: DevonMarshaller, emit: String =
     report match {
       case x: ExecutionReport => summarizeExecutionReport(x)
       case x: IgnoredReport => summarizeIgnoredReport(x)
+      case x: ExceptionReport => summarizeExceptionReport(x)
     }
   }
 
@@ -46,6 +47,10 @@ class LineEmittingNotifications(devonMarshaller: DevonMarshaller, emit: String =
 
   private def summarizeIgnoredReport(report: IgnoredReport): Seq[String] = {
     Seq(s"(ignored) ${report.projectName}")
+  }
+
+  private def summarizeExceptionReport(report: ExceptionReport): Seq[String] = {
+    Seq(s"(exception) ${report.projectName}")
   }
 
   override def projects(projects: Seq[Project]): Unit = {

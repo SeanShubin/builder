@@ -43,7 +43,12 @@ class RunnerImpl(configuration: Configuration,
 
   def doBuildProcess(): Unit = {
     def processProject(project: ProjectConfig): Report = {
-      project.command.execute(project.name, api)
+      try {
+        project.command.execute(project.name, api)
+      } catch {
+        case ex: Throwable =>
+          ExceptionReport(project.name, ex)
+      }
     }
     val results = configuration.projects.map(processProject)
     notifications.summarize(results)
