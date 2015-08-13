@@ -7,7 +7,7 @@
         commandPrefix []
         directoryListingCommand [ls -1]
         shouldUpgradeDependencies true
-        mavenSettings /home/sshubin/bin/maven-settings/sean-settings.xml
+        mavenSettings /home/sshubin/.m2/sean-settings.xml
       }
       'Windows 7' {
         baseDirectory g:\keep\github\sean
