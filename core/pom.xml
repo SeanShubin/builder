@@ -9,7 +9,7 @@
     <name>builder-core</name>
     <dependencies>
         <dependency>
-            <groupId>com.seanshubin</groupId>
+            <groupId>com.seanshubin.devon</groupId>
             <artifactId>devon-core</artifactId>
         </dependency>
         <dependency>
