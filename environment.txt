@@ -38,7 +38,7 @@
     }
     {
       name developers-value-notation
-      command deploy
+      command verify
     }
     {
       name http-values

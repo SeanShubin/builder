@@ -3,7 +3,7 @@ package com.seanshubin.builder.console
 import java.nio.charset.{Charset, StandardCharsets}
 
 import com.seanshubin.builder.core._
-import com.seanshubin.devon.core.devon.DevonMarshaller
+import com.seanshubin.devon.core.devon.{DevonMarshallerWiring, DevonMarshaller}
 import com.seanshubin.http.values.client.google.HttpSender
 import com.seanshubin.utility.filesystem.{FileSystemIntegration, FileSystemIntegrationImpl}
 import com.seanshubin.utility.json.{JsonMarshaller, JsonMarshallerImpl}
@@ -13,7 +13,7 @@ trait RunnerWiring {
 
   lazy val osName = System.getProperty("os.name")
   lazy val emitLine: String => Unit = println
-  lazy val devonMarshaller: DevonMarshaller = CustomDevonMarshallerWiring.devonMarshaller
+  lazy val devonMarshaller: DevonMarshaller = DevonMarshallerWiring.Default
   lazy val fileSystem: FileSystemIntegration = new FileSystemIntegrationImpl
   lazy val charset: Charset = StandardCharsets.UTF_8
   lazy val reporter: Reporter = new ReporterImpl(configuration.reportDirectory, fileSystem, devonMarshaller, charset)
