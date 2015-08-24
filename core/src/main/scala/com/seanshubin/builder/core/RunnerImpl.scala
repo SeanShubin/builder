@@ -60,7 +60,9 @@ class RunnerImpl(configuration: Configuration,
     RunnerWiring(configuration.upToDateConfiguration).runner.run()
     def processProject(project: ProjectConfig): Seq[ExecutionResult] = {
       if (api.pendingLocalEdits(project.name) && project.name != "learn-spark") {
-        api.addCommitPush(project.name, "Automatically upgrade maven dependencies to latest")
+        val fetchRebaseResult = api.fetchRebase(project.name)
+        val addCommitPushResult = api.addCommitPush(project.name, "Automatically upgrade maven dependencies to latest")
+        fetchRebaseResult ++ addCommitPushResult
       } else {
         Seq()
       }

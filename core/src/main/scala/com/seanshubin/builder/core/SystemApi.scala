@@ -12,4 +12,6 @@ trait SystemApi {
   def hasPendingEdits(projectName: String): Boolean
 
   def listLocalDirectoryNames(): Seq[String]
+
+  def gitFetchRebase(projectName: String): Seq[ExecutionResult]
 }

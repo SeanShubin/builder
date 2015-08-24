@@ -92,4 +92,10 @@ class SystemApiImpl(systemExecutor: SystemExecutor,
     val result = exec(command, directory)
     result
   }
+
+  override def gitFetchRebase(projectName: String): Seq[ExecutionResult] = {
+    val fetchResult = fetch(projectName)
+    val rebaseResult = rebase(projectName)
+    Seq(fetchResult, rebaseResult)
+  }
 }

@@ -20,4 +20,8 @@ class ApiImpl(systemApi: SystemApi, githubApi: GithubApi, userName: String) exte
   override def addCommitPush(projectName: String, gitMessage: String): Seq[ExecutionResult] = {
     systemApi.gitAddCommitPush(projectName, gitMessage)
   }
+
+  override def fetchRebase(projectName: String): Seq[ExecutionResult] = {
+    systemApi.gitFetchRebase(projectName)
+  }
 }

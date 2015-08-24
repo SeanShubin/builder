@@ -14,4 +14,6 @@ trait Api {
   def compile(name: String): Seq[ExecutionResult]
 
   def addCommitPush(projectName: String, gitMessage: String): Seq[ExecutionResult]
+
+  def fetchRebase(projectName: String): Seq[ExecutionResult]
 }
