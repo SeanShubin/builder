@@ -114,7 +114,7 @@
     }
     {
       name inliner
-      command verify
+      command ignore
     }
     {
       name liars-dice
