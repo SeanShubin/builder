@@ -6,6 +6,7 @@
         commandPrefix []
         directoryListingCommand [ls -1]
         shouldUpgradeDependencies true
+        mavenSettings /Users/sshubin/.m2/sean-settings.xml
       }
       /home/sshubin/github/sean {
         commandPrefix []
