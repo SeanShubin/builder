@@ -1,22 +1,24 @@
 {
   githubUserName SeanShubin
   reportDirectory generated/reports
-  environmentByOsName {
-      Linux {
-        baseDirectory /home/sshubin/github/sean
+  settingsByUserHome {
+      /Users/sshubin {
+        commandPrefix []
+        directoryListingCommand [ls -1]
+        shouldUpgradeDependencies true
+      }
+      /home/sshubin/github/sean {
         commandPrefix []
         directoryListingCommand [ls -1]
         shouldUpgradeDependencies true
         mavenSettings /home/sshubin/.m2/sean-settings.xml
       }
-      'Windows 7' {
-        baseDirectory g:\keep\github\sean
+      g:\keep\github\sean {
         commandPrefix [cmd /C]
         directoryListingCommand [dir /b]
         shouldUpgradeDependencies false
       }
-      'Mac OS X' {
-        baseDirectory /Users/seanshubin/github/sean
+      /Users/seanshubin/github/sean {
         commandPrefix []
         directoryListingCommand [ls -1]
         shouldUpgradeDependencies true

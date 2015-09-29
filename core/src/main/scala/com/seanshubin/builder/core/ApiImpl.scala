@@ -24,4 +24,12 @@ class ApiImpl(systemApi: SystemApi, githubApi: GithubApi, userName: String) exte
   override def fetchRebase(projectName: String): Seq[ExecutionResult] = {
     systemApi.gitFetchRebase(projectName)
   }
+
+  override def cloneIfMissing(projectName: String): Seq[ExecutionResult] = {
+    if(systemApi.exists(projectName)) {
+      Seq()
+    } else {
+      systemApi.clone(projectName)
+    }
+  }
 }

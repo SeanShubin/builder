@@ -1,13 +1,14 @@
 package com.seanshubin.builder.core
 
-import java.nio.file.Path
+import java.nio.file.{Files, Path}
 
 class SystemApiImpl(systemExecutor: SystemExecutor,
-                    environment: Environment,
+                   homeDirectory:Path,
+                    environment: Settings,
                     notifications: Notifications) extends SystemApi {
   override def listLocalDirectoryNames(): Seq[String] = {
     val command = environment.commandPrefix ++ environment.directoryListingCommand
-    val directory = environment.baseDirectory
+    val directory = homeDirectory
     val result = exec(command, directory)
     result.throwIfError()
     result.outputLines
@@ -15,7 +16,7 @@ class SystemApiImpl(systemExecutor: SystemExecutor,
 
   override def hasPendingEdits(projectName: String): Boolean = {
     val command = environment.commandPrefix ++ Seq("git", "status", "-s")
-    val directory = environment.baseDirectory.resolve(projectName)
+    val directory = homeDirectory.resolve(projectName)
     val result = exec(command, directory)
     result.throwIfError()
     result.outputLines.size > 0
@@ -42,21 +43,21 @@ class SystemApiImpl(systemExecutor: SystemExecutor,
 
   private def gitAdd(projectName: String): ExecutionResult = {
     val command = environment.commandPrefix ++ Seq("git", "add", "--all")
-    val directory = environment.baseDirectory.resolve(projectName)
+    val directory = homeDirectory.resolve(projectName)
     val result = exec(command, directory)
     result
   }
 
   private def gitCommit(projectName: String, commitMessage: String): ExecutionResult = {
     val command = environment.commandPrefix ++ Seq("git", "commit", "-m", commitMessage)
-    val directory = environment.baseDirectory.resolve(projectName)
+    val directory = homeDirectory.resolve(projectName)
     val result = exec(command, directory)
     result
   }
 
   private def gitPush(projectName: String): ExecutionResult = {
     val command = environment.commandPrefix ++ Seq("git", "push")
-    val directory = environment.baseDirectory.resolve(projectName)
+    val directory = homeDirectory.resolve(projectName)
     val result = exec(command, directory)
     result
   }
@@ -74,21 +75,21 @@ class SystemApiImpl(systemExecutor: SystemExecutor,
       case None => Seq()
     }
     val command = environment.commandPrefix ++ Seq("mvn", "clean", mavenCommand) ++ mavenSettings
-    val directory = environment.baseDirectory.resolve(projectName)
+    val directory = homeDirectory.resolve(projectName)
     val mavenResult = exec(command, directory)
     Seq(fetchResult, rebaseResult, mavenResult)
   }
 
   private def fetch(projectName: String): ExecutionResult = {
     val command = environment.commandPrefix ++ Seq("git", "fetch")
-    val directory = environment.baseDirectory.resolve(projectName)
+    val directory = homeDirectory.resolve(projectName)
     val result = exec(command, directory)
     result
   }
 
   private def rebase(projectName: String): ExecutionResult = {
     val command = environment.commandPrefix ++ Seq("git", "rebase")
-    val directory = environment.baseDirectory.resolve(projectName)
+    val directory = homeDirectory.resolve(projectName)
     val result = exec(command, directory)
     result
   }
@@ -97,5 +98,13 @@ class SystemApiImpl(systemExecutor: SystemExecutor,
     val fetchResult = fetch(projectName)
     val rebaseResult = rebase(projectName)
     Seq(fetchResult, rebaseResult)
+  }
+
+  override def exists(projectName: String): Boolean = Files.exists(homeDirectory.resolve(projectName))
+
+  override def clone(projectName: String): Seq[ExecutionResult] = {
+    val command = environment.commandPrefix ++ Seq("git", "clone", s"git@github.com:SeanShubin/$projectName.git")
+    val result = exec(command, homeDirectory)
+    Seq(result)
   }
 }

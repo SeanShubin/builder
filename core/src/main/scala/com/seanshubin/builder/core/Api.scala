@@ -16,4 +16,6 @@ trait Api {
   def addCommitPush(projectName: String, gitMessage: String): Seq[ExecutionResult]
 
   def fetchRebase(projectName: String): Seq[ExecutionResult]
+
+  def cloneIfMissing(projectName: String): Seq[ExecutionResult]
 }

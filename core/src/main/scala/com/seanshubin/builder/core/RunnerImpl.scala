@@ -12,6 +12,8 @@ class RunnerImpl(configuration: Configuration,
   override def run(): Unit = {
     val elapsed = timer.elapsedTimeFor {
       val configuredMap = configuration.projects.map(p => (p.name, p)).toMap
+      val configuredNames = configuredMap.keySet.toSeq.sorted
+      configuredNames.foreach(api.cloneIfMissing)
       val localNames = api.projectNamesLocal()
       val githubNames = api.projectNamesInGithub()
       val allNames = (configuredMap.keySet ++ localNames ++ githubNames).toSeq.sorted

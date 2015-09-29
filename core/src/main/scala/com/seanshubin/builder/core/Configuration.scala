@@ -6,6 +6,6 @@ import com.seanshubin.up_to_date.logic.{Configuration => UpToDateConfiguration}
 
 case class Configuration(githubUserName: String,
                          reportDirectory: Path,
-                         environmentByOsName: Map[String, Environment],
+                         settingsByUserHome: Map[String, Settings],
                          projects: Seq[ProjectConfig],
                          upToDateConfiguration: UpToDateConfiguration)

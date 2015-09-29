@@ -14,4 +14,8 @@ trait SystemApi {
   def listLocalDirectoryNames(): Seq[String]
 
   def gitFetchRebase(projectName: String): Seq[ExecutionResult]
+
+  def exists(projectName:String):Boolean
+
+  def clone(projectName:String):Seq[ExecutionResult]
 }

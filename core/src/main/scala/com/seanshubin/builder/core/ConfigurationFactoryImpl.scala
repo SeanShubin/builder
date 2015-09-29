@@ -56,16 +56,14 @@ object ConfigurationFactoryImpl {
   val sampleConfiguration: Configuration = Configuration(
     githubUserName = "SeanShubin",
     reportDirectory = Paths.get("generated", "reports"),
-    environmentByOsName = Map(
-      "Linux" -> Environment(
-        baseDirectory = Paths.get("/home/sshubin/temp/git"),
+    settingsByUserHome = Map(
+      "/home/sshubin/temp/git" -> Settings(
         commandPrefix = Seq(""),
         directoryListingCommand = Seq("ls", "-1"),
         shouldUpgradeDependencies = true,
         mavenSettings = Some("/home/sshubin/bin/maven-settings/sean-settings.xml")
       ),
-      "Windows 7" -> Environment(
-        baseDirectory = Paths.get("G:\\keep\\temp\\git"),
+      "G:\\keep\\temp\\git" -> Settings(
         commandPrefix = Seq("cmd", "/C"),
         directoryListingCommand = Seq("ls", "-1"),
         shouldUpgradeDependencies = false,
