@@ -123,6 +123,10 @@
       name liars-dice
       command ignore
     }
+    {
+      name documentation
+      command verify
+    }
   ]
   upToDateConfiguration {
     pomFileName pom.xml
