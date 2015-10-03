@@ -12,17 +12,11 @@
         commandPrefix []
         directoryListingCommand [ls -1]
         shouldUpgradeDependencies true
-        mavenSettings /home/sshubin/.m2/sean-settings.xml
       }
       g:\keep\github\sean {
         commandPrefix [cmd /C]
         directoryListingCommand [dir /b]
         shouldUpgradeDependencies false
-      }
-      /Users/seanshubin/github/sean {
-        commandPrefix []
-        directoryListingCommand [ls -1]
-        shouldUpgradeDependencies true
       }
   }
   projects
