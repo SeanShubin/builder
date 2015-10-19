@@ -3,17 +3,20 @@
   reportDirectory generated/reports
   settingsByUserHome {
       /Users/sshubin {
+        githubDirectory /Users/sshubin/github/sean
         commandPrefix []
         directoryListingCommand [ls -1]
         shouldUpgradeDependencies true
         mavenSettings /Users/sshubin/.m2/sean-settings.xml
       }
       /Users/seanshubin {
+        githubDirectory /Users/seanshubin/github/sean
         commandPrefix []
         directoryListingCommand [ls -1]
         shouldUpgradeDependencies true
       }
-      g:\keep\github\sean {
+      C:\Users\Sean {
+        githubDirectory g:\keep\github\sean
         commandPrefix [cmd /C]
         directoryListingCommand [dir /b]
         shouldUpgradeDependencies false
