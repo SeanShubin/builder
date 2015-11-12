@@ -29,6 +29,10 @@
       command deploy
     }
     {
+      name contract
+      command verify
+    }
+    {
       name up-to-date
       command deploy
     }
@@ -98,10 +102,6 @@
     }
     {
       name types-of-loops
-      command verify
-    }
-    {
-      name examples
       command verify
     }
     {
