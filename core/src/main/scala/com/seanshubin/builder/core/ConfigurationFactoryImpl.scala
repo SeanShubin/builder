@@ -58,14 +58,14 @@ object ConfigurationFactoryImpl {
     reportDirectory = Paths.get("generated", "reports"),
     settingsByUserHome = Map(
       "/home/sshubin/temp/git" -> Settings(
-        githubDirectory = Paths.get("/","Users","sshubin","github","sean"),
+        githubDirectory = Paths.get("/", "Users", "sshubin", "github", "sean"),
         commandPrefix = Seq(""),
         directoryListingCommand = Seq("ls", "-1"),
         shouldUpgradeDependencies = true,
         mavenSettings = Some("/home/sshubin/bin/maven-settings/sean-settings.xml")
       ),
       "G:\\keep\\temp\\git" -> Settings(
-        githubDirectory = Paths.get("G:\\","keep","github","sean"),
+        githubDirectory = Paths.get("G:\\", "keep", "github", "sean"),
         commandPrefix = Seq("cmd", "/C"),
         directoryListingCommand = Seq("ls", "-1"),
         shouldUpgradeDependencies = false,

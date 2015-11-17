@@ -116,11 +116,11 @@ object DurationFormat {
         numberString = matchData.group("number")
         nameString = matchData.group("name")
       } yield {
-          val name = timeUnitFromString(nameString)
-          val number = numberString.toLong
-          val quantityAndName = QuantityAndName(number, name)
-          quantityAndName.toUnitsAtScale(scale)
-        }
+        val name = timeUnitFromString(nameString)
+        val number = numberString.toLong
+        val quantityAndName = QuantityAndName(number, name)
+        quantityAndName.toUnitsAtScale(scale)
+      }
       val sum = parts.sum
       sum
     }

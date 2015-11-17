@@ -7,8 +7,7 @@ class RunnerImpl(configuration: Configuration,
                  notifications: Notifications,
                  reporter: Reporter,
                  timer: Timer,
-                 shouldUpgradeDependencies: Boolean) extends Runner {
-
+                 shouldUpgradeDependencies: Boolean) extends Runnable {
   override def run(): Unit = {
     val elapsed = timer.elapsedTimeFor {
       val configuredMap = configuration.projects.map(p => (p.name, p)).toMap
@@ -20,15 +19,15 @@ class RunnerImpl(configuration: Configuration,
       val projects = for {
         name <- allNames
       } yield {
-          Project(
-            name,
-            configuredMap.contains(name),
-            configuredMap.get(name).exists(p => p.command == CommandEnum.Ignore),
-            githubNames.contains(name),
-            localNames.contains(name),
-            api.pendingLocalEdits(name)
-          )
-        }
+        Project(
+          name,
+          configuredMap.contains(name),
+          configuredMap.get(name).exists(p => p.command == CommandEnum.Ignore),
+          githubNames.contains(name),
+          localNames.contains(name),
+          api.pendingLocalEdits(name)
+        )
+      }
       notifications.projects(projects)
 
       val okToBuild = projects.forall(p => p.isOkToBuild)

@@ -1,10 +1,10 @@
 package com.seanshubin.builder.console
 
 import java.nio.charset.{Charset, StandardCharsets}
-import java.nio.file.{Paths, Path}
+import java.nio.file.Path
 
 import com.seanshubin.builder.core._
-import com.seanshubin.devon.core.devon.{DevonMarshallerWiring, DevonMarshaller}
+import com.seanshubin.devon.core.devon.{DevonMarshaller, DevonMarshallerWiring}
 import com.seanshubin.http.values.client.google.HttpSender
 import com.seanshubin.utility.filesystem.{FileSystemIntegration, FileSystemIntegrationImpl}
 import com.seanshubin.utility.json.{JsonMarshaller, JsonMarshallerImpl}
@@ -20,7 +20,7 @@ trait RunnerWiring {
   lazy val reporter: Reporter = new ReporterImpl(configuration.reportDirectory, fileSystem, devonMarshaller, charset)
   lazy val notifications: Notifications = new LineEmittingNotifications(devonMarshaller, emitLine)
   lazy val environment: Settings = configuration.settingsByUserHome(userHome)
-  lazy val githubDirectory:Path = environment.githubDirectory
+  lazy val githubDirectory: Path = environment.githubDirectory
   lazy val emitProcessLine: String => Unit = notifications.execOutput
   lazy val processLoggerFactory: ProcessLoggerFactory = new ProcessLoggerFactoryImpl(emitProcessLine)
   lazy val systemExecutor: SystemExecutor = new SystemExecutorImpl(processLoggerFactory)
@@ -31,5 +31,5 @@ trait RunnerWiring {
   lazy val api: Api = new ApiImpl(systemApi, githubApi, configuration.githubUserName)
   lazy val systemClock: SystemClock = new SystemClockImpl()
   lazy val timer: Timer = new TimerImpl(systemClock)
-  lazy val runner: Runner = new RunnerImpl(configuration, api, notifications, reporter, timer, environment.shouldUpgradeDependencies)
+  lazy val runner: Runnable = new RunnerImpl(configuration, api, notifications, reporter, timer, environment.shouldUpgradeDependencies)
 }

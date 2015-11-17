@@ -26,7 +26,7 @@ class ApiImpl(systemApi: SystemApi, githubApi: GithubApi, userName: String) exte
   }
 
   override def cloneIfMissing(projectName: String): Seq[ExecutionResult] = {
-    if(systemApi.exists(projectName)) {
+    if (systemApi.exists(projectName)) {
       Seq()
     } else {
       systemApi.clone(projectName)

@@ -15,7 +15,7 @@ trait SystemApi {
 
   def gitFetchRebase(projectName: String): Seq[ExecutionResult]
 
-  def exists(projectName:String):Boolean
+  def exists(projectName: String): Boolean
 
-  def clone(projectName:String):Seq[ExecutionResult]
+  def clone(projectName: String): Seq[ExecutionResult]
 }

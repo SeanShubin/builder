@@ -3,7 +3,7 @@ package com.seanshubin.builder.core
 import java.nio.file.{Files, Path}
 
 class SystemApiImpl(systemExecutor: SystemExecutor,
-                   homeDirectory:Path,
+                    homeDirectory: Path,
                     environment: Settings,
                     notifications: Notifications) extends SystemApi {
   override def listLocalDirectoryNames(): Seq[String] = {
