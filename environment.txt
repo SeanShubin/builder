@@ -33,6 +33,10 @@
       command verify
     }
     {
+      name hello
+      command verify
+    }
+    {
       name up-to-date
       command deploy
     }
