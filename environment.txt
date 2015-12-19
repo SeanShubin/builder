@@ -128,10 +128,6 @@
       name documentation
       command verify
     }
-    {
-      name hello
-      command verify
-    }
   ]
   upToDateConfiguration {
     pomFileName pom.xml
