@@ -150,7 +150,17 @@
     ]
     automaticallyUpgrade true
     doNotUpgradeTo []
-    doNotUpgradeFrom []
+    doNotUpgradeFrom
+    [
+      {
+        group com.fasterxml.jackson.module
+        artifact jackson-module-scala_2.11
+      }
+      {
+        group com.fasterxml.jackson.datatype
+        artifact jackson-datatype-jsr310
+      }
+    ]
     reportDirectory generated/reports/up-to-date/github
     cacheDirectory generated/reports/up-to-date/cache
     cacheExpire '12 hours'
