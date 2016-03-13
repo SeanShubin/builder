@@ -132,6 +132,10 @@
       name java-embedded-jetty-sample
       command verify
     }
+    {
+      name hello-jetty-java
+      command verify
+    }
   ]
   upToDateConfiguration {
     pomFileName pom.xml
