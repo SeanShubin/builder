@@ -136,6 +136,10 @@
       name hello-jetty-java
       command verify
     }
+    {
+      name hello-war
+      command verify
+    }
   ]
   upToDateConfiguration {
     pomFileName pom.xml
