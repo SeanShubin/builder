@@ -25,6 +25,18 @@
   projects
   [
     {
+      name developers-value-notation
+      command verify
+    }
+    {
+      name detangler
+      command verify
+    }
+    {
+      name todo
+      command verify
+    }
+    {
       name dependency-analyzer
       command deploy
     }
@@ -45,20 +57,12 @@
       command deploy
     }
     {
-      name developers-value-notation
-      command verify
-    }
-    {
       name http-values
       command deploy
     }
     {
       name web-sync
       command deploy
-    }
-    {
-      name detangler
-      command verify
     }
     {
       name cron-format
