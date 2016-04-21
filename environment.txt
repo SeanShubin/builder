@@ -33,7 +33,7 @@
       command verify
     }
     {
-      name todo
+      name todo-prototype
       command verify
     }
     {
