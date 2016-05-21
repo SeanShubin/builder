@@ -23,6 +23,12 @@ object CommandEnum {
       ExecutionReport(projectName, name, executionResult)
     }
   }
+  val Install = new CommandEnum("install") {
+    override def execute(projectName: String, api: Api): Report = {
+      val executionResult = api.install(projectName)
+      ExecutionReport(projectName, name, executionResult)
+    }
+  }
   val Compile = new CommandEnum("compile") {
     override def execute(projectName: String, api: Api): Report = {
       val executionResult = api.compile(projectName)

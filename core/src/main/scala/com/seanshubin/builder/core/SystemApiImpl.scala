@@ -30,6 +30,10 @@ class SystemApiImpl(systemExecutor: SystemExecutor,
     maven("verify", projectName)
   }
 
+  override def install(projectName: String): Seq[ExecutionResult] = {
+    maven("install", projectName)
+  }
+
   override def compile(projectName: String): Seq[ExecutionResult] = {
     maven("compile", projectName)
   }

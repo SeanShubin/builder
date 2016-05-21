@@ -11,6 +11,8 @@ class ApiImpl(systemApi: SystemApi, githubApi: GithubApi, userName: String) exte
 
   override def verify(name: String): Seq[ExecutionResult] = systemApi.verify(name)
 
+  override def install(name: String): Seq[ExecutionResult] = systemApi.install(name)
+
   override def deploy(name: String): Seq[ExecutionResult] = systemApi.deploy(name)
 
   override def pendingLocalEdits(projectName: String): Boolean = systemApi.hasPendingEdits(projectName)

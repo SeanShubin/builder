@@ -11,6 +11,8 @@ trait Api {
 
   def verify(name: String): Seq[ExecutionResult]
 
+  def install(name: String): Seq[ExecutionResult]
+
   def compile(name: String): Seq[ExecutionResult]
 
   def addCommitPush(projectName: String, gitMessage: String): Seq[ExecutionResult]

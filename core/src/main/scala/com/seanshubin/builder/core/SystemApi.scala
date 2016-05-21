@@ -7,6 +7,8 @@ trait SystemApi {
 
   def verify(projectName: String): Seq[ExecutionResult]
 
+  def install(projectName: String): Seq[ExecutionResult]
+
   def compile(projectName: String): Seq[ExecutionResult]
 
   def hasPendingEdits(projectName: String): Boolean

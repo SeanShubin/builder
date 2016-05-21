@@ -65,6 +65,18 @@
       command deploy
     }
     {
+      name todo-specification
+      command install
+    }
+    {
+      name todo-application
+      command verify
+    }
+    {
+      name todo-persistence
+      command verify
+    }
+    {
       name cron-format
       command verify
     }
