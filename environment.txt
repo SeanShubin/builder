@@ -33,10 +33,6 @@
       command verify
     }
     {
-      name todo-prototype
-      command verify
-    }
-    {
       name dependency-analyzer
       command deploy
     }
