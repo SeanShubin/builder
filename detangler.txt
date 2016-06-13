@@ -1,0 +1,17 @@
+{
+  reportDir generated/detangled
+  searchPaths
+  [
+    console/target/builder.jar
+  ]
+  level 2
+  startsWith
+  {
+    include [com seanshubin builder]
+    exclude []
+    drop [com seanshubin builder]
+  }
+  ignoreFiles []
+  canFailBuild true
+  allowedInCycle []
+}
