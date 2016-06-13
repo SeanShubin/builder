@@ -33,10 +33,6 @@
       command verify
     }
     {
-      name dependency-analyzer
-      command deploy
-    }
-    {
       name contract
       command verify
     }
