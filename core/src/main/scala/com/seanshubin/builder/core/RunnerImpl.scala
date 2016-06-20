@@ -32,12 +32,12 @@ class RunnerImpl(configuration: Configuration,
 
       val okToBuild = projects.forall(p => p.isOkToBuild)
 
-//      if (okToBuild) {
-//        if (shouldUpgradeDependencies) {
+      if (okToBuild) {
+        if (shouldUpgradeDependencies) {
           upgradeDependencies()
-//        }
-//        doBuildProcess()
-//      }
+        }
+        doBuildProcess()
+      }
     }
     notifications.totalMillisecondsElapsed(elapsed)
   }
