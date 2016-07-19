@@ -21,10 +21,6 @@
             <artifactId>http-values-client-google</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.seanshubin.utility</groupId>
-            <artifactId>utility-json</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.seanshubin</groupId>
             <artifactId>up_to_date-console</artifactId>
         </dependency>
@@ -43,6 +39,10 @@
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-scala_2.11</artifactId>
         </dependency>
     </dependencies>
     <build>

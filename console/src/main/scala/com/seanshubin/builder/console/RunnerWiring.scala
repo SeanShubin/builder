@@ -7,7 +7,6 @@ import com.seanshubin.builder.core._
 import com.seanshubin.devon.core.devon.{DevonMarshaller, DevonMarshallerWiring}
 import com.seanshubin.http.values.client.google.HttpSender
 import com.seanshubin.utility.filesystem.{FileSystemIntegration, FileSystemIntegrationImpl}
-import com.seanshubin.utility.json.{JsonMarshaller, JsonMarshallerImpl}
 
 trait RunnerWiring {
   def configuration: Configuration
