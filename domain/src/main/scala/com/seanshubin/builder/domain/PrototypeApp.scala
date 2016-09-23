@@ -13,10 +13,8 @@ object PrototypeApp extends App {
   val base = Paths.get("/Users/sshubin/github/sean")
 
   val dirs = Files.list(base).collect(Collectors.toList[Path]).asScala.filter(Files.isDirectory(_))
-  val dirsF: Seq[Future[Seq[ProcessResult]]] = dirs.map(gitFetchRebase)
-
-  val blah: Future[Seq[ProcessResult]] = Future.sequence(dirsF).map(_.flatten)
-  val processResults = Await.result(blah, Duration.Inf)
+  val resultsSeqFuture: Future[Seq[ProcessResult]] = Future.sequence(dirs.map(gitFetchRebase)).map(_.flatten)
+  val processResults = Await.result(resultsSeqFuture, Duration.Inf)
   processResults.filter(_.isError).flatMap(_.toMultipleLineString).foreach(println)
 
   def gitFetchRebase(dir: Path): Future[Seq[ProcessResult]] = {
