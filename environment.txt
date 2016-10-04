@@ -148,6 +148,10 @@
       name hello-war
       command verify
     }
+    {
+      name entry-point
+      command verify
+    }
   ]
   upToDateConfiguration {
     pomFileName pom.xml

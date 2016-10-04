@@ -18,17 +18,32 @@ object PrototypeApp extends App {
   val githubDirectory = homeDirectory.resolve("github").resolve("sean")
 
   val dirs = Files.list(githubDirectory).collect(Collectors.toList[Path]).asScala.filter(Files.isDirectory(_))
-  val resultsSeqFuture: Future[Seq[ProcessResult]] = Future.sequence(dirs.map(gitFetchRebase)).map(_.flatten)
+  val resultsSeqFuture: Future[Seq[ProcessResult]] = Future.sequence(dirs.map(gitFetch)).map(_.flatten)
   val processResults = Await.result(resultsSeqFuture, Duration.Inf)
-  processResults.filter(_.isError).flatMap(_.toMultipleLineString).foreach(println)
+  processResults.filterNot(_.isSuccess).flatMap(_.toMultipleLineString).foreach(println)
 
-  def gitFetchRebase(dir: Path): Future[Seq[ProcessResult]] = {
-    val futureSeq: Future[Seq[ProcessResult]] = for {
-      a <- ProcessRunner.run(Seq("git", "fetch"), dir)
-      b <- ProcessRunner.run(Seq("git", "rebase"), dir)
+  def gitFetch(dir: Path): Future[Seq[ProcessResult]] = {
+    val futureFetch: Future[ProcessResult] = ProcessRunner.run(Seq("git", "fetch"), dir)
+    val futureRebase: Future[Seq[ProcessResult]] = for {
+      fetchResult <- futureFetch
+      rebaseResult <- gitRebase(dir, fetchResult)
     } yield {
-      Seq(a, b)
+      rebaseResult
     }
-    futureSeq
+    futureRebase
+  }
+
+  def gitRebase(dir: Path, fetchResult: ProcessResult): Future[Seq[ProcessResult]] = {
+    if (fetchResult.isSuccess) {
+      val result: Future[Seq[ProcessResult]] = for {
+        rebaseResult <- ProcessRunner.run(Seq("git", "rebase"), dir)
+      } yield {
+        Seq(fetchResult, rebaseResult)
+      }
+      result
+    } else {
+      val result: Future[Seq[ProcessResult]] = Future.successful(Seq(fetchResult))
+      result
+    }
   }
 }
