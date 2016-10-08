@@ -20,11 +20,8 @@ object PrototypeApp extends App {
   val homeDirectory = homeDirectories.find(Files.exists(_)).get
   val githubDirectory = homeDirectory.resolve("github").resolve("sean")
   val commands: Seq[Seq[String]] = Seq(
-    Seq("git", "add", "--all"),
-    Seq("git", "commit", "-m", "fixed package for DevonMarshaller"),
     Seq("git", "fetch"),
-    Seq("git", "rebase"),
-    Seq("git", "push"))
+    Seq("git", "rebase"))
 
   val dirs = Files.list(githubDirectory).collect(Collectors.toList[Path]).asScala.filter(Files.isDirectory(_))
 
