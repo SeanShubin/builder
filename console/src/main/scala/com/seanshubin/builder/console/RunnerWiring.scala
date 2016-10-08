@@ -4,7 +4,8 @@ import java.nio.charset.{Charset, StandardCharsets}
 import java.nio.file.Path
 
 import com.seanshubin.builder.core._
-import com.seanshubin.devon.core.devon.{DevonMarshaller, DevonMarshallerWiring}
+import com.seanshubin.devon.domain.DevonMarshallerWiring
+import com.seanshubin.devon.parserules.DevonMarshaller
 import com.seanshubin.http.values.client.google.HttpSender
 import com.seanshubin.utility.filesystem.{FileSystemIntegration, FileSystemIntegrationImpl}
 

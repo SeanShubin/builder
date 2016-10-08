@@ -3,7 +3,7 @@ package com.seanshubin.builder.core
 import java.nio.charset.Charset
 import java.nio.file.Path
 
-import com.seanshubin.devon.core.devon.DevonMarshaller
+import com.seanshubin.devon.parserules.DevonMarshaller
 import com.seanshubin.utility.filesystem.FileSystemIntegration
 
 import scala.collection.JavaConversions
