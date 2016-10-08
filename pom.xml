@@ -45,8 +45,8 @@
             </dependency>
             <dependency>
                 <groupId>com.seanshubin.devon</groupId>
-                <artifactId>devon-core</artifactId>
-                <version>1.0</version>
+                <artifactId>devon-domain</artifactId>
+                <version>1.1</version>
             </dependency>
             <dependency>
                 <groupId>com.seanshubin.utility</groupId>
