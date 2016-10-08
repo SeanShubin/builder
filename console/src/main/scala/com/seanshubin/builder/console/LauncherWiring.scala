@@ -3,8 +3,7 @@ package com.seanshubin.builder.console
 import java.nio.charset.{Charset, StandardCharsets}
 
 import com.seanshubin.builder.core._
-import com.seanshubin.devon.domain.DevonMarshallerWiring
-import com.seanshubin.devon.parserules.DevonMarshaller
+import com.seanshubin.devon.domain.{DevonMarshaller, DevonMarshallerWiring}
 import com.seanshubin.utility.filesystem.{FileSystemIntegration, FileSystemIntegrationImpl}
 
 trait LauncherWiring {

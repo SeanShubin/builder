@@ -13,6 +13,10 @@
             <artifactId>devon-domain</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.seanshubin.devon</groupId>
+            <artifactId>devon-tokenizer</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.seanshubin</groupId>
             <artifactId>http-values-client-google</artifactId>
         </dependency>

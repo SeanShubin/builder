@@ -15,7 +15,8 @@ class LinesBasedProcess(command: Seq[String],
                         charset: Charset,
                         executionContext: ExecutionContext) {
   implicit val implicitExecutionContext = executionContext
-  val processBuilder = new ProcessBuilder(command: _*).directory(workingDirectory.toFile).redirectErrorStream(redirectErrorToStandard)
+  val file = workingDirectory.toFile
+  val processBuilder = new ProcessBuilder(command: _*).directory(file).redirectErrorStream(redirectErrorToStandard)
   val processEnvironment = processBuilder.environment()
   for {
     (key, value) <- environment

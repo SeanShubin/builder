@@ -1,6 +1,6 @@
 package com.seanshubin.builder.core
 
-import com.seanshubin.devon.parserules.DevonMarshaller
+import com.seanshubin.devon.domain.DevonMarshaller
 
 class LineEmittingNotifications(devonMarshaller: DevonMarshaller, emit: String => Unit) extends Notifications {
   override def effectiveConfiguration(configuration: Configuration): Unit = {
