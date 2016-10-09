@@ -26,7 +26,7 @@
   [
     {
       name developers-value-notation
-      command verify
+      command install
     }
     {
       name detangler
