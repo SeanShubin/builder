@@ -107,7 +107,7 @@ class SystemApiImpl(systemExecutor: SystemExecutor,
   override def exists(projectName: String): Boolean = Files.exists(homeDirectory.resolve(projectName))
 
   override def clone(projectName: String): Seq[ExecutionResult] = {
-    val command = environment.commandPrefix ++ Seq("git", "clone", s"git@github.com:SeanShubin/$projectName.git")
+    val command = environment.commandPrefix ++ Seq("git", "clone", s"https://github.com/SeanShubin/$projectName.git")
     val result = exec(command, homeDirectory)
     Seq(result)
   }
