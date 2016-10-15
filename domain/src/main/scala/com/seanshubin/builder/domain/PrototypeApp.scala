@@ -15,7 +15,7 @@ object PrototypeApp extends App {
 
   val homeMac = Paths.get("/Users/seanshubin")
   val workMac = Paths.get("/Users/sshubin")
-  val homePc = Paths.get("C:\\Users\\Sean")
+  val homePc = Paths.get("G:\\keep")
   val homeDirectories = Seq(homeMac, workMac, homePc)
   val homeDirectory = homeDirectories.find(Files.exists(_)).get
   val githubDirectory = homeDirectory.resolve("github").resolve("sean")
