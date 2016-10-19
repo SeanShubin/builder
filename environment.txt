@@ -145,7 +145,15 @@
       command verify
     }
     {
-      name hello-war
+      name hello-war-scala
+      command verify
+    }
+    {
+      name hello-web
+      command verify
+    }
+    {
+      name prototype-hello-web
       command verify
     }
     {
