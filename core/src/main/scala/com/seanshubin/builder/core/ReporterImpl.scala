@@ -6,7 +6,7 @@ import java.nio.file.Path
 import com.seanshubin.devon.domain.DevonMarshaller
 import com.seanshubin.utility.filesystem.FileSystemIntegration
 
-import scala.collection.JavaConversions
+import scala.collection.JavaConverters._
 
 class ReporterImpl(reportDir: Path, fileSystem: FileSystemIntegration, devonMarshaller: DevonMarshaller, charset: Charset) extends Reporter {
   override def storeAllReports(reports: Seq[Report]): Unit = {
@@ -23,7 +23,7 @@ class ReporterImpl(reportDir: Path, fileSystem: FileSystemIntegration, devonMars
     fileSystem.createDirectories(upgradeDir)
     val upgradeReportPath = upgradeDir.resolve("upgrade-results.txt")
     val lines = devonMarshaller.valueToPretty(upgradeResults)
-    fileSystem.write(upgradeReportPath, JavaConversions.asJavaIterable(lines), charset)
+    fileSystem.write(upgradeReportPath, lines.asJava, charset)
   }
 
   private def storeReport(buildDir: Path, report: Report): Unit = {
@@ -31,12 +31,12 @@ class ReporterImpl(reportDir: Path, fileSystem: FileSystemIntegration, devonMars
       case x: ExecutionReport =>
         val lines = devonMarshaller.valueToPretty(x)
         val path = buildDir.resolve(x.projectName + ".txt")
-        fileSystem.write(path, JavaConversions.asJavaIterable(lines), charset)
+        fileSystem.write(path, lines.asJava, charset)
       case ExceptionReport(projectName, exception) =>
         val exceptionValue = ExceptionValue.fromException(exception)
         val lines = devonMarshaller.valueToPretty(exceptionValue)
         val path = buildDir.resolve(projectName + ".txt")
-        fileSystem.write(path, JavaConversions.asJavaIterable(lines), charset)
+        fileSystem.write(path, lines.asJava, charset)
       case _ => //do nothing
     }
   }
