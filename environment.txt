@@ -30,7 +30,7 @@
     }
     {
       name detangler
-      command verify
+      command install
     }
     {
       name contract

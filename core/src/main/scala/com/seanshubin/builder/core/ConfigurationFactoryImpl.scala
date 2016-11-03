@@ -5,18 +5,17 @@ import java.nio.file.Paths
 
 import com.seanshubin.devon.domain.DevonMarshaller
 import com.seanshubin.up_to_date.logic.{GroupAndArtifact, GroupArtifactVersion, Configuration => UpToDateConfiguration}
-import com.seanshubin.utility.filesystem.FileSystemIntegration
 
-class ConfigurationFactoryImpl(fileSystem: FileSystemIntegration,
+class ConfigurationFactoryImpl(files: FilesContract,
                                devonMarshaller: DevonMarshaller,
                                charset: Charset) extends ConfigurationFactory {
   override def validate(args: Seq[String]): Either[Seq[String], Configuration] = {
     if (args.length == 1) {
       val configFilePath = Paths.get(args(0))
       try {
-        if (fileSystem.exists(configFilePath)) {
-          val bytes = fileSystem.readAllBytes(configFilePath)
-          val text = new String(bytes.toArray, charset)
+        if (files.exists(configFilePath)) {
+          val bytes = files.readAllBytes(configFilePath)
+          val text = new String(bytes, charset)
           val config = devonMarshaller.stringToValue(text, classOf[Configuration])
           Right(config)
         } else {
@@ -24,6 +23,7 @@ class ConfigurationFactoryImpl(fileSystem: FileSystemIntegration,
         }
       } catch {
         case ex: Throwable =>
+          ex.printStackTrace()
           Left(Seq(s"There was a problem reading the configuration file '$configFilePath': ${ex.getMessage}"))
       }
     } else {

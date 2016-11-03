@@ -9,6 +9,10 @@
     <name>builder-console</name>
     <dependencies>
         <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.seanshubin</groupId>
             <artifactId>builder-core</artifactId>
             <version>${project.parent.version}</version>
@@ -28,18 +32,24 @@
                 <artifactId>scalatest-maven-plugin</artifactId>
             </plugin>
             <plugin>
-                <groupId>org.dstovall</groupId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.seanshubin.builder.console.ConsoleApplication</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.jolira</groupId>
                 <artifactId>onejar-maven-plugin</artifactId>
-                <version>1.4.5</version>
+                <version>1.4.4</version>
                 <executions>
                     <execution>
                         <configuration>
-                            <mainClass>com.seanshubin.builder.console.ConsoleApplication</mainClass>
                             <filename>builder.jar</filename>
-                            <manifestEntries>
-                                <One-Jar-URL-Factory>com.simontuffs.onejar.JarClassLoader$OneJarURLFactory
-                                </One-Jar-URL-Factory>
-                            </manifestEntries>
                         </configuration>
                         <goals>
                             <goal>one-jar</goal>

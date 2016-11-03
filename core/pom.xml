@@ -13,10 +13,6 @@
             <artifactId>devon-domain</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.seanshubin.utility</groupId>
-            <artifactId>utility-filesystem</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.seanshubin</groupId>
             <artifactId>http-values-client-google</artifactId>
         </dependency>
@@ -38,7 +34,7 @@
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
-            <artifactId>jackson-module-scala_2.11</artifactId>
+            <artifactId>jackson-module-scala_2.12.0-RC1</artifactId>
         </dependency>
     </dependencies>
     <build>

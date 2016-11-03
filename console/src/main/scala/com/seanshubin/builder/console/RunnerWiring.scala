@@ -6,7 +6,6 @@ import java.nio.file.Path
 import com.seanshubin.builder.core._
 import com.seanshubin.devon.domain.{DevonMarshaller, DevonMarshallerWiring}
 import com.seanshubin.http.values.client.google.HttpSender
-import com.seanshubin.utility.filesystem.{FileSystemIntegration, FileSystemIntegrationImpl}
 
 trait RunnerWiring {
   def configuration: Configuration
@@ -14,9 +13,9 @@ trait RunnerWiring {
   lazy val userHome = System.getProperty("user.home")
   lazy val emitLine: String => Unit = println
   lazy val devonMarshaller: DevonMarshaller = DevonMarshallerWiring.Default
-  lazy val fileSystem: FileSystemIntegration = new FileSystemIntegrationImpl
+  lazy val files: FilesContract = FilesDelegate
   lazy val charset: Charset = StandardCharsets.UTF_8
-  lazy val reporter: Reporter = new ReporterImpl(configuration.reportDirectory, fileSystem, devonMarshaller, charset)
+  lazy val reporter: Reporter = new ReporterImpl(configuration.reportDirectory, files, devonMarshaller, charset)
   lazy val notifications: Notifications = new LineEmittingNotifications(devonMarshaller, emitLine)
   lazy val environment: Settings = configuration.settingsByUserHome(userHome)
   lazy val githubDirectory: Path = environment.githubDirectory
