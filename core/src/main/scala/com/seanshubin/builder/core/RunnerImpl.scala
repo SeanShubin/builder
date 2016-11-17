@@ -1,5 +1,7 @@
 package com.seanshubin.builder.core
 
+import java.nio.file.Path
+
 import com.seanshubin.up_to_date.console.RunnerWiring
 
 class RunnerImpl(configuration: Configuration,
@@ -7,7 +9,8 @@ class RunnerImpl(configuration: Configuration,
                  notifications: Notifications,
                  reporter: Reporter,
                  timer: Timer,
-                 shouldUpgradeDependencies: Boolean) extends Runnable {
+                 shouldUpgradeDependencies: Boolean,
+                 githubDirectory:Path) extends Runnable {
   override def run(): Unit = {
     val elapsed = timer.elapsedTimeFor {
       val configuredMap = configuration.projects.map(p => (p.name, p)).toMap
@@ -58,7 +61,9 @@ class RunnerImpl(configuration: Configuration,
   }
 
   def upgradeDependencies(): Unit = {
-    RunnerWiring(configuration.upToDateConfiguration).runner.run()
+    val originalUpToDateConfiguration = configuration.upToDateConfiguration
+    val upToDateConfiguration = originalUpToDateConfiguration.copy(directoriesToSearch = Seq(githubDirectory))
+    RunnerWiring(upToDateConfiguration).runner.run()
     def processProject(project: ProjectConfig): Seq[ExecutionResult] = {
       if (api.pendingLocalEdits(project.name) && project.name != "learn-spark") {
         val fetchRebaseResult = api.fetchRebase(project.name)
