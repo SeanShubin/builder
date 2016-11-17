@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.seanshubin</groupId>
     <artifactId>builder</artifactId>
@@ -73,7 +72,7 @@
             <dependency>
                 <groupId>org.scalatest</groupId>
                 <artifactId>scalatest_2.12</artifactId>
-                <version>3.0.0</version>
+                <version>3.0.1</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
