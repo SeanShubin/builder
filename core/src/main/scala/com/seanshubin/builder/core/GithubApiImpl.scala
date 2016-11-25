@@ -1,7 +1,7 @@
 package com.seanshubin.builder.core
 
 import com.seanshubin.http.values.client.google.HttpSender
-import com.seanshubin.http.values.core.RequestValue
+import com.seanshubin.http.values.domain.RequestValue
 
 class GithubApiImpl(httpSender: HttpSender, jsonMarshaller: JsonMarshaller) extends GithubApi {
   override def getProjectsForUser(userName: String): Seq[String] = {
