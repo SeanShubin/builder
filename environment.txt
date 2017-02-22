@@ -160,6 +160,10 @@
       name entry-point
       command verify
     }
+    {
+      name parser
+      command verify
+    }
   ]
   upToDateConfiguration {
     pomFileName pom.xml
