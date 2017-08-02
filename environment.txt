@@ -16,7 +16,7 @@
         shouldUpgradeDependencies true
       }
       C:\Users\Sean {
-        githubDirectory g:\keep\github\sean
+        githubDirectory d:\keep\github\sean
         commandPrefix [cmd /C]
         directoryListingCommand [dir /b]
         shouldUpgradeDependencies false
