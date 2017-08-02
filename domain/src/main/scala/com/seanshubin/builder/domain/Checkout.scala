@@ -2,6 +2,8 @@ package com.seanshubin.builder.domain
 
 import java.time.Clock
 
+import com.seanshubin.builder.process.ProcessOutput
+
 class Checkout(clock: Clock, checkoutProcessFinished: CheckoutResult => Unit) {
   def accept(sshUrl: String, previousAttempts: Int): Unit = {
     if (sshUrl == "succeed first try") {

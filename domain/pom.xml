@@ -9,6 +9,11 @@
     <name>builder-domain</name>
     <dependencies>
         <dependency>
+            <groupId>com.seanshubin</groupId>
+            <artifactId>builder-process</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.seanshubin.devon</groupId>
             <artifactId>devon-domain</artifactId>
         </dependency>
@@ -17,7 +22,7 @@
             <artifactId>devon-tokenizer</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.seanshubin</groupId>
+            <groupId>com.seanshubin.http.values</groupId>
             <artifactId>http-values-client-google</artifactId>
         </dependency>
         <dependency>

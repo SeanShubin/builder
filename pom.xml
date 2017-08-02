@@ -12,6 +12,7 @@
         <module>core</module>
         <module>console</module>
         <module>domain</module>
+        <module>process</module>
     </modules>
     <dependencyManagement>
         <dependencies>
@@ -31,7 +32,7 @@
                 <version>1.1</version>
             </dependency>
             <dependency>
-                <groupId>com.seanshubin</groupId>
+                <groupId>com.seanshubin.http.values</groupId>
                 <artifactId>http-values-client-google</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>

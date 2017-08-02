@@ -1,4 +1,4 @@
-package com.seanshubin.builder.domain
+package com.seanshubin.builder.process
 
 import java.time.Instant
 

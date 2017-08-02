@@ -13,7 +13,7 @@
             <artifactId>devon-domain</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.seanshubin</groupId>
+            <groupId>com.seanshubin.http.values</groupId>
             <artifactId>http-values-client-google</artifactId>
         </dependency>
         <dependency>
