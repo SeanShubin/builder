@@ -40,4 +40,3 @@ class Checkout(clock: Clock, checkoutProcessFinished: CheckoutResult => Unit) {
     processOutput
   }
 }
-
