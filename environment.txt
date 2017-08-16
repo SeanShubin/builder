@@ -165,7 +165,7 @@
       command verify
     }
     {
-      name repeat-jackson-bug
+      name repeat-jackson-scala-module-bug
       command verify
     }
   ]
