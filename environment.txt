@@ -26,11 +26,11 @@
   [
     {
       name developers-value-notation
-      command install
+      command verify
     }
     {
       name detangler
-      command install
+      command verify
     }
     {
       name contract
