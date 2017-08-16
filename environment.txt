@@ -164,6 +164,10 @@
       name parser
       command verify
     }
+    {
+      name repeat-jackson-bug
+      command verify
+    }
   ]
   upToDateConfiguration {
     pomFileName pom.xml
