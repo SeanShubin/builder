@@ -42,19 +42,19 @@
     }
     {
       name up-to-date
-      command deploy
+      command verify
     }
     {
       name utility
-      command deploy
+      command verify
     }
     {
       name http-values
-      command deploy
+      command verify
     }
     {
       name web-sync
-      command deploy
+      command verify
     }
     {
       name todo-specification
@@ -94,7 +94,7 @@
     }
     {
       name learn-spark
-      command compile
+      command verify
     }
     {
       name scala-training
