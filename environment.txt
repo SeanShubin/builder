@@ -185,7 +185,13 @@
       http://thoughtfulcraftsmanship.com/nexus/content/groups/public
     ]
     automaticallyUpgrade true
-    doNotUpgradeTo []
+    doNotUpgradeTo [
+     {
+       group    com.fasterxml.jackson.module
+       artifact jackson-module-scala_2.12
+       version  2.9.0
+     }
+    ]
     doNotUpgradeFrom
     [
     ]
