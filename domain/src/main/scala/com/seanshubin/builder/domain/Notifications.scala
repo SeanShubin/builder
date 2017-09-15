@@ -1,5 +1,11 @@
 package com.seanshubin.builder.domain
 
 trait Notifications {
-  def projectFoundInGithub(name: String): Unit
+  def projectsFoundInGithub(names: Seq[String]): Unit
+
+  def projectsFoundLocally(names: Seq[String]): Unit
+
+  def errorFindingProjectsInGithub(): Unit
+
+  def errorFindingProjectsLocally(ex: Throwable): Unit
 }
