@@ -5,7 +5,7 @@ import com.seanshubin.builder.domain.Event._
 
 import scala.concurrent.Promise
 
-class Coordinator(done: Promise[State]) extends Behavior[Event] {
+class StateMachine(done: Promise[State]) extends Behavior[Event] {
   private var state: State = State.Initial
 
   override def management(ctx: ActorContext[Event], msg: Signal): Behavior[Event] = {
@@ -14,6 +14,7 @@ class Coordinator(done: Promise[State]) extends Behavior[Event] {
 
   override def message(ctx: ActorContext[Event], msg: Event): Behavior[Event] = {
     msg match {
+      case Initialize => state = State.Initial
       case ProjectsFoundInGithub(names) => state = state.setGithub(names)
       case ProjectsFoundLocally(names) => state = state.setLocal(names)
       case ErrorFindingProjectsInGithub(ex) => state = state.setError(ex)

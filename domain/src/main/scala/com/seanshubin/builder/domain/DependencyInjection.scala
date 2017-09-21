@@ -27,8 +27,8 @@ trait DependencyInjection {
   val charset: Charset = StandardCharsets.UTF_8
   val systemSpecific: SystemSpecific = new SystemSpecificImpl
   val processLauncher: ProcessLauncher = new ProcessLauncherImpl(createProcessBuilder, futureRunner, clock, charset)
-  val coordinator: Behavior[Event] = new Coordinator(done)
-  val actorSystem: ActorSystem[Event] = ActorSystem("coordinator", coordinator)
+  val stateMachine: Behavior[Event] = new StateMachine(done)
+  val actorSystem: ActorSystem[Event] = ActorSystem("coordinator", stateMachine)
   val eventBuilder = new EventBuilder(actorSystem)
   val localProjectFinder: ProjectFinder = new LocalProjectFinder(
     systemSpecific,

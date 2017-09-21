@@ -4,6 +4,8 @@ sealed trait Event
 
 object Event {
 
+  case object Initialize extends Event
+
   case class ProjectsFoundInGithub(names: Seq[String]) extends Event
 
   case class ProjectsFoundLocally(names: Seq[String]) extends Event
