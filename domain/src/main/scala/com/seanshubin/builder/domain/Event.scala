@@ -12,4 +12,12 @@ object Event {
 
   case class ErrorFindingProjectsLocally(ex: Throwable) extends Event
 
+  case class Cloned(name: String) extends Event
+
+  case class ErrorCloning(name: String, exception: Throwable) extends Event
+
+  case class Built(name: String) extends Event
+
+  case class ErrorBuilding(name: String, exception: Throwable) extends Event
+
 }

@@ -5,14 +5,13 @@ import com.seanshubin.builder.domain.State.HasLocalAndGithub
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
-class Runner(githubProjectFinder: ProjectFinder,
-             localProjectFinder: ProjectFinder,
+class Runner(dispatcher:Dispatcher,
              done: Future[State],
              duration: Duration,
              cleaner: Cleaner) extends Runnable {
   override def run(): Unit = {
-    localProjectFinder.findProjects()
-    githubProjectFinder.findProjects()
+    dispatcher.findLocalProjects()
+    dispatcher.findRemoteProjects()
     val finalState: State = Await.result(done, duration)
     cleaner.cleanup()
     finalState match {

@@ -1,5 +1,7 @@
 package com.seanshubin.builder.domain
 
+import scala.concurrent.Future
+
 trait ProjectFinder {
-  def findProjects(): Unit
+  def findProjects(): Future[Seq[String]]
 }

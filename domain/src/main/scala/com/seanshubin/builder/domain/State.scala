@@ -9,6 +9,11 @@ sealed trait State {
 
   def setError(ex: Throwable): State = ???
 
+  def cloned(name: String): State = ???
+
+  def built(name: String): State = ???
+
+  def setProjectError(name: String, ex: Throwable): State = ???
 }
 
 object State {
@@ -38,6 +43,8 @@ object State {
   }
 
   case class HasLocalAndGithub(local: Seq[String], github: Seq[String]) extends FinalState
+
+  case class Processing(projects: Map[String, ProjectState]) extends State
 
   case class Error(ex: Throwable) extends FinalState
 
