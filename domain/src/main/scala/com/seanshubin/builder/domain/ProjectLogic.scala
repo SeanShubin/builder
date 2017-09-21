@@ -10,10 +10,11 @@ object ProjectLogic {
     withBuildAndClone
   }
 
-  def addBuild(stateMap:Map[String, ProjectState], build:String):Map[String, ProjectState] = {
+  def addBuild(stateMap: Map[String, ProjectState], build: String): Map[String, ProjectState] = {
     stateMap + (build -> ProjectState.Building)
   }
-  def addClone(stateMap:Map[String, ProjectState], build:String):Map[String, ProjectState] = {
+
+  def addClone(stateMap: Map[String, ProjectState], build: String): Map[String, ProjectState] = {
     stateMap + (build -> ProjectState.Cloning)
   }
 }

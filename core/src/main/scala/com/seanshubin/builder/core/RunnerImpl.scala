@@ -10,7 +10,7 @@ class RunnerImpl(configuration: Configuration,
                  reporter: Reporter,
                  timer: Timer,
                  shouldUpgradeDependencies: Boolean,
-                 githubDirectory:Path) extends Runnable {
+                 githubDirectory: Path) extends Runnable {
   override def run(): Unit = {
     val elapsed = timer.elapsedTimeFor {
       val configuredMap = configuration.projects.map(p => (p.name, p)).toMap
@@ -54,6 +54,7 @@ class RunnerImpl(configuration: Configuration,
           ExceptionReport(project.name, ex)
       }
     }
+
     val results = configuration.projects.map(processProject)
     notifications.summarize(results)
     reporter.storeAllReports(results)
@@ -64,6 +65,7 @@ class RunnerImpl(configuration: Configuration,
     val originalUpToDateConfiguration = configuration.upToDateConfiguration
     val upToDateConfiguration = originalUpToDateConfiguration.copy(directoriesToSearch = Seq(githubDirectory))
     RunnerWiring(upToDateConfiguration).runner.run()
+
     def processProject(project: ProjectConfig): Seq[ExecutionResult] = {
       if (api.pendingLocalEdits(project.name) && project.name != "learn-spark") {
         val fetchRebaseResult = api.fetchRebase(project.name)
@@ -73,6 +75,7 @@ class RunnerImpl(configuration: Configuration,
         Seq()
       }
     }
+
     val upgradeResults = configuration.projects.flatMap(processProject)
     reporter.storeUpgradeResults(upgradeResults)
   }

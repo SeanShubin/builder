@@ -11,9 +11,11 @@ class ReporterImpl(reportDir: Path, files: FilesContract, devonMarshaller: Devon
   override def storeAllReports(reports: Seq[Report]): Unit = {
     val buildDir = reportDir.resolve("build")
     files.createDirectories(buildDir)
+
     def storeReportInBuildDir(report: Report): Unit = {
       storeReport(buildDir, report)
     }
+
     reports.foreach(storeReportInBuildDir)
   }
 

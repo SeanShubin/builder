@@ -16,7 +16,7 @@ trait DependencyInjection {
   implicit val executionContext: ExecutionContext = new MyExecutionContext(ExecutionContext.Implicits.global)
   val done: Promise[State] = Promise()
   val userName: String = "SeanShubin"
-  val baseDirectory:Path = Paths.get("/Users/sshubin/github/sean")
+  val baseDirectory: Path = Paths.get("/Users/sshubin/github/sean")
   val sender: Sender = new HttpSender
   val jsonMarshaller: JsonMarshaller = JacksonJsonMarshaller
   val emit: String => Unit = println
@@ -40,8 +40,8 @@ trait DependencyInjection {
     futureRunner)
   val duration = Duration(1, TimeUnit.HOURS)
   val cleaner: Cleaner = new CleanerImpl(actorSystem)
-  val projectCommandRunner:ProjectCommandRunner = new ProjectCommandRunnerImpl(baseDirectory, processLauncher)
-  val dispatcher:Dispatcher = new DispatcherImpl(githubProjectFinder, localProjectFinder, projectCommandRunner, actorSystem.tell _)
+  val projectCommandRunner: ProjectCommandRunner = new ProjectCommandRunnerImpl(baseDirectory, processLauncher)
+  val dispatcher: Dispatcher = new DispatcherImpl(githubProjectFinder, localProjectFinder, projectCommandRunner, actorSystem.tell _)
   val runner: Runnable = new Runner(
     dispatcher,
     done.future,

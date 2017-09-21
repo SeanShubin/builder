@@ -5,7 +5,7 @@ import com.seanshubin.builder.domain.State.HasLocalAndGithub
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
-class Runner(dispatcher:Dispatcher,
+class Runner(dispatcher: Dispatcher,
              done: Future[State],
              duration: Duration,
              cleaner: Cleaner) extends Runnable {

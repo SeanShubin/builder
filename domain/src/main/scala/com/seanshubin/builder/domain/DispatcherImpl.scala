@@ -5,8 +5,8 @@ import scala.util.{Failure, Success}
 
 class DispatcherImpl(githubProjectFinder: ProjectFinder,
                      localProjectFinder: ProjectFinder,
-                     projectCommandRunner:ProjectCommandRunner,
-                     eventListener:Event => Unit)(implicit executionContext:ExecutionContext) extends Dispatcher {
+                     projectCommandRunner: ProjectCommandRunner,
+                     eventListener: Event => Unit)(implicit executionContext: ExecutionContext) extends Dispatcher {
   override def findLocalProjects(): Unit = {
     val futureResult = localProjectFinder.findProjects()
     futureResult.onComplete {
