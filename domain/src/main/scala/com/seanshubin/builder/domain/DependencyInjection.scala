@@ -22,7 +22,7 @@ trait DependencyInjection {
   val emit: String => Unit = println
   val notifications: Notifications = new LineEmittingNotifications(emit)
   val createProcessBuilder: () => ProcessBuilderContract = ProcessBuilderDelegate.apply _
-  val futureRunner: FutureRunner = new ExecutionContextFutureRunner
+  val futureRunner: FutureRunner = new ExecutionContextFutureRunner(notifications.unhandledException(_))
   val clock: Clock = Clock.systemUTC()
   val charset: Charset = StandardCharsets.UTF_8
   val systemSpecific: SystemSpecific = new SystemSpecificImpl

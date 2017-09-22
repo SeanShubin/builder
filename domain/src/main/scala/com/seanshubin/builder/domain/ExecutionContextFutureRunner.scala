@@ -2,10 +2,17 @@ package com.seanshubin.builder.domain
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ExecutionContextFutureRunner(implicit executionContext: ExecutionContext) extends FutureRunner {
+class ExecutionContextFutureRunner(notifyOfException: Throwable => Unit)
+                                  (implicit executionContext: ExecutionContext) extends FutureRunner {
   override def runInFuture[T](block: => T): Future[T] = {
     Future {
-      block
+      try {
+        block
+      } catch {
+        case ex: Throwable =>
+          notifyOfException(ex)
+          throw ex
+      }
     }
   }
 }

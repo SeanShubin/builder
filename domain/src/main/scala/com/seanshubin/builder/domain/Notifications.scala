@@ -8,4 +8,6 @@ trait Notifications {
   def errorFindingProjectsInGithub(): Unit
 
   def errorFindingProjectsLocally(ex: Throwable): Unit
+
+  def unhandledException(ex: Throwable): Unit
 }
