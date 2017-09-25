@@ -13,10 +13,9 @@ class DependencyInjection {
   val notifications: Notifications = new LineEmittingNotifications(emit)
   val futureRunner = new ExecutionContextFutureRunner(notifications.asyncException _)
   val done: Promise[Unit] = Promise()
-  val dispatcher: Dispatcher = new DispatcherImpl(futureRunner)
+  val dispatcher: Dispatcher = new DispatcherImpl(futureRunner, done)
   val behavior: Behavior[Event] = new PrototypeBehavior(
     dispatcher,
-    done,
     notifications.signal _,
     notifications.event _)
   val actorSystem: ActorSystem[Event] = ActorSystem("behavior", behavior)

@@ -6,8 +6,6 @@ import com.seanshubin.builder.prototype.Event.{Found, Processed, Ready}
 import scala.concurrent.ExecutionContext
 
 sealed trait State {
-  def isDone: Boolean = false
-
   def update(name: String, status: Int): State = ???
 
   def results: Map[String, Int] = ???
@@ -46,16 +44,11 @@ object State {
       event match {
         case Processed(name, code) =>
           val newStatus = status.completeProject(name, code)
+          if (newStatus.isDone) {
+            dispatcher.setDone()
+          }
           Processing(newStatus)
       }
-    }
-
-    override def isDone: Boolean = {
-      def isNameDone(name: String, result: Option[Int]): Boolean = {
-        result.isDefined
-      }
-
-      status.isDone
     }
   }
 
