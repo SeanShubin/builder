@@ -71,7 +71,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <detanglerConfig>detangler.txt</detanglerConfig>
+                    <detanglerConfig>console/detangler.txt</detanglerConfig>
                 </configuration>
             </plugin>
         </plugins>

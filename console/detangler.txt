@@ -1,5 +1,5 @@
 {
-  reportDir generated/detangled
+  reportDir console/target/detangled
   searchPaths
   [
     console/target/builder.jar
@@ -7,9 +7,9 @@
   level 2
   startsWith
   {
-    include [com seanshubin builder]
+    include [[com seanshubin builder]]
     exclude []
-    drop [com seanshubin builder]
+    drop [[com seanshubin builder]]
   }
   ignoreFiles []
   canFailBuild true

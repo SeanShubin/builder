@@ -1,0 +1,17 @@
+{
+  reportDir prototype/target/detangled
+  searchPaths
+  [
+    prototype/target/builder-prototype-1.0-SNAPSHOT.jar
+  ]
+  level 1
+  startsWith
+  {
+    include [[com seanshubin builder prototype]]
+    exclude []
+    drop [[com seanshubin builder prototype]]
+  }
+  ignoreFiles []
+  canFailBuild true
+  allowedInCycle []
+}
