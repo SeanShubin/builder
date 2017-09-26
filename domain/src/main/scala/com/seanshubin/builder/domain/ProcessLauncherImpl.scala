@@ -27,7 +27,7 @@ class ProcessLauncherImpl(createProcessBuilder: () => ProcessBuilderContract,
       exitCode <- exitCodeFuture
     } yield {
       val ended = clock.instant()
-      ProcessOutput(exitCode, outputLines, errorLines, started, ended)
+      ProcessOutput(input, exitCode, outputLines, errorLines, started, ended)
     }
     compositeFuture
   }

@@ -1,5 +1,7 @@
 package com.seanshubin.builder.domain
 
+import akka.typed.Signal
+
 trait Notifications {
   def projectsFoundInGithub(names: Seq[String]): Unit
 
@@ -10,4 +12,9 @@ trait Notifications {
   def errorFindingProjectsLocally(ex: Throwable): Unit
 
   def unhandledException(ex: Throwable): Unit
+
+  def event(event: Event): Unit
+
+  def signal(signal: Signal): Unit
+
 }

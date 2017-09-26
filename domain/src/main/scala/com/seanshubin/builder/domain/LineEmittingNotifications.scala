@@ -1,6 +1,6 @@
 package com.seanshubin.builder.domain
 
-import java.io.{PrintWriter, StringWriter}
+import akka.typed.Signal
 
 class LineEmittingNotifications(emit: String => Unit) extends Notifications {
   override def projectsFoundInGithub(names: Seq[String]): Unit = {
@@ -16,10 +16,15 @@ class LineEmittingNotifications(emit: String => Unit) extends Notifications {
   override def errorFindingProjectsLocally(ex: Throwable): Unit = ???
 
   override def unhandledException(ex: Throwable): Unit = {
-    val stringWriter = new StringWriter()
-    val printWriter = new PrintWriter(stringWriter)
-    ex.printStackTrace(printWriter)
-    val s = stringWriter.getBuffer.toString
+    val s = ExceptionUtil.toStringWithStackTrace(ex)
     emit(s)
+  }
+
+  override def event(event: Event): Unit = {
+    emit(s"event: $event")
+  }
+
+  override def signal(signal: Signal): Unit = {
+    emit(s"signal: $signal")
   }
 }
