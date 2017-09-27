@@ -7,7 +7,7 @@ trait Dispatcher {
 
   def findRemoteProjects(): Future[Seq[String]]
 
-  def cloneProject(name: String): Future[ProcessOutput]
+  def cloneProject(name: String, previousAttemptCount: Int): Future[CommandResult]
 
-  def buildProject(name: String): Future[ProcessOutput]
+  def buildProject(name: String, previousAttemptCount: Int): Future[CommandResult]
 }

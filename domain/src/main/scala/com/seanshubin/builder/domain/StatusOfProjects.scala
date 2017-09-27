@@ -24,7 +24,7 @@ object StatusOfProjects {
     stateMap + (build -> ProjectState.Cloning)
   }
 
-  private def isEntryDone(name:String, status:ProjectState):Boolean = {
+  private def isEntryDone(name: String, status: ProjectState): Boolean = {
     status == ProjectState.Finished
   }
 }

@@ -9,7 +9,10 @@ import scala.concurrent.{Await, Future}
 class Runner(actorSystem: ActorSystem[Event], done: Future[Unit], duration: Duration) extends Runnable {
   override def run(): Unit = {
     actorSystem ! Event.Initialize
-    Await.ready(done, duration)
-    actorSystem.terminate()
+    try {
+      Await.ready(done, duration)
+    } finally {
+      actorSystem.terminate()
+    }
   }
 }

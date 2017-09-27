@@ -8,6 +8,8 @@ object Event {
 
   case class ProjectsFoundInGithub(names: Seq[String]) extends Event
 
+  case class MissingFromGithub(name: String) extends Event
+
   case class ProjectsFoundLocally(names: Seq[String]) extends Event
 
   case class ErrorFindingProjectsInGithub(ex: Throwable) extends Event
@@ -21,5 +23,13 @@ object Event {
   case class Built(name: String) extends Event
 
   case class ErrorBuilding(name: String, exception: Throwable) extends Event
+
+  case class CloneProject(name: String, previousAttemptCount: Int) extends Event
+
+  case class BuildProject(name: String, previousAttemptCount: Int) extends Event
+
+  case class FailedToClone(name: String) extends Event
+
+  case class ProjectFinished(name: String) extends Event
 
 }

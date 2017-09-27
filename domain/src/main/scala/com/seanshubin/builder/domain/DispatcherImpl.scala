@@ -14,11 +14,11 @@ class DispatcherImpl(githubProjectFinder: ProjectFinder,
     githubProjectFinder.findProjects()
   }
 
-  override def cloneProject(name: String): Future[ProcessOutput] = {
-    projectCommandRunner.exec("git", "clone", s"https://github.com/SeanShubin/$name.git")
+  override def cloneProject(name: String, previousAttemptCount: Int): Future[CommandResult] = {
+    projectCommandRunner.exec("clone", name, previousAttemptCount, "git", "clone", s"https://github.com/SeanShubin/$name.git")
   }
 
-  override def buildProject(name: String): Future[ProcessOutput] = {
-    projectCommandRunner.exec("mvn", "clean", "verify")
+  override def buildProject(name: String, previousAttemptCount: Int): Future[CommandResult] = {
+    projectCommandRunner.exec("build", name, previousAttemptCount, "mvn", "clean", "verify")
   }
 }
