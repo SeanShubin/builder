@@ -1,6 +1,7 @@
 package com.seanshubin.builder.domain
 
 import akka.typed.Signal
+import com.seanshubin.devon.domain.DevonMarshallerWiring
 
 class LineEmittingNotifications(emit: String => Unit) extends Notifications {
   override def projectsFoundInGithub(names: Seq[String]): Unit = {
@@ -26,5 +27,10 @@ class LineEmittingNotifications(emit: String => Unit) extends Notifications {
 
   override def signal(signal: Signal): Unit = {
     emit(s"signal: $signal")
+  }
+
+  override def processLaunched(processInput: ProcessInput): Unit = {
+    emit("launching process:")
+    DevonMarshallerWiring.Default.valueToPretty(processInput).foreach(emit)
   }
 }

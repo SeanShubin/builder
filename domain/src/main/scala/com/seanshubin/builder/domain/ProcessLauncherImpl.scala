@@ -10,8 +10,10 @@ import scala.concurrent.{ExecutionContext, Future}
 class ProcessLauncherImpl(createProcessBuilder: () => ProcessBuilderContract,
                           futureRunner: FutureRunner,
                           clock: Clock,
-                          charset: Charset)(implicit executionContext: ExecutionContext) extends ProcessLauncher {
+                          charset: Charset,
+                          launched:ProcessInput => Unit)(implicit executionContext: ExecutionContext) extends ProcessLauncher {
   override def launch(input: ProcessInput): Future[ProcessOutput] = {
+    launched(input)
     val processBuilder = createProcessBuilder()
     updateEnvironment(processBuilder, input.environment)
     val started = clock.instant()

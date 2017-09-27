@@ -26,7 +26,12 @@ trait DependencyInjection {
   val clock: Clock = Clock.systemUTC()
   val charset: Charset = StandardCharsets.UTF_8
   val systemSpecific: SystemSpecific = new SystemSpecificImpl
-  val processLauncher: ProcessLauncher = new ProcessLauncherImpl(createProcessBuilder, futureRunner, clock, charset)
+  val processLauncher: ProcessLauncher = new ProcessLauncherImpl(
+    createProcessBuilder,
+    futureRunner,
+    clock,
+    charset,
+    notifications.processLaunched)
   val notifySignal: Signal => Unit = notifications.signal
   val notifyEvent: Event => Unit = notifications.event
   val githubProjectFinder: ProjectFinder = new GithubProjectFinder(
