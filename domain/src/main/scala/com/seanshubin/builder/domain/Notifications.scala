@@ -17,5 +17,5 @@ trait Notifications {
 
   def signal(signal: Signal): Unit
 
-  def processLaunched(processInput:ProcessInput):Unit
+  def processLaunched(processInput: ProcessInput): Unit
 }
