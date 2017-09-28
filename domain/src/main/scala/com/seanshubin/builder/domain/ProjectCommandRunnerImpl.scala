@@ -6,7 +6,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class ProjectCommandRunnerImpl(baseDirectory: Path,
                                processLauncher: ProcessLauncher,
-                               loggerFactory: LoggerFactory)
+                               loggerFactory: ProcessLoggerFactory)
                               (implicit executionContext: ExecutionContext) extends ProjectCommandRunner {
   override def exec(commandName: String, projectName: String, previousAttemptCount: Int, command: String*): Future[CommandResult] = {
     val logger = loggerFactory.createCommandProjectRetry(commandName, projectName, previousAttemptCount)

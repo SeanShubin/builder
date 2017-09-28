@@ -32,4 +32,5 @@ object Event {
 
   case class ProjectFinished(name: String) extends Event
 
+  case object WantStatusUpdate extends Event
 }

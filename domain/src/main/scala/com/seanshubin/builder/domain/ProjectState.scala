@@ -18,4 +18,6 @@ object ProjectState {
 
   case object Finished extends ProjectState
 
+  case object FailedToClone extends ProjectState
+
 }

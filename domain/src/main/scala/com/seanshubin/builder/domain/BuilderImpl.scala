@@ -7,7 +7,7 @@ import scala.concurrent.ExecutionContext
 class BuilderImpl(processLauncher: ProcessLauncher,
                   baseDirectory: Path,
                   processCompleted: ProcessOutput => Unit,
-                  loggerFactory: LoggerFactory)
+                  loggerFactory: ProcessLoggerFactory)
                  (implicit val executionContext: ExecutionContext) extends Builder {
   override def build(name: String): Unit = {
     val logger = loggerFactory.createProjectAction(name, "build")

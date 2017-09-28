@@ -5,7 +5,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class LocalProjectFinder(systemSpecific: SystemSpecific,
                          processLauncher: ProcessLauncher,
-                         loggerFactory: LoggerFactory)(
+                         loggerFactory: ProcessLoggerFactory)(
                           implicit executionContext: ExecutionContext) extends ProjectFinder {
   override def findProjects(): Future[Seq[String]] = {
     val logger = loggerFactory.createAction("find")

@@ -14,18 +14,21 @@ import scala.concurrent.{ExecutionContext, Promise}
 
 trait DependencyInjection {
   implicit val executionContext: ExecutionContext = new MyExecutionContext(ExecutionContext.Implicits.global)
+  val files: FilesContract = FilesDelegate
+  val system:SystemContract = SystemDelegate
   val done: Promise[Unit] = Promise()
   val userName: String = "SeanShubin"
   val baseDirectory: Path = Paths.get("/Users/sshubin/github/sean")
   val logDirectory: Path = baseDirectory.resolve("builder/logs")
   val sender: Sender = new HttpSender
   val jsonMarshaller: JsonMarshaller = JacksonJsonMarshaller
-  val emit: String => Unit = println
-  val notifications: Notifications = new LineEmittingNotifications(emit)
-  val createProcessBuilder: () => ProcessBuilderContract = ProcessBuilderDelegate.apply _
-  val futureRunner: FutureRunner = new ExecutionContextFutureRunner(notifications.unhandledException(_))
+  val emitToView: String => Unit = println
   val clock: Clock = Clock.systemUTC()
   val startTime: Instant = clock.instant()
+  val rootLogger: String => Unit = new RootLogger(logDirectory, startTime,emitToView, files, system)
+  val notifications: Notifications = new LineEmittingNotifications(rootLogger)
+  val createProcessBuilder: () => ProcessBuilderContract = ProcessBuilderDelegate.apply _
+  val futureRunner: FutureRunner = new ExecutionContextFutureRunner(notifications.unhandledException(_))
   val charset: Charset = StandardCharsets.UTF_8
   val systemSpecific: SystemSpecific = new SystemSpecificImpl
   val processLauncher: ProcessLauncher = new ProcessLauncherImpl(
@@ -36,8 +39,7 @@ trait DependencyInjection {
     notifications.processLaunched)
   val notifySignal: Signal => Unit = notifications.signal
   val notifyEvent: Event => Unit = notifications.event
-  val files: FilesContract = FilesDelegate
-  val loggerFactory = new LoggerFactoryImpl(files, logDirectory, startTime)
+  val loggerFactory = new ProcessLoggerFactoryImpl(files, logDirectory, startTime)
   val githubProjectFinder: ProjectFinder = new GithubProjectFinder(
     userName,
     sender,
@@ -52,7 +54,7 @@ trait DependencyInjection {
   val stateMachine: Behavior[Event] = new StateMachine(dispatcher, notifySignal, notifyEvent)
   val actorSystem: ActorSystem[Event] = ActorSystem("coordinator", stateMachine)
   val eventBuilder = new EventBuilder(actorSystem)
-  val duration = Duration(1, TimeUnit.MINUTES)
+  val duration = Duration(1, TimeUnit.HOURS)
   val cleaner: Cleaner = new CleanerImpl(actorSystem)
   val runner: Runnable = new Runner(actorSystem, done.future, duration)
 }

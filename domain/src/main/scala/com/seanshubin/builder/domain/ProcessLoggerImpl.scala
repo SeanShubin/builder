@@ -7,7 +7,7 @@ import com.seanshubin.devon.domain.DevonMarshallerWiring
 
 import scala.reflect.runtime.universe
 
-class LoggerImpl(files: FilesContract, directory: Path, baseName: String) extends Logger {
+class ProcessLoggerImpl(files: FilesContract, directory: Path, baseName: String) extends ProcessLogger {
   private val outPath = directory.resolve(baseName + ".stream.out.txt")
   private val errPath = directory.resolve(baseName + ".stream.err.txt")
   private val inputPath = directory.resolve(baseName + ".process.input.txt")

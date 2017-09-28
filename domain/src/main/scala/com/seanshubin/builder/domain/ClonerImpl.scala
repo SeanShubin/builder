@@ -7,7 +7,7 @@ import scala.concurrent.ExecutionContext
 class ClonerImpl(processLauncher: ProcessLauncher,
                  baseDirectory: Path,
                  processCompleted: ProcessOutput => Unit,
-                 loggerFactory: LoggerFactory)
+                 loggerFactory: ProcessLoggerFactory)
                 (implicit val executionContext: ExecutionContext) extends Cloner {
   override def clone(name: String): Unit = {
     val logger = loggerFactory.createProjectAction(name, "clone")

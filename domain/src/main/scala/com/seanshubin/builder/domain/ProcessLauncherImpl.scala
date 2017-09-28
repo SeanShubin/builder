@@ -14,7 +14,7 @@ class ProcessLauncherImpl(createProcessBuilder: () => ProcessBuilderContract,
                           launched: ProcessInput => Unit)
                          (implicit executionContext: ExecutionContext) extends ProcessLauncher {
   override def launch(input: ProcessInput,
-                      logger: Logger): Future[ProcessOutput] = {
+                      logger: ProcessLogger): Future[ProcessOutput] = {
     logger.emitInput(input)
     launched(input)
     val processBuilder = createProcessBuilder()

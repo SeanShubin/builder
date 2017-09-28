@@ -1,11 +1,12 @@
 package com.seanshubin.builder.domain
 
-import com.seanshubin.devon.domain.DevonMarshallerWiring
-
 case class CommandResult(command: String, project: String, processOutput: ProcessOutput, previousAttemptCount: Int) {
   def isSuccess: Boolean = {
-    DevonMarshallerWiring.Default.valueToPretty(this).foreach(println)
-    ???
+    processOutput.exitCode match {
+      case 0 => true
+      case 1 => false
+      case _ => ???
+    }
   }
 
   def shouldRetry: Boolean = false

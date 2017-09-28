@@ -1,7 +1,7 @@
 package com.seanshubin.builder.domain
 
 import akka.typed.ActorRef
-import com.seanshubin.builder.domain.Event.{Initialize, ProjectsFoundInGithub, ProjectsFoundLocally}
+import com.seanshubin.builder.domain.Event.{FailedToClone, Initialize, ProjectsFoundInGithub, ProjectsFoundLocally}
 import com.seanshubin.builder.domain.ProjectState.{InGithubNotLocal, InLocalAndGithub, InLocalNotGithub}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -54,7 +54,13 @@ object State {
   }
 
   case class Processing(stateMap: Map[String, ProjectState]) extends State {
-    override def handle(event: Event, dispatcher: Dispatcher, actorRef: ActorRef[Event]): State = ???
+    override def handle(event: Event, dispatcher: Dispatcher, actorRef: ActorRef[Event]): State = {
+      event match {
+        case FailedToClone(project) =>
+          val newStateMap = stateMap + (project -> ProjectState.FailedToClone)
+          Processing(newStateMap)
+      }
+    }
   }
 
   def beginProcessing(localProjectNames: Seq[String], remoteProjectNames: Seq[String], dispatcher: Dispatcher, actorRef: ActorRef[Event]): State = {
