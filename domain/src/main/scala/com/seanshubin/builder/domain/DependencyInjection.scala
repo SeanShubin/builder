@@ -2,7 +2,7 @@ package com.seanshubin.builder.domain
 
 import java.nio.charset.{Charset, StandardCharsets}
 import java.nio.file.{Path, Paths}
-import java.time.Clock
+import java.time.{Clock, Instant}
 import java.util.concurrent.TimeUnit
 
 import akka.typed.{ActorSystem, Behavior, Signal}
@@ -17,6 +17,7 @@ trait DependencyInjection {
   val done: Promise[Unit] = Promise()
   val userName: String = "SeanShubin"
   val baseDirectory: Path = Paths.get("/Users/sshubin/github/sean")
+  val logDirectory: Path = baseDirectory.resolve("builder/logs")
   val sender: Sender = new HttpSender
   val jsonMarshaller: JsonMarshaller = JacksonJsonMarshaller
   val emit: String => Unit = println
@@ -24,6 +25,7 @@ trait DependencyInjection {
   val createProcessBuilder: () => ProcessBuilderContract = ProcessBuilderDelegate.apply _
   val futureRunner: FutureRunner = new ExecutionContextFutureRunner(notifications.unhandledException(_))
   val clock: Clock = Clock.systemUTC()
+  val startTime: Instant = clock.instant()
   val charset: Charset = StandardCharsets.UTF_8
   val systemSpecific: SystemSpecific = new SystemSpecificImpl
   val processLauncher: ProcessLauncher = new ProcessLauncherImpl(
@@ -34,6 +36,8 @@ trait DependencyInjection {
     notifications.processLaunched)
   val notifySignal: Signal => Unit = notifications.signal
   val notifyEvent: Event => Unit = notifications.event
+  val files: FilesContract = FilesDelegate
+  val loggerFactory = new LoggerFactoryImpl(files, logDirectory, startTime)
   val githubProjectFinder: ProjectFinder = new GithubProjectFinder(
     userName,
     sender,
@@ -41,8 +45,9 @@ trait DependencyInjection {
     futureRunner)
   val localProjectFinder: ProjectFinder = new LocalProjectFinder(
     systemSpecific,
-    processLauncher)
-  val projectCommandRunner: ProjectCommandRunner = new ProjectCommandRunnerImpl(baseDirectory, processLauncher)
+    processLauncher,
+    loggerFactory)
+  val projectCommandRunner: ProjectCommandRunner = new ProjectCommandRunnerImpl(baseDirectory, processLauncher, loggerFactory)
   val dispatcher: Dispatcher = new DispatcherImpl(githubProjectFinder, localProjectFinder, projectCommandRunner)
   val stateMachine: Behavior[Event] = new StateMachine(dispatcher, notifySignal, notifyEvent)
   val actorSystem: ActorSystem[Event] = ActorSystem("coordinator", stateMachine)

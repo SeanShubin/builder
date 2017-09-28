@@ -13,7 +13,8 @@ class ProcessLauncherImpl(createProcessBuilder: () => ProcessBuilderContract,
                           charset: Charset,
                           launched: ProcessInput => Unit)
                          (implicit executionContext: ExecutionContext) extends ProcessLauncher {
-  override def launch(input: ProcessInput): Future[ProcessOutput] = {
+  override def launch(input: ProcessInput,
+                      logger: Logger): Future[ProcessOutput] = {
     launched(input)
     val processBuilder = createProcessBuilder()
     updateEnvironment(processBuilder, input.environment)
@@ -21,8 +22,8 @@ class ProcessLauncherImpl(createProcessBuilder: () => ProcessBuilderContract,
     val process = processBuilder.
       command(input.command: _*).
       directory(input.directory.toFile).start
-    val standardOutputFuture = captureLines(process.getInputStream)
-    val standardErrorFuture = captureLines(process.getErrorStream)
+    val standardOutputFuture = captureLines(process.getInputStream, logger.emitOut)
+    val standardErrorFuture = captureLines(process.getErrorStream, logger.emitErr)
     val exitCodeFuture = captureExitCode(process)
     val compositeFuture = for {
       outputLines <- standardOutputFuture
@@ -43,13 +44,14 @@ class ProcessLauncherImpl(createProcessBuilder: () => ProcessBuilderContract,
     }
   }
 
-  private def captureLines(inputStream: InputStream): Future[Seq[String]] = {
+  private def captureLines(inputStream: InputStream, emit: String => Unit): Future[Seq[String]] = {
     futureRunner.runInFuture {
       val linesBuffer = new ArrayBuffer[String]
       val inputStreamReader = new InputStreamReader(inputStream, charset)
       val bufferedReader = new BufferedReader(inputStreamReader)
       var line = bufferedReader.readLine()
       while (line != null) {
+        emit(line)
         linesBuffer.append(line)
         line = bufferedReader.readLine()
       }

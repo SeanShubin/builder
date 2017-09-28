@@ -4,11 +4,13 @@ import scala.concurrent.{ExecutionContext, Future}
 
 
 class LocalProjectFinder(systemSpecific: SystemSpecific,
-                         processLauncher: ProcessLauncher)(
+                         processLauncher: ProcessLauncher,
+                         loggerFactory: LoggerFactory)(
                           implicit executionContext: ExecutionContext) extends ProjectFinder {
   override def findProjects(): Future[Seq[String]] = {
+    val logger = loggerFactory.createAction("find")
     val command = systemSpecific.composeDirectoryListingCommand()
-    val futureProcessOutput = processLauncher.launch(command)
+    val futureProcessOutput = processLauncher.launch(command, logger)
     for {
       processOutput <- futureProcessOutput
     } yield {
