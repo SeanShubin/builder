@@ -1,7 +1,8 @@
 package com.seanshubin.builder.domain
 
 trait Logger {
-  def emitOut(line: String): Unit
-
-  def emitErr(line: String): Unit
+  def emitInput(input:ProcessInput):Unit
+  def emitOutput(output:ProcessOutput):Unit
+  def emitOutLine(line: String): Unit
+  def emitErrLine(line: String): Unit
 }

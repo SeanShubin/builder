@@ -15,6 +15,7 @@ class ProcessLauncherImpl(createProcessBuilder: () => ProcessBuilderContract,
                          (implicit executionContext: ExecutionContext) extends ProcessLauncher {
   override def launch(input: ProcessInput,
                       logger: Logger): Future[ProcessOutput] = {
+    logger.emitInput(input)
     launched(input)
     val processBuilder = createProcessBuilder()
     updateEnvironment(processBuilder, input.environment)
@@ -22,8 +23,8 @@ class ProcessLauncherImpl(createProcessBuilder: () => ProcessBuilderContract,
     val process = processBuilder.
       command(input.command: _*).
       directory(input.directory.toFile).start
-    val standardOutputFuture = captureLines(process.getInputStream, logger.emitOut)
-    val standardErrorFuture = captureLines(process.getErrorStream, logger.emitErr)
+    val standardOutputFuture = captureLines(process.getInputStream, logger.emitOutLine)
+    val standardErrorFuture = captureLines(process.getErrorStream, logger.emitErrLine)
     val exitCodeFuture = captureExitCode(process)
     val compositeFuture = for {
       outputLines <- standardOutputFuture
@@ -31,7 +32,9 @@ class ProcessLauncherImpl(createProcessBuilder: () => ProcessBuilderContract,
       exitCode <- exitCodeFuture
     } yield {
       val ended = clock.instant()
-      ProcessOutput(input, exitCode, outputLines, errorLines, started, ended)
+      val processOutput = ProcessOutput(input, exitCode, outputLines, errorLines, started, ended)
+      logger.emitOutput(processOutput)
+      processOutput
     }
     compositeFuture
   }
