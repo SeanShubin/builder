@@ -35,11 +35,11 @@ class DispatchResultHandler(actorRef: ActorRef[Event]) {
     result match {
       case Success(buildResult) =>
         if (buildResult.isSuccess) {
-          actorRef ! ProjectFinished(buildResult.project)
+          actorRef ! ProjectBuilt(buildResult.project)
         } else if (buildResult.shouldRetry) {
           actorRef ! BuildProject(buildResult.project, buildResult.previousAttemptCount + 1)
         } else {
-          actorRef ! FailedToClone(buildResult.project)
+          actorRef ! FailedToBuild(buildResult.project)
         }
     }
   }

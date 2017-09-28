@@ -30,7 +30,9 @@ object Event {
 
   case class FailedToClone(name: String) extends Event
 
-  case class ProjectFinished(name: String) extends Event
+  case class FailedToBuild(name: String) extends Event
+
+  case class ProjectBuilt(name: String) extends Event
 
   case object WantStatusUpdate extends Event
 }

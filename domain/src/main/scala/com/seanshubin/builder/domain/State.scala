@@ -1,7 +1,7 @@
 package com.seanshubin.builder.domain
 
 import akka.typed.ActorRef
-import com.seanshubin.builder.domain.Event.{FailedToClone, Initialize, ProjectsFoundInGithub, ProjectsFoundLocally}
+import com.seanshubin.builder.domain.Event._
 import com.seanshubin.builder.domain.ProjectState.{InGithubNotLocal, InLocalAndGithub, InLocalNotGithub}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -53,21 +53,33 @@ object State {
     }
   }
 
-  case class Processing(stateMap: Map[String, ProjectState]) extends State {
+  case class Processing(statusOfProjects: StatusOfProjects) extends State {
     override def handle(event: Event, dispatcher: Dispatcher, actorRef: ActorRef[Event]): State = {
-      event match {
+      val newState = event match {
         case FailedToClone(project) =>
-          val newStateMap = stateMap + (project -> ProjectState.FailedToClone)
-          Processing(newStateMap)
+          Processing(statusOfProjects.update(project, ProjectState.FailedToClone))
+        case FailedToBuild(project) =>
+          Processing(statusOfProjects.update(project, ProjectState.FailedToBuild))
+        case ProjectBuilt(project) =>
+          Processing(statusOfProjects.update(project, ProjectState.BuildSuccess))
+      }
+      if(newState.statusOfProjects.isDone){
+        Done
+      } else {
+        newState
       }
     }
   }
 
+  case object Done extends State {
+    override def handle(event: Event, dispatcher: Dispatcher, actorRef: ActorRef[Event]): State = ???
+  }
+
   def beginProcessing(localProjectNames: Seq[String], remoteProjectNames: Seq[String], dispatcher: Dispatcher, actorRef: ActorRef[Event]): State = {
-    val stateMap = ProjectLogic.createStateMap(localProjectNames, remoteProjectNames)
+    val statusOfProjects = StatusOfProjects.create(localProjectNames, remoteProjectNames)
     val processProjectFunction = (processProject(_: String, _: ProjectState, dispatcher, actorRef)).tupled
-    stateMap.foreach(processProjectFunction)
-    Processing(stateMap)
+    statusOfProjects.map.foreach(processProjectFunction)
+    Processing(statusOfProjects)
   }
 
   def processProject(name: String, state: ProjectState, dispatcher: Dispatcher, actorRef: ActorRef[Event]): Unit = {

@@ -2,29 +2,20 @@ package com.seanshubin.builder.domain
 
 case class StatusOfProjects(map: Map[String, ProjectState]) {
   def isDone: Boolean = {
-    map.forall((StatusOfProjects.isEntryDone _).tupled)
+    map.values.forall(_.isFinished)
+  }
+
+  def update(name:String, newState:ProjectState):StatusOfProjects = {
+    StatusOfProjects(map.updated(name, newState))
   }
 }
 
 object StatusOfProjects {
   def create(local: Seq[String], github: Seq[String]): StatusOfProjects = {
-    val needBuild = local
-    val needClone = github.toSet -- local.toSet
-    val emptyStateMap = Map[String, ProjectState]()
-    val withBuild = needBuild.foldLeft(emptyStateMap)(addBuild)
-    val withBuildAndClone = needClone.foldLeft(withBuild)(addClone)
-    StatusOfProjects(withBuildAndClone)
-  }
-
-  private def addBuild(stateMap: Map[String, ProjectState], build: String): Map[String, ProjectState] = {
-    stateMap + (build -> ProjectState.Building)
-  }
-
-  private def addClone(stateMap: Map[String, ProjectState], build: String): Map[String, ProjectState] = {
-    stateMap + (build -> ProjectState.Cloning)
-  }
-
-  private def isEntryDone(name: String, status: ProjectState): Boolean = {
-    status == ProjectState.Finished
+    val inLocalAndGithub = local.intersect(github).map((_, ProjectState.InLocalAndGithub)).toMap
+    val inGithubNotLocal = (github.toSet -- local.toSet).map((_, ProjectState.InGithubNotLocal)).toMap
+    val inLocalNotGithub = (local.toSet -- github.toSet).map((_, ProjectState.InLocalNotGithub)).toMap
+    val map = inLocalAndGithub ++ inGithubNotLocal ++ inLocalNotGithub
+    StatusOfProjects(map)
   }
 }
