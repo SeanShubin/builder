@@ -49,4 +49,5 @@ class LineEmittingNotifications(emit: String => Unit) extends Notifications {
         statusOfProjects.remaining)
     }
   }
+
 }
