@@ -42,10 +42,19 @@ class LineEmittingNotifications(emit: String => Unit) extends Notifications {
     DevonMarshallerWiring.Default.valueToPretty(report).foreach(emit)
   }
 
+  override def statusSummary(statusOfProjects: StatusOfProjects): Unit = {
+    DevonMarshallerWiring.Default.valueToPretty(statusOfProjects.byStateName).foreach(emit)
+  }
+
   override def startAndEndTime(start: Instant, end: Instant): Unit = {
     val duration = Duration.between(start, end).toMillis
     val durationString = DurationFormat.MillisecondsFormat.format(duration)
     emit(durationString)
+  }
+
+
+  override def unsupportedEventFromState(eventName: String, stateName: String): Unit = {
+    emit(s"Unable to apply event $eventName to state $stateName")
   }
 
   case class StatusReport(finished: Int, total: Int, remaining: Seq[String])

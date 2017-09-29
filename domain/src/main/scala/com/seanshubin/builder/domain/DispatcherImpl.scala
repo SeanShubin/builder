@@ -6,6 +6,8 @@ class DispatcherImpl(githubProjectFinder: ProjectFinder,
                      localProjectFinder: ProjectFinder,
                      projectCommandRunner: ProjectCommandRunner,
                      statusUpdateFunction: StatusOfProjects => Unit,
+                     statusSummaryFunction: StatusOfProjects => Unit,
+                     unsupportedEventFromStateFunction: (String, String) => Unit,
                      donePromise: Promise[Unit])
                     (implicit executionContext: ExecutionContext) extends Dispatcher {
   override def findLocalProjects(): Future[Seq[String]] = {
@@ -29,4 +31,8 @@ class DispatcherImpl(githubProjectFinder: ProjectFinder,
   }
 
   override def statusUpdate(statusOfProjects: StatusOfProjects): Unit = statusUpdateFunction(statusOfProjects)
+
+  override def statusSummary(statusOfProjects: StatusOfProjects): Unit = statusSummaryFunction(statusOfProjects)
+
+  override def unsupportedEventFromState(eventName: String, stateName: String): Unit = unsupportedEventFromStateFunction(eventName, stateName)
 }

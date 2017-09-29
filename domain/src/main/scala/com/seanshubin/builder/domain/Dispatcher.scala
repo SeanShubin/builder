@@ -13,5 +13,9 @@ trait Dispatcher {
 
   def statusUpdate(statusOfProjects: StatusOfProjects): Unit
 
+  def statusSummary(statusOfProjects: StatusOfProjects): Unit
+
+  def unsupportedEventFromState(eventName: String, stateName: String): Unit
+
   def done(): Unit
 }

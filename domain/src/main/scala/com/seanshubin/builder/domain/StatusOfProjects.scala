@@ -21,6 +21,10 @@ case class StatusOfProjects(map: Map[String, ProjectState]) {
       name
     }).toSeq
   }
+
+  def byStateName: Map[String, Seq[String]] = {
+    map.foldLeft(Map[String, Seq[String]]())(StatusOfProjects.addToByStateNameMap)
+  }
 }
 
 object StatusOfProjects {
@@ -30,5 +34,11 @@ object StatusOfProjects {
     val inLocalNotGithub = (local.toSet -- github.toSet).map((_, ProjectState.InLocalNotGithub)).toMap
     val map = inLocalAndGithub ++ inGithubNotLocal ++ inLocalNotGithub
     StatusOfProjects(map)
+  }
+
+  def addToByStateNameMap(accumulator: Map[String, Seq[String]], entry: (String, ProjectState)): Map[String, Seq[String]] = {
+    val (project, state) = entry
+    val stateName = state.name
+    accumulator.updated(stateName, accumulator(stateName) :+ project)
   }
 }

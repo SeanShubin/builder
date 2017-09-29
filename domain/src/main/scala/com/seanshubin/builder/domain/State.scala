@@ -13,8 +13,9 @@ sealed trait State {
 
   def handleDefault(dispatcher: Dispatcher, actorRef: ActorRef[Event]): PartialFunction[Event, State] = {
     case event =>
-      actorRef ! UnsupportedEventFromState(event.toString, this.toString)
-      State.Done
+      dispatcher.unsupportedEventFromState(event.toString, this.toString)
+      dispatcher.done()
+      this
   }
 
   def handlePartially(dispatcher: Dispatcher, actorRef: ActorRef[Event]): PartialFunction[Event, State]
@@ -66,19 +67,10 @@ object State {
       val newStatus = statusOfProjects.update(project, newProjectState)
       dispatcher.statusUpdate(newStatus)
       if (newStatus.isDone) {
+        dispatcher.statusSummary(newStatus)
         dispatcher.done()
-        Done
-      } else {
-        Processing(newStatus)
       }
-    }
-  }
-
-  case object Done extends State {
-    override def handlePartially(dispatcher: Dispatcher, actorRef: ActorRef[Event]): PartialFunction[Event, State] = {
-      case _ =>
-        dispatcher.done()
-        this
+      Processing(newStatus)
     }
   }
 

@@ -23,5 +23,9 @@ trait Notifications {
 
   def statusUpdate(statusOfProjects: StatusOfProjects): Unit
 
+  def statusSummary(statusOfProjects: StatusOfProjects): Unit
+
   def startAndEndTime(start: Instant, end: Instant): Unit
+
+  def unsupportedEventFromState(eventName: String, stateName: String): Unit
 }

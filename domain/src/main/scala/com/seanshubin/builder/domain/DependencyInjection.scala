@@ -55,6 +55,8 @@ trait DependencyInjection {
     localProjectFinder,
     projectCommandRunner,
     notifications.statusUpdate,
+    notifications.statusSummary,
+    notifications.unsupportedEventFromState,
     done)
   val stateMachine: Behavior[Event] = new StateMachine(dispatcher, notifySignal, notifyEvent)
   val actorSystem: ActorSystem[Event] = ActorSystem("coordinator", stateMachine)
