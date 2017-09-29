@@ -61,5 +61,5 @@ trait DependencyInjection {
   val eventBuilder = new EventBuilder(actorSystem)
   val duration = Duration(1, TimeUnit.HOURS)
   val cleaner: Cleaner = new CleanerImpl(actorSystem)
-  val runner: Runnable = new Runner(actorSystem, done.future, duration)
+  val runner: Runnable = new Runner(clock, actorSystem, done.future, duration, notifications.startAndEndTime)
 }

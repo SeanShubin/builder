@@ -1,7 +1,10 @@
 package com.seanshubin.builder.domain
 
+import java.time.{Duration, Instant}
+
 import akka.typed.Signal
 import com.seanshubin.devon.domain.DevonMarshallerWiring
+import com.seanshubin.up_to_date.logic.DurationFormat
 
 class LineEmittingNotifications(emit: String => Unit) extends Notifications {
   override def projectsFoundInGithub(names: Seq[String]): Unit = {
@@ -37,6 +40,12 @@ class LineEmittingNotifications(emit: String => Unit) extends Notifications {
   override def statusUpdate(statusOfProjects: StatusOfProjects): Unit = {
     val report = StatusReport.fromStatusOfProjects(statusOfProjects)
     DevonMarshallerWiring.Default.valueToPretty(report).foreach(emit)
+  }
+
+  override def startAndEndTime(start: Instant, end: Instant): Unit = {
+    val duration = Duration.between(start, end).toMillis
+    val durationString = DurationFormat.MillisecondsFormat.format(duration)
+    emit(durationString)
   }
 
   case class StatusReport(finished: Int, total: Int, remaining: Seq[String])

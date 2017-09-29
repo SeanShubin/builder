@@ -1,5 +1,7 @@
 package com.seanshubin.builder.domain
 
+import java.time.Instant
+
 import akka.typed.Signal
 
 trait Notifications {
@@ -20,4 +22,6 @@ trait Notifications {
   def processLaunched(processInput: ProcessInput): Unit
 
   def statusUpdate(statusOfProjects: StatusOfProjects): Unit
+
+  def startAndEndTime(start: Instant, end: Instant): Unit
 }
