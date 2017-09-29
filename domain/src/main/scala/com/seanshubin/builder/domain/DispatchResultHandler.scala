@@ -3,18 +3,20 @@ package com.seanshubin.builder.domain
 import akka.typed.ActorRef
 import com.seanshubin.builder.domain.Event._
 
-import scala.util.{Success, Try}
+import scala.util.{Failure, Success, Try}
 
 class DispatchResultHandler(actorRef: ActorRef[Event]) {
   def foundLocalProjects(result: Try[Seq[String]]): Unit = {
     result match {
       case Success(names) => actorRef ! ProjectsFoundLocally(names)
+      case Failure(exception) => actorRef ! ErrorFindingProjectsLocally(exception)
     }
   }
 
   def foundRemoteProjects(result: Try[Seq[String]]): Unit = {
     result match {
       case Success(names) => actorRef ! ProjectsFoundInGithub(names)
+      case Failure(exception) => actorRef ! ErrorFindingProjectsLocally(exception)
     }
   }
 
@@ -26,8 +28,9 @@ class DispatchResultHandler(actorRef: ActorRef[Event]) {
         } else if (cloneResult.shouldRetry) {
           actorRef ! CloneProject(cloneResult.project, cloneResult.previousAttemptCount + 1)
         } else {
-          actorRef ! FailedToClone(cloneResult.project)
+          actorRef ! FailedToCloneBasedOnExitCode(cloneResult.project)
         }
+      case Failure(exception) => FailedToCloneBasedOnException(exception)
     }
   }
 
@@ -39,8 +42,9 @@ class DispatchResultHandler(actorRef: ActorRef[Event]) {
         } else if (buildResult.shouldRetry) {
           actorRef ! BuildProject(buildResult.project, buildResult.previousAttemptCount + 1)
         } else {
-          actorRef ! FailedToBuild(buildResult.project)
+          actorRef ! FailedToBuildBasedOnExitCode(buildResult.project)
         }
+
     }
   }
 

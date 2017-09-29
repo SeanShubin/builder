@@ -2,8 +2,11 @@ package com.seanshubin.builder.domain
 
 import java.io.PrintWriter
 import java.nio.file.{Path, StandardOpenOption}
+import java.time.Duration
 
+import com.seanshubin.builder.domain.ProcessLoggerImpl.ProcessOutputReport
 import com.seanshubin.devon.domain.DevonMarshallerWiring
+import com.seanshubin.up_to_date.logic.DurationFormat
 
 import scala.reflect.runtime.universe
 
@@ -19,7 +22,8 @@ class ProcessLoggerImpl(files: FilesContract, directory: Path, baseName: String)
   }
 
   override def emitOutput(output: ProcessOutput): Unit = {
-    emitDevon(outputPath, output)
+    val report = ProcessOutputReport.fromProcessOutput(output)
+    emitDevon(outputPath, report)
   }
 
   override def emitOutLine(line: String): Unit = {
@@ -50,4 +54,31 @@ class ProcessLoggerImpl(files: FilesContract, directory: Path, baseName: String)
     block(printWriter)
     printWriter.close()
   }
+}
+
+object ProcessLoggerImpl {
+
+  case class ProcessOutputReport(processInput: ProcessInput,
+                                 exitCode: Int,
+                                 outputSummary: String,
+                                 errorSummary: String,
+                                 duration: String)
+
+  object ProcessOutputReport {
+    def fromProcessOutput(processOutput: ProcessOutput): ProcessOutputReport = {
+      val outputLineCount = processOutput.outputLines.size
+      val errorLineCount = processOutput.errorLines.size
+      val durationInMilliseconds = Duration.between(processOutput.started, processOutput.ended).toMillis
+      val outputSummary = s"$outputLineCount output lines"
+      val errorSummary = s"$errorLineCount error lines"
+      val duration = DurationFormat.MillisecondsFormat.format(durationInMilliseconds)
+      ProcessOutputReport(
+        processOutput.processInput,
+        processOutput.exitCode,
+        outputSummary,
+        errorSummary,
+        duration)
+    }
+  }
+
 }

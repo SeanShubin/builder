@@ -8,6 +8,19 @@ case class StatusOfProjects(map: Map[String, ProjectState]) {
   def update(name: String, newState: ProjectState): StatusOfProjects = {
     StatusOfProjects(map.updated(name, newState))
   }
+
+  def finished: Int = map.values.count(_.isFinished)
+
+  def total: Int = map.size
+
+  def remaining: Seq[String] = {
+    (for {
+      (name, state) <- map
+      if !state.isFinished
+    } yield {
+      name
+    }).toSeq
+  }
 }
 
 object StatusOfProjects {

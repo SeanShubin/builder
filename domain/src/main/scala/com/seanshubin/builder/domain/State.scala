@@ -7,72 +7,79 @@ import com.seanshubin.builder.domain.ProjectState.{InGithubNotLocal, InLocalAndG
 import scala.concurrent.ExecutionContext.Implicits.global
 
 sealed trait State {
-  def handle(event: Event, dispatcher: Dispatcher, actorRef: ActorRef[Event]): State
+  final def handle(event: Event, dispatcher: Dispatcher, actorRef: ActorRef[Event]): State = {
+    handlePartially(dispatcher, actorRef).orElse(handleDefault(dispatcher, actorRef))(event)
+  }
+
+  def handleDefault(dispatcher: Dispatcher, actorRef: ActorRef[Event]): PartialFunction[Event, State] = {
+    case event =>
+      actorRef ! UnsupportedEventFromState(event.toString, this.toString)
+      State.Done
+  }
+
+  def handlePartially(dispatcher: Dispatcher, actorRef: ActorRef[Event]): PartialFunction[Event, State]
 }
 
 object State {
 
   case object Initial extends State {
-    override def handle(event: Event, dispatcher: Dispatcher, actorRef: ActorRef[Event]): State = {
-      val handler = new DispatchResultHandler(actorRef)
-      event match {
-        case Initialize =>
-          dispatcher.findRemoteProjects().onComplete(handler.foundRemoteProjects)
-          dispatcher.findLocalProjects().onComplete(handler.foundLocalProjects)
-          State.Searching
-      }
+    override def handlePartially(dispatcher: Dispatcher, actorRef: ActorRef[Event]): PartialFunction[Event, State] = {
+      case Initialize =>
+        val handler = new DispatchResultHandler(actorRef)
+        dispatcher.findRemoteProjects().onComplete(handler.foundRemoteProjects)
+        dispatcher.findLocalProjects().onComplete(handler.foundLocalProjects)
+        State.Searching
     }
   }
 
   case object Searching extends State {
-    override def handle(event: Event, dispatcher: Dispatcher, actorRef: ActorRef[Event]): State = {
-      event match {
-        case ProjectsFoundLocally(names) =>
-          SearchingForRemoteProjects(names)
-        case ProjectsFoundInGithub(names) =>
-          SearchingForLocalProjects(names)
-      }
+    override def handlePartially(dispatcher: Dispatcher, actorRef: ActorRef[Event]): PartialFunction[Event, State] = {
+      case ProjectsFoundLocally(names) =>
+        SearchingForRemoteProjects(names)
+      case ProjectsFoundInGithub(names) =>
+        SearchingForLocalProjects(names)
     }
   }
 
   case class SearchingForRemoteProjects(localProjectNames: Seq[String]) extends State {
-    override def handle(event: Event, dispatcher: Dispatcher, actorRef: ActorRef[Event]): State = {
-      event match {
-        case ProjectsFoundInGithub(remoteProjectNames) =>
-          beginProcessing(localProjectNames, remoteProjectNames, dispatcher, actorRef)
-      }
+    override def handlePartially(dispatcher: Dispatcher, actorRef: ActorRef[Event]): PartialFunction[Event, State] = {
+      case ProjectsFoundInGithub(remoteProjectNames) =>
+        beginProcessing(localProjectNames, remoteProjectNames, dispatcher, actorRef)
     }
   }
 
   case class SearchingForLocalProjects(remoteProjectNames: Seq[String]) extends State {
-    override def handle(event: Event, dispatcher: Dispatcher, actorRef: ActorRef[Event]): State = {
-      event match {
-        case ProjectsFoundLocally(localProjectNames) =>
-          beginProcessing(localProjectNames, remoteProjectNames, dispatcher, actorRef)
-      }
+    override def handlePartially(dispatcher: Dispatcher, actorRef: ActorRef[Event]): PartialFunction[Event, State] = {
+      case ProjectsFoundLocally(localProjectNames) =>
+        beginProcessing(localProjectNames, remoteProjectNames, dispatcher, actorRef)
     }
   }
 
   case class Processing(statusOfProjects: StatusOfProjects) extends State {
-    override def handle(event: Event, dispatcher: Dispatcher, actorRef: ActorRef[Event]): State = {
-      val newState = event match {
-        case FailedToClone(project) =>
-          Processing(statusOfProjects.update(project, ProjectState.FailedToClone))
-        case FailedToBuild(project) =>
-          Processing(statusOfProjects.update(project, ProjectState.FailedToBuild))
-        case ProjectBuilt(project) =>
-          Processing(statusOfProjects.update(project, ProjectState.BuildSuccess))
-      }
-      if (newState.statusOfProjects.isDone) {
+    override def handlePartially(dispatcher: Dispatcher, actorRef: ActorRef[Event]): PartialFunction[Event, State] = {
+      case FailedToCloneBasedOnExitCode(project) => update(dispatcher, project, ProjectState.FailedToClone)
+      case FailedToBuildBasedOnExitCode(project) => update(dispatcher, project, ProjectState.FailedToBuild)
+      case ProjectBuilt(project) => update(dispatcher, project, ProjectState.BuildSuccess)
+    }
+
+    def update(dispatcher: Dispatcher, project: String, newProjectState: ProjectState): State = {
+      val newStatus = statusOfProjects.update(project, newProjectState)
+      dispatcher.statusUpdate(newStatus)
+      if (newStatus.isDone) {
+        dispatcher.done()
         Done
       } else {
-        newState
+        Processing(newStatus)
       }
     }
   }
 
   case object Done extends State {
-    override def handle(event: Event, dispatcher: Dispatcher, actorRef: ActorRef[Event]): State = ???
+    override def handlePartially(dispatcher: Dispatcher, actorRef: ActorRef[Event]): PartialFunction[Event, State] = {
+      case _ =>
+        dispatcher.done()
+        this
+    }
   }
 
   def beginProcessing(localProjectNames: Seq[String], remoteProjectNames: Seq[String], dispatcher: Dispatcher, actorRef: ActorRef[Event]): State = {

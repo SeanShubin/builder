@@ -10,4 +10,8 @@ trait Dispatcher {
   def cloneProject(name: String, previousAttemptCount: Int): Future[CommandResult]
 
   def buildProject(name: String, previousAttemptCount: Int): Future[CommandResult]
+
+  def statusUpdate(statusOfProjects: StatusOfProjects): Unit
+
+  def done(): Unit
 }

@@ -18,4 +18,6 @@ trait Notifications {
   def signal(signal: Signal): Unit
 
   def processLaunched(processInput: ProcessInput): Unit
+
+  def statusUpdate(statusOfProjects: StatusOfProjects): Unit
 }

@@ -50,7 +50,12 @@ trait DependencyInjection {
     processLauncher,
     loggerFactory)
   val projectCommandRunner: ProjectCommandRunner = new ProjectCommandRunnerImpl(baseDirectory, processLauncher, loggerFactory)
-  val dispatcher: Dispatcher = new DispatcherImpl(githubProjectFinder, localProjectFinder, projectCommandRunner)
+  val dispatcher: Dispatcher = new DispatcherImpl(
+    githubProjectFinder,
+    localProjectFinder,
+    projectCommandRunner,
+    notifications.statusUpdate,
+    done)
   val stateMachine: Behavior[Event] = new StateMachine(dispatcher, notifySignal, notifyEvent)
   val actorSystem: ActorSystem[Event] = ActorSystem("coordinator", stateMachine)
   val eventBuilder = new EventBuilder(actorSystem)

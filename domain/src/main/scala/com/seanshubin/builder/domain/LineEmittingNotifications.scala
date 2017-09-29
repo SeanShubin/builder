@@ -33,4 +33,20 @@ class LineEmittingNotifications(emit: String => Unit) extends Notifications {
     emit("launching process:")
     DevonMarshallerWiring.Default.valueToPretty(processInput).foreach(emit)
   }
+
+  override def statusUpdate(statusOfProjects: StatusOfProjects): Unit = {
+    val report = StatusReport.fromStatusOfProjects(statusOfProjects)
+    DevonMarshallerWiring.Default.valueToPretty(report).foreach(emit)
+  }
+
+  case class StatusReport(finished: Int, total: Int, remaining: Seq[String])
+
+  object StatusReport {
+    def fromStatusOfProjects(statusOfProjects: StatusOfProjects): StatusReport = {
+      StatusReport(
+        statusOfProjects.finished,
+        statusOfProjects.total,
+        statusOfProjects.remaining)
+    }
+  }
 }
