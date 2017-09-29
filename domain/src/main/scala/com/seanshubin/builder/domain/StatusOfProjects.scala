@@ -23,7 +23,8 @@ case class StatusOfProjects(map: Map[String, ProjectState]) {
   }
 
   def byStateName: Map[String, Seq[String]] = {
-    map.foldLeft(Map[String, Seq[String]]())(StatusOfProjects.addToByStateNameMap)
+    val initialMap = Map[String, Seq[String]]().withDefaultValue(Seq())
+    map.foldLeft(initialMap)(StatusOfProjects.addToByStateNameMap)
   }
 }
 
