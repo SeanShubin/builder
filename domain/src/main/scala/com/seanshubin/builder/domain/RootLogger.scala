@@ -4,20 +4,21 @@ import java.io.PrintWriter
 import java.nio.file.{Path, StandardOpenOption}
 import java.time.Instant
 
-class RootLogger(baseDirectory:Path,
-                 startTime:Instant,
-                 emitToView:String => Unit,
-                 files:FilesContract,
-                 system:SystemContract) extends (String => Unit) {
+class RootLogger(baseDirectory: Path,
+                 startTime: Instant,
+                 emitToView: String => Unit,
+                 files: FilesContract,
+                 system: SystemContract) extends (String => Unit) {
   val directory = baseDirectory.resolve(startTime.toString)
   files.createDirectories(directory)
   val path = directory.resolve("root.txt")
 
   override def apply(line: String) = {
     emitToView(line)
-    emitToStorage(path,line)
+    emitToStorage(path, line)
 
   }
+
   private def emitToStorage(path: Path, line: String): Unit = {
     withPrintWriter(path) { printWriter =>
       printWriter.println(line)

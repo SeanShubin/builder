@@ -1,14 +1,15 @@
 package com.seanshubin.builder.domain
 
 sealed trait ProjectState {
-  def isFinished:Boolean = false
+  def isFinished: Boolean = false
 }
 
 object ProjectState {
 
-  trait OneOfTheFinishedStates extends ProjectState{
+  trait OneOfTheFinishedStates extends ProjectState {
     override def isFinished: Boolean = true
   }
+
   case object InGithubNotLocal extends ProjectState
 
   case object InLocalNotGithub extends ProjectState

@@ -5,7 +5,7 @@ case class StatusOfProjects(map: Map[String, ProjectState]) {
     map.values.forall(_.isFinished)
   }
 
-  def update(name:String, newState:ProjectState):StatusOfProjects = {
+  def update(name: String, newState: ProjectState): StatusOfProjects = {
     StatusOfProjects(map.updated(name, newState))
   }
 }

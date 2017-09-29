@@ -15,7 +15,7 @@ import scala.concurrent.{ExecutionContext, Promise}
 trait DependencyInjection {
   implicit val executionContext: ExecutionContext = new MyExecutionContext(ExecutionContext.Implicits.global)
   val files: FilesContract = FilesDelegate
-  val system:SystemContract = SystemDelegate
+  val system: SystemContract = SystemDelegate
   val done: Promise[Unit] = Promise()
   val userName: String = "SeanShubin"
   val baseDirectory: Path = Paths.get("/Users/sshubin/github/sean")
@@ -25,7 +25,7 @@ trait DependencyInjection {
   val emitToView: String => Unit = println
   val clock: Clock = Clock.systemUTC()
   val startTime: Instant = clock.instant()
-  val rootLogger: String => Unit = new RootLogger(logDirectory, startTime,emitToView, files, system)
+  val rootLogger: String => Unit = new RootLogger(logDirectory, startTime, emitToView, files, system)
   val notifications: Notifications = new LineEmittingNotifications(rootLogger)
   val createProcessBuilder: () => ProcessBuilderContract = ProcessBuilderDelegate.apply _
   val futureRunner: FutureRunner = new ExecutionContextFutureRunner(notifications.unhandledException(_))

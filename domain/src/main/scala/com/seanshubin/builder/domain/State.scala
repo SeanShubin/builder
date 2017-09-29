@@ -63,7 +63,7 @@ object State {
         case ProjectBuilt(project) =>
           Processing(statusOfProjects.update(project, ProjectState.BuildSuccess))
       }
-      if(newState.statusOfProjects.isDone){
+      if (newState.statusOfProjects.isDone) {
         Done
       } else {
         newState
