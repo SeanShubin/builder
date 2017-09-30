@@ -3,7 +3,7 @@ package com.seanshubin.builder.domain
 sealed trait ProjectState {
   def isFinished: Boolean = false
 
-  def name: String = getClass.getSimpleName
+  def name: String = ClassUtil.getSimpleClassName(this)
 }
 
 object ProjectState {
