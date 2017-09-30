@@ -1,5 +1,8 @@
 package com.seanshubin.builder.domain
 
-trait SystemSpecific {
-  def composeDirectoryListingCommand(): ProcessInput
-}
+import java.nio.file.Path
+
+case class SystemSpecific(commandPrefix: Seq[String],
+                          githubDirectory: Path,
+                          directoryListingCommand: Seq[String],
+                          mavenSettings: Option[String])

@@ -77,7 +77,7 @@ object State {
   def beginProcessing(localProjectNames: Seq[String], remoteProjectNames: Seq[String], dispatcher: Dispatcher, actorRef: ActorRef[Event]): State = {
     val statusOfProjects = StatusOfProjects.create(localProjectNames, remoteProjectNames)
     val processProjectFunction = (processProject(_: String, _: ProjectState, dispatcher, actorRef)).tupled
-    statusOfProjects.map.foreach(processProjectFunction)
+    statusOfProjects.map.par.foreach(processProjectFunction)
     Processing(statusOfProjects)
   }
 

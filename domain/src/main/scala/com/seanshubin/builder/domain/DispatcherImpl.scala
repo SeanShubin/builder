@@ -1,10 +1,15 @@
 package com.seanshubin.builder.domain
 
+import java.nio.file.Path
+
 import scala.concurrent.{ExecutionContext, Future, Promise}
 
 class DispatcherImpl(githubProjectFinder: ProjectFinder,
                      localProjectFinder: ProjectFinder,
-                     projectCommandRunner: ProjectCommandRunner,
+                     systemSpecific: SystemSpecific,
+                     baseDirectory: Path,
+                     processLauncher: ProcessLauncher,
+                     loggerFactory: ProcessLoggerFactory,
                      statusUpdateFunction: StatusOfProjects => Unit,
                      statusSummaryFunction: StatusOfProjects => Unit,
                      unsupportedEventFromStateFunction: (String, String) => Unit,
@@ -19,11 +24,35 @@ class DispatcherImpl(githubProjectFinder: ProjectFinder,
   }
 
   override def cloneProject(name: String, previousAttemptCount: Int): Future[CommandResult] = {
-    projectCommandRunner.exec("clone", name, previousAttemptCount, "git", "clone", s"https://github.com/SeanShubin/$name.git")
+    val command = Seq("git", "clone", s"https://github.com/SeanShubin/$name.git")
+    val logger = loggerFactory.createCommandProjectRetry("clone", name, previousAttemptCount)
+    val environment = Map[String, String]()
+    val input = ProcessInput(command, baseDirectory, environment)
+    val futureProcessOutput = processLauncher.launch(input, logger)
+    for {
+      processOutput <- futureProcessOutput
+    } yield {
+      CommandResult("clone", name, processOutput, previousAttemptCount)
+    }
   }
 
   override def buildProject(name: String, previousAttemptCount: Int): Future[CommandResult] = {
-    projectCommandRunner.exec("build", name, previousAttemptCount, "mvn", "clean", "verify", "--settings", "/Users/sshubin/.m2/sean-settings.xml")
+    val mvnCleanVerify = Seq("mvn", "clean", "verify")
+    val settingsAnnotation = systemSpecific.mavenSettings match {
+      case Some(mavenSettings) => Seq("--settings", mavenSettings)
+      case None => Seq()
+    }
+    val mavenCommand = mvnCleanVerify ++ settingsAnnotation
+    val logger = loggerFactory.createCommandProjectRetry("build", name, previousAttemptCount)
+    val directory = baseDirectory.resolve(name)
+    val environment = Map[String, String]()
+    val input = ProcessInput(mavenCommand, directory, environment)
+    val futureProcessOutput = processLauncher.launch(input, logger)
+    for {
+      processOutput <- futureProcessOutput
+    } yield {
+      CommandResult("build", name, processOutput, previousAttemptCount)
+    }
   }
 
   override def done(): Unit = {

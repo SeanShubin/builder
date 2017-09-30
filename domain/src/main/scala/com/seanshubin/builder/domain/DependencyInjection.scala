@@ -1,7 +1,7 @@
 package com.seanshubin.builder.domain
 
 import java.nio.charset.{Charset, StandardCharsets}
-import java.nio.file.{Path, Paths}
+import java.nio.file.Path
 import java.time.{Clock, Instant}
 import java.util.concurrent.TimeUnit
 
@@ -13,12 +13,14 @@ import scala.concurrent.duration.Duration
 import scala.concurrent.{ExecutionContext, Promise}
 
 trait DependencyInjection {
+  def systemSpecific: SystemSpecific
+
   implicit val executionContext: ExecutionContext = new MyExecutionContext(ExecutionContext.Implicits.global)
   val files: FilesContract = FilesDelegate
   val system: SystemContract = SystemDelegate
   val done: Promise[Unit] = Promise()
   val userName: String = "SeanShubin"
-  val baseDirectory: Path = Paths.get("/Users/sshubin/github/sean")
+  val baseDirectory: Path = systemSpecific.githubDirectory
   val logDirectory: Path = baseDirectory.resolve("builder/logs")
   val sender: Sender = new HttpSender
   val jsonMarshaller: JsonMarshaller = JacksonJsonMarshaller
@@ -30,7 +32,6 @@ trait DependencyInjection {
   val createProcessBuilder: () => ProcessBuilderContract = ProcessBuilderDelegate.apply _
   val futureRunner: FutureRunner = new ExecutionContextFutureRunner(notifications.unhandledException(_))
   val charset: Charset = StandardCharsets.UTF_8
-  val systemSpecific: SystemSpecific = new SystemSpecificImpl
   val processLauncher: ProcessLauncher = new ProcessLauncherImpl(
     createProcessBuilder,
     futureRunner,
@@ -39,7 +40,7 @@ trait DependencyInjection {
     notifications.processLaunched)
   val notifySignal: Signal => Unit = notifications.signal
   val notifyEvent: Event => Unit = notifications.event
-  val loggerFactory = new ProcessLoggerFactoryImpl(files, logDirectory, startTime)
+  val loggerFactory = new ProcessLoggerFactoryImpl(files, logDirectory, startTime, rootLogger)
   val githubProjectFinder: ProjectFinder = new GithubProjectFinder(
     userName,
     sender,
@@ -49,11 +50,13 @@ trait DependencyInjection {
     systemSpecific,
     processLauncher,
     loggerFactory)
-  val projectCommandRunner: ProjectCommandRunner = new ProjectCommandRunnerImpl(baseDirectory, processLauncher, loggerFactory)
   val dispatcher: Dispatcher = new DispatcherImpl(
     githubProjectFinder,
     localProjectFinder,
-    projectCommandRunner,
+    systemSpecific,
+    baseDirectory,
+    processLauncher,
+    loggerFactory,
     notifications.statusUpdate,
     notifications.statusSummary,
     notifications.unsupportedEventFromState,

@@ -10,7 +10,10 @@ import com.seanshubin.up_to_date.logic.DurationFormat
 
 import scala.reflect.runtime.universe
 
-class ProcessLoggerImpl(files: FilesContract, directory: Path, baseName: String) extends ProcessLogger {
+class ProcessLoggerImpl(files: FilesContract,
+                        directory: Path,
+                        baseName: String,
+                        rootLogger: String => Unit) extends ProcessLogger {
   private val outPath = directory.resolve(baseName + ".stream.out.txt")
   private val errPath = directory.resolve(baseName + ".stream.err.txt")
   private val inputPath = directory.resolve(baseName + ".process.input.txt")
@@ -45,6 +48,8 @@ class ProcessLoggerImpl(files: FilesContract, directory: Path, baseName: String)
     withPrintWriter(path) { printWriter =>
       printWriter.println(line)
     }
+    val topDirectory = directory.getFileName
+    rootLogger(s"$topDirectory $line")
   }
 
   private def withPrintWriter(path: Path)(block: PrintWriter => Unit): Unit = {
