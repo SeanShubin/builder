@@ -84,9 +84,9 @@ object State {
   def processProject(name: String, state: ProjectState, dispatcher: Dispatcher, actorRef: ActorRef[Event]): Unit = {
     val handler = new DispatchResultHandler(actorRef)
     state match {
-      case InGithubNotLocal => dispatcher.cloneProject(name, 0).onComplete(handler.finishedCloning)
+      case InGithubNotLocal => dispatcher.cloneProject(name).onComplete(handler.finishedCloning)
       case InLocalNotGithub => handler.missingFromGithub(name)
-      case InLocalAndGithub => dispatcher.buildProject(name, 0).onComplete(handler.finishedBuilding)
+      case InLocalAndGithub => dispatcher.buildProject(name).onComplete(handler.finishedBuilding)
     }
   }
 }

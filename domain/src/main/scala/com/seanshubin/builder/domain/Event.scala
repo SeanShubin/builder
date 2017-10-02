@@ -24,9 +24,9 @@ object Event {
 
   case class ErrorBuilding(name: String, exception: Throwable) extends Event
 
-  case class CloneProject(name: String, previousAttemptCount: Int) extends Event
+  case class CloneProject(name: String) extends Event
 
-  case class BuildProject(name: String, previousAttemptCount: Int) extends Event
+  case class BuildProject(name: String) extends Event
 
   case class FailedToCloneBasedOnExitCode(name: String) extends Event
 

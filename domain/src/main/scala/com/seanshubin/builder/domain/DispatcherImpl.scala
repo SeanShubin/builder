@@ -23,27 +23,27 @@ class DispatcherImpl(githubProjectFinder: ProjectFinder,
     githubProjectFinder.findProjects()
   }
 
-  override def cloneProject(name: String, previousAttemptCount: Int): Future[CommandResult] = {
+  override def cloneProject(name: String): Future[CommandResult] = {
     val command = Seq("git", "clone", s"https://github.com/SeanShubin/$name.git")
-    val logger = loggerFactory.createCommandProjectRetry("clone", name, previousAttemptCount)
+    val logger = loggerFactory.createProjectCommand("clone", name)
     val environment = Map[String, String]()
     val input = ProcessInput(command, baseDirectory, environment)
     val futureProcessOutput = processLauncher.launch(input, logger)
     for {
       processOutput <- futureProcessOutput
     } yield {
-      CommandResult("clone", name, processOutput, previousAttemptCount)
+      CommandResult("clone", name, processOutput)
     }
   }
 
-  override def buildProject(name: String, previousAttemptCount: Int): Future[CommandResult] = {
+  override def buildProject(name: String): Future[CommandResult] = {
     val mvnCleanVerify = Seq("mvn", "clean", "verify")
     val settingsAnnotation = systemSpecific.mavenSettings match {
       case Some(mavenSettings) => Seq("--settings", mavenSettings)
       case None => Seq()
     }
     val mavenCommand = mvnCleanVerify ++ settingsAnnotation
-    val logger = loggerFactory.createCommandProjectRetry("build", name, previousAttemptCount)
+    val logger = loggerFactory.createProjectCommand("build", name)
     val directory = baseDirectory.resolve(name)
     val environment = Map[String, String]()
     val input = ProcessInput(mavenCommand, directory, environment)
@@ -51,7 +51,29 @@ class DispatcherImpl(githubProjectFinder: ProjectFinder,
     for {
       processOutput <- futureProcessOutput
     } yield {
-      CommandResult("build", name, processOutput, previousAttemptCount)
+      CommandResult("build", name, processOutput)
+    }
+  }
+
+  override def checkForPendingEdits(name: String):Future[PendingEditResult] = {
+    val command = Seq("git", "status", "-s")
+    val directory = baseDirectory.resolve(name)
+    val environment = Map[String, String]()
+    val input = ProcessInput(command, directory, environment)
+    val logger = loggerFactory.createProjectCommand("status", name)
+    val futureProcessOutput = processLauncher.launch(input, logger)
+    for {
+      processOutput <- futureProcessOutput
+    } yield {
+      if(processOutput.exitCode == 0 ){
+        if(processOutput.outputLines.isEmpty){
+          PendingEditResult.NoPendingEdits(name)
+        } else {
+          PendingEditResult.HasPendingEdits(name)
+        }
+      } else {
+        PendingEditResult.UnableToDeterminePendingEdits(name)
+      }
     }
   }
 
