@@ -58,6 +58,22 @@
                 <groupId>org.scalatest</groupId>
                 <artifactId>scalatest-maven-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>com.seanshubin.detangler</groupId>
+                <artifactId>detangler-maven-plugin</artifactId>
+                <version>0.9.1</version>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <detanglerConfig>domain/detangler.txt</detanglerConfig>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>

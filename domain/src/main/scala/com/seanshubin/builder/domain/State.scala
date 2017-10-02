@@ -87,6 +87,7 @@ object State {
       case InGithubNotLocal => dispatcher.cloneProject(name).onComplete(handler.finishedCloning)
       case InLocalNotGithub => handler.missingFromGithub(name)
       case InLocalAndGithub => dispatcher.buildProject(name).onComplete(handler.finishedBuilding)
+      case unexpected => handler.unableToProcessProjectInThisState(name, unexpected)
     }
   }
 }

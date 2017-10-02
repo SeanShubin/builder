@@ -10,4 +10,6 @@ object Event {
 
   case class Processed(name: String, result: Int) extends Event
 
+  case class UnexpectedException(exception: Throwable) extends Event
+
 }

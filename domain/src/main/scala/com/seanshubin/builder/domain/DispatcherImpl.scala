@@ -55,7 +55,7 @@ class DispatcherImpl(githubProjectFinder: ProjectFinder,
     }
   }
 
-  override def checkForPendingEdits(name: String):Future[PendingEditResult] = {
+  override def checkForPendingEdits(name: String): Future[PendingEditResult] = {
     val command = Seq("git", "status", "-s")
     val directory = baseDirectory.resolve(name)
     val environment = Map[String, String]()
@@ -65,8 +65,8 @@ class DispatcherImpl(githubProjectFinder: ProjectFinder,
     for {
       processOutput <- futureProcessOutput
     } yield {
-      if(processOutput.exitCode == 0 ){
-        if(processOutput.outputLines.isEmpty){
+      if (processOutput.exitCode == 0) {
+        if (processOutput.outputLines.isEmpty) {
           PendingEditResult.NoPendingEdits(name)
         } else {
           PendingEditResult.HasPendingEdits(name)

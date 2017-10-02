@@ -11,7 +11,7 @@ trait Dispatcher {
 
   def buildProject(name: String): Future[CommandResult]
 
-  def checkForPendingEdits(name:String):Future[PendingEditResult]
+  def checkForPendingEdits(name: String): Future[PendingEditResult]
 
   def statusUpdate(statusOfProjects: StatusOfProjects): Unit
 

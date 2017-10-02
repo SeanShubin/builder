@@ -11,7 +11,8 @@ sealed trait State {
   def results: Map[String, Int] = ???
 
   def handle(event: Event, dispatcher: Dispatcher, actorRef: ActorRef[Event])(implicit executionContext: ExecutionContext): State = {
-    throw new UnsupportedOperationException(this.getClass.getName)
+    val stateName: String = getClass.getSimpleName
+    throw new UnsupportedOperationException(s"State $stateName does not support event $event")
   }
 }
 
@@ -24,6 +25,7 @@ object State {
         case Ready =>
           dispatcher.doSearch().onComplete(handler.searchResult)
           State.Searching
+        case _ => super.handle(event, dispatcher, actorRef)
       }
     }
   }
@@ -35,6 +37,7 @@ object State {
         case Found(names) => names.foreach(dispatcher.process(_).onComplete(handler.processResult))
           val statusOfProjects = StatusOfProjects.fromNames(names)
           State.Processing(statusOfProjects)
+        case _ => super.handle(event, dispatcher, actorRef)
       }
     }
   }
@@ -48,8 +51,11 @@ object State {
             dispatcher.setDone()
           }
           Processing(newStatus)
+        case _ => super.handle(event, dispatcher, actorRef)
       }
     }
   }
+
+  case object Error extends State
 
 }

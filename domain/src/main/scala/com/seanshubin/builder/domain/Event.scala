@@ -42,4 +42,6 @@ object Event {
 
   case class UnsupportedEventFromState(eventName: String, stateName: String) extends Event
 
+  case class UnableToProcessProjectInThisState(project: String, stateName: String) extends Event
+
 }

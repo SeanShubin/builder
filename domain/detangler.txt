@@ -1,0 +1,17 @@
+{
+  reportDir domain/target/detangled
+  searchPaths
+  [
+    domain/target/builder-domain-1.0-SNAPSHOT.jar
+  ]
+  level 1
+  startsWith
+  {
+    include [[com seanshubin builder domain]]
+    exclude []
+    drop [[com seanshubin builder domain]]
+  }
+  ignoreFiles []
+  canFailBuild true
+  allowedInCycle []
+}

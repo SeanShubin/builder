@@ -40,11 +40,16 @@ class DispatchResultHandler(actorRef: ActorRef[Event]) {
         } else {
           actorRef ! FailedToBuildBasedOnExitCode(buildResult.project)
         }
-
+      case Failure(exception) =>
+        actorRef ! FailedToBuildBasedOnException(exception)
     }
   }
 
   def missingFromGithub(name: String): Unit = {
     actorRef ! MissingFromGithub(name)
+  }
+
+  def unableToProcessProjectInThisState(project: String, state: ProjectState): Unit = {
+    actorRef ! UnableToProcessProjectInThisState(project, ClassUtil.getSimpleClassName(state))
   }
 }
