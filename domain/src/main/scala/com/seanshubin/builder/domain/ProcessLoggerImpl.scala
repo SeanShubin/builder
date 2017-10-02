@@ -13,10 +13,10 @@ import scala.reflect.runtime.universe
 class ProcessLoggerImpl(files: FilesContract,
                         directory: Path,
                         rootLogger: String => Unit) extends ProcessLogger {
-  private val outPath = directory.resolve("stream.out.txt")
-  private val errPath = directory.resolve("stream.err.txt")
-  private val inputPath = directory.resolve("process.input.txt")
-  private val outputPath = directory.resolve("process.output.txt")
+  private val outPath = createPath("stream.out.txt")
+  private val errPath = createPath("stream.err.txt")
+  private val inputPath = createPath("process.input.txt")
+  private val outputPath = createPath("process.output.txt")
   files.createDirectories(directory)
 
   override def emitInput(input: ProcessInput): Unit = {
@@ -57,6 +57,10 @@ class ProcessLoggerImpl(files: FilesContract,
     val printWriter = new PrintWriter(writer)
     block(printWriter)
     printWriter.close()
+  }
+
+  private def createPath(name: String): Path = {
+    directory.resolve(name)
   }
 }
 

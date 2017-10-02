@@ -10,7 +10,7 @@ class ProcessLoggerFactoryImpl(files: FilesContract,
   val directory = baseDirectory.resolve(startTime.toString)
 
   override def createAction(action: String): ProcessLogger = {
-    val path = directory.resolve("action")
+    val path = directory.resolve("action").resolve(action)
     new ProcessLoggerImpl(files, path, rootLogger)
   }
 
