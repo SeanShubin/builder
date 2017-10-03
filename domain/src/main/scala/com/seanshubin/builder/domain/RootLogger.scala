@@ -16,7 +16,6 @@ class RootLogger(baseDirectory: Path,
   override def apply(line: String) = {
     emitToView(line)
     emitToStorage(path, line)
-
   }
 
   private def emitToStorage(path: Path, line: String): Unit = {

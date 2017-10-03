@@ -33,13 +33,16 @@ object StatusOfProjects {
     val inLocalAndGithub = local.intersect(github).map((_, ProjectState.InLocalAndGithub)).toMap
     val inGithubNotLocal = (github.toSet -- local.toSet).map((_, ProjectState.InGithubNotLocal)).toMap
     val inLocalNotGithub = (local.toSet -- github.toSet).map((_, ProjectState.InLocalNotGithub)).toMap
-    //    val inLocalAndGithub = Map(
-    //      "hello" -> ProjectState.InLocalAndGithub,
-    //      "hello-web" -> ProjectState.InLocalAndGithub)
-    //    val inGithubNotLocal = Map[String, ProjectState]()
-    //    val inLocalNotGithub = Map[String, ProjectState]()
     val map = inLocalAndGithub ++ inGithubNotLocal ++ inLocalNotGithub
     StatusOfProjects(map)
+    val onlyLookAt = Set("hello", "hello-web")
+    val filteredMap = for {
+      (key, value) <- map
+      if onlyLookAt.contains(key)
+    } yield {
+      (key, value)
+    }
+    StatusOfProjects(filteredMap)
   }
 
   def addToByStateNameMap(accumulator: Map[String, Seq[String]], entry: (String, ProjectState)): Map[String, Seq[String]] = {
