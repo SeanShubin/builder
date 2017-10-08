@@ -59,13 +59,15 @@ object State {
 
   case class Processing(statusOfProjects: StatusOfProjects) extends State {
     override def handlePartially(): PartialFunction[Event, (State, Seq[Effect])] = {
-      case FailedToCloneBasedOnExitCode(project) => update(project, ProjectState.FailedToClone)
-      case FailedToBuildBasedOnExitCode(project) => update(project, ProjectState.FailedToBuild)
-      case ProjectBuilt(project) => update(project, ProjectState.BuildSuccess)
-      case ProjectCloned(project) => updateAndBuild(project, ProjectState.CloneSuccess)
+      case NoPendingEdits(projectName) => update(projectName, ProjectState.NoPendingEdits, Effect.Build(projectName))
+      case HasPendingEdits(projectName) => update(projectName, ProjectState.HasPendingEdits)
+      case FailedToClone(projectName, _) => update(projectName, ProjectState.FailedToClone)
+      case FailedToBuild(projectName, _) => update(projectName, ProjectState.FailedToBuild)
+      case ProjectBuilt(projectName) => update(projectName, ProjectState.BuildSuccess)
+      case ProjectCloned(projectName) => update(projectName, ProjectState.CloneSuccess, Effect.Build(projectName))
     }
 
-    def update(project: String, newProjectState: ProjectState): (State, Seq[Effect]) = {
+    def update(project: String, newProjectState: ProjectState, newEffects: Effect*): (State, Seq[Effect]) = {
       val newStatus = statusOfProjects.update(project, newProjectState)
       val statusUpdateEffect = Effect.StatusUpdate(newStatus)
       val doneEffects = if (newStatus.isDone) {
@@ -75,14 +77,8 @@ object State {
       } else {
         Seq()
       }
-      val effects = statusUpdateEffect +: doneEffects
+      val effects = Seq(statusUpdateEffect) ++ newEffects ++ doneEffects
       (Processing(newStatus), effects)
-    }
-
-    def updateAndBuild(project: String, newProjectState: ProjectState): (State, Seq[Effect]) = {
-      val (state, effects) = update(project, newProjectState)
-      val effectsPlusBuild = effects :+ Effect.Build(project)
-      (state, effectsPlusBuild)
     }
   }
 
@@ -97,7 +93,7 @@ object State {
     state match {
       case InGithubNotLocal => Effect.Clone(name)
       case InLocalNotGithub => Effect.MissingFromGithub(name)
-      case InLocalAndGithub => Effect.Build(name)
+      case InLocalAndGithub => Effect.CheckForPendingEdits(name)
       case unexpected => Effect.UnableToProcessProjectInThisState(name, unexpected)
     }
   }

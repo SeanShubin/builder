@@ -20,29 +20,41 @@ class DispatchResultHandler(actorRef: ActorRef[Event]) {
     }
   }
 
-  def finishedCloning(result: Try[CommandResult]): Unit = {
-    result match {
-      case Success(cloneResult) =>
-        if (cloneResult.isSuccess) {
-          actorRef ! ProjectCloned(cloneResult.project)
-        } else {
-          actorRef ! FailedToCloneBasedOnExitCode(cloneResult.project)
-        }
-      case Failure(exception) => FailedToCloneBasedOnException(exception)
-    }
+  def finishedCloning(projectName: String): Try[ProcessOutput] => Unit = {
+    case Success(processOutput) =>
+      if (processOutput.exitCode == 0) {
+        actorRef ! ProjectCloned(projectName)
+      } else {
+        actorRef ! FailedToClone(projectName, FailReason.ExitCode(processOutput.exitCode))
+      }
+    case Failure(exception) =>
+      actorRef ! FailedToClone(projectName, FailReason.ExceptionThrown(exception))
   }
 
-  def finishedBuilding(result: Try[CommandResult]): Unit = {
-    result match {
-      case Success(buildResult) =>
-        if (buildResult.isSuccess) {
-          actorRef ! ProjectBuilt(buildResult.project)
+  def finishedBuilding(projectName: String): Try[ProcessOutput] => Unit = {
+    case Success(processOutput) =>
+      if (processOutput.exitCode == 0) {
+        actorRef ! ProjectBuilt(projectName)
+      } else {
+        actorRef ! FailedToBuild(projectName, FailReason.ExitCode(processOutput.exitCode))
+      }
+    case Failure(exception) =>
+      actorRef ! FailedToBuild(projectName, FailReason.ExceptionThrown(exception))
+  }
+
+  def finishedCheckingForPendingEdits(projectName: String): Try[ProcessOutput] => Unit = {
+    case Success(processOutput) =>
+      if (processOutput.exitCode == 0) {
+        if (processOutput.outputLines.isEmpty) {
+          actorRef ! Event.NoPendingEdits(projectName)
         } else {
-          actorRef ! FailedToBuildBasedOnExitCode(buildResult.project)
+          actorRef ! Event.HasPendingEdits(projectName)
         }
-      case Failure(exception) =>
-        actorRef ! FailedToBuildBasedOnException(exception)
-    }
+      } else {
+        actorRef ! Event.FailedToGetPendingEdits(projectName, FailReason.ExitCode(processOutput.exitCode))
+      }
+    case Failure(exception) =>
+      actorRef ! Event.FailedToGetPendingEdits(projectName, FailReason.ExceptionThrown(exception))
   }
 
   def missingFromGithub(name: String): Unit = {

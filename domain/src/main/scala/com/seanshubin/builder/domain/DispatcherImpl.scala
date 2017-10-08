@@ -23,20 +23,15 @@ class DispatcherImpl(githubProjectFinder: ProjectFinder,
     githubProjectFinder.findProjects()
   }
 
-  override def cloneProject(name: String): Future[CommandResult] = {
+  override def cloneProject(name: String): Future[ProcessOutput] = {
     val command = Seq("git", "clone", s"https://github.com/SeanShubin/$name.git")
     val logger = loggerFactory.createProjectCommand("clone", name)
     val environment = Map[String, String]()
     val input = ProcessInput(command, baseDirectory, environment)
-    val futureProcessOutput = processLauncher.launch(input, logger)
-    for {
-      processOutput <- futureProcessOutput
-    } yield {
-      CommandResult("clone", name, processOutput)
-    }
+    processLauncher.launch(input, logger)
   }
 
-  override def buildProject(name: String): Future[CommandResult] = {
+  override def buildProject(name: String): Future[ProcessOutput] = {
     val mvnCleanVerify = Seq("mvn", "clean", "verify")
     val settingsAnnotation = systemSpecific.mavenSettings match {
       case Some(mavenSettings) => Seq("--settings", mavenSettings)
@@ -47,34 +42,16 @@ class DispatcherImpl(githubProjectFinder: ProjectFinder,
     val directory = baseDirectory.resolve(name)
     val environment = Map[String, String]()
     val input = ProcessInput(mavenCommand, directory, environment)
-    val futureProcessOutput = processLauncher.launch(input, logger)
-    for {
-      processOutput <- futureProcessOutput
-    } yield {
-      CommandResult("build", name, processOutput)
-    }
+    processLauncher.launch(input, logger)
   }
 
-  override def checkForPendingEdits(name: String): Future[PendingEditResult] = {
+  override def checkForPendingEdits(name: String): Future[ProcessOutput] = {
     val command = Seq("git", "status", "-s")
     val directory = baseDirectory.resolve(name)
     val environment = Map[String, String]()
     val input = ProcessInput(command, directory, environment)
     val logger = loggerFactory.createProjectCommand("status", name)
-    val futureProcessOutput = processLauncher.launch(input, logger)
-    for {
-      processOutput <- futureProcessOutput
-    } yield {
-      if (processOutput.exitCode == 0) {
-        if (processOutput.outputLines.isEmpty) {
-          PendingEditResult.NoPendingEdits(name)
-        } else {
-          PendingEditResult.HasPendingEdits(name)
-        }
-      } else {
-        PendingEditResult.UnableToDeterminePendingEdits(name)
-      }
-    }
+    processLauncher.launch(input, logger)
   }
 
   override def done(): Unit = {

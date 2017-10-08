@@ -10,6 +10,6 @@ object PendingEditResult {
 
   case class HasPendingEdits(project: String) extends PendingEditResult
 
-  case class UnableToDeterminePendingEdits(project: String) extends PendingEditResult
+  case class UnableToDeterminePendingEdits(project: String, exitCode: Int) extends PendingEditResult
 
 }

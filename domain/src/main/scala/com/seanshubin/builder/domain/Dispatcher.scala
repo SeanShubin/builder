@@ -7,11 +7,11 @@ trait Dispatcher {
 
   def findRemoteProjects(): Future[Seq[String]]
 
-  def cloneProject(name: String): Future[CommandResult]
+  def cloneProject(name: String): Future[ProcessOutput]
 
-  def buildProject(name: String): Future[CommandResult]
+  def buildProject(name: String): Future[ProcessOutput]
 
-  def checkForPendingEdits(name: String): Future[PendingEditResult]
+  def checkForPendingEdits(name: String): Future[ProcessOutput]
 
   def statusUpdate(statusOfProjects: StatusOfProjects): Unit
 

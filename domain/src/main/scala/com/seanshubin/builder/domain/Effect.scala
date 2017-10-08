@@ -36,17 +36,17 @@ object Effect {
     }
   }
 
-  case class Clone(project: String) extends Effect {
+  case class Clone(projectName: String) extends Effect {
     override def applyEffect(dispatcher: Dispatcher, actorRef: ActorRef[Event])(implicit executionContext: ExecutionContext): Unit = {
       val handler = new DispatchResultHandler(actorRef)
-      dispatcher.cloneProject(project).onComplete(handler.finishedCloning)
+      dispatcher.cloneProject(projectName).onComplete(handler.finishedCloning(projectName))
     }
   }
 
-  case class Build(project: String) extends Effect {
+  case class Build(projectName: String) extends Effect {
     override def applyEffect(dispatcher: Dispatcher, actorRef: ActorRef[Event])(implicit executionContext: ExecutionContext): Unit = {
       val handler = new DispatchResultHandler(actorRef)
-      dispatcher.buildProject(project).onComplete(handler.finishedBuilding)
+      dispatcher.buildProject(projectName).onComplete(handler.finishedBuilding(projectName))
     }
   }
 
@@ -73,6 +73,13 @@ object Effect {
   case class Summary(statusOfProjects: StatusOfProjects) extends Effect {
     override def applyEffect(dispatcher: Dispatcher, actorRef: ActorRef[Event])(implicit executionContext: ExecutionContext): Unit = {
       dispatcher.statusSummary(statusOfProjects)
+    }
+  }
+
+  case class CheckForPendingEdits(projectName: String) extends Effect {
+    override def applyEffect(dispatcher: Dispatcher, actorRef: ActorRef[Event])(implicit executionContext: ExecutionContext): Unit = {
+      val handler = new DispatchResultHandler(actorRef)
+      dispatcher.checkForPendingEdits(projectName).onComplete(handler.finishedCheckingForPendingEdits(projectName))
     }
   }
 
