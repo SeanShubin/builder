@@ -24,7 +24,7 @@ class DispatchResultHandler(actorRef: ActorRef[Event]) {
     result match {
       case Success(cloneResult) =>
         if (cloneResult.isSuccess) {
-          actorRef ! BuildProject(cloneResult.project)
+          actorRef ! ProjectCloned(cloneResult.project)
         } else {
           actorRef ! FailedToCloneBasedOnExitCode(cloneResult.project)
         }

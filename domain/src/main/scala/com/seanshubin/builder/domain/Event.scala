@@ -16,8 +16,6 @@ object Event {
 
   case class ErrorFindingProjectsLocally(ex: Throwable) extends Event
 
-  case class BuildProject(name: String) extends Event
-
   case class FailedToCloneBasedOnExitCode(name: String) extends Event
 
   case class FailedToCloneBasedOnException(exception: Throwable) extends Event
@@ -27,6 +25,8 @@ object Event {
   case class FailedToBuildBasedOnException(exception: Throwable) extends Event
 
   case class ProjectBuilt(name: String) extends Event
+
+  case class ProjectCloned(name: String) extends Event
 
   case class UnableToProcessProjectInThisState(project: String, stateName: String) extends Event
 

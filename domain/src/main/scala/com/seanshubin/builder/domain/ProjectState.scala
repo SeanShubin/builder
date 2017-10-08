@@ -18,6 +18,8 @@ object ProjectState {
 
   case object InLocalAndGithub extends ProjectState
 
+  case object CloneSuccess extends ProjectState
+
   case object BuildSuccess extends OneOfTheFinishedStates
 
   case object FailedToClone extends OneOfTheFinishedStates
