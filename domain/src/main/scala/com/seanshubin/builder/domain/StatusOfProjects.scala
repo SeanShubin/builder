@@ -35,14 +35,14 @@ object StatusOfProjects {
     val inLocalNotGithub = (local.toSet -- github.toSet).map((_, ProjectState.InLocalNotGithub)).toMap
     val map = inLocalAndGithub ++ inGithubNotLocal ++ inLocalNotGithub
     StatusOfProjects(map)
-    val onlyLookAt = Set("hello", "hello-web")
-    val filteredMap = for {
-      (key, value) <- map
-      if onlyLookAt.contains(key)
-    } yield {
-      (key, value)
-    }
-    StatusOfProjects(filteredMap)
+    //    val onlyLookAt = Set("hello", "hello-web")
+    //    val filteredMap = for {
+    //      (key, value) <- map
+    //      if onlyLookAt.contains(key)
+    //    } yield {
+    //      (key, value)
+    //    }
+    //    StatusOfProjects(filteredMap)
   }
 
   def addToByStateNameMap(accumulator: Map[String, Seq[String]], entry: (String, ProjectState)): Map[String, Seq[String]] = {
