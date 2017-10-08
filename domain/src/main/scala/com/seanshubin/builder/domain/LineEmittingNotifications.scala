@@ -4,7 +4,6 @@ import java.time.{Duration, Instant}
 
 import akka.typed.Signal
 import com.seanshubin.devon.domain.DevonMarshallerWiring
-import com.seanshubin.up_to_date.logic.DurationFormat
 
 class LineEmittingNotifications(emit: String => Unit) extends Notifications {
   override def projectsFoundInGithub(names: Seq[String]): Unit = {

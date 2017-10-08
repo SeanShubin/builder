@@ -6,7 +6,6 @@ import java.time.Duration
 
 import com.seanshubin.builder.domain.ProcessLoggerImpl.ProcessOutputReport
 import com.seanshubin.devon.domain.DevonMarshallerWiring
-import com.seanshubin.up_to_date.logic.DurationFormat
 
 import scala.reflect.runtime.universe
 
