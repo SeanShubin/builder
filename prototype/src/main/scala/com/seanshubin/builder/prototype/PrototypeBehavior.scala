@@ -16,7 +16,9 @@ class PrototypeBehavior(dispatcher: Dispatcher,
 
   override def message(ctx: ActorContext[Event], msg: Event): Behavior[Event] = {
     notifyEvent(msg)
-    state = state.handle(msg, dispatcher, ctx.getSelf())
+    val (newState, effects) = state.handle(msg)
+    state = newState
+    effects.foreach(effect => effect.apply(dispatcher, ctx.getSelf()))
     this
   }
 }
