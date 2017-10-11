@@ -24,6 +24,14 @@ object Event {
 
   case class ProjectCloned(name: String) extends Event
 
+  case class ProjectFetched(name: String) extends Event
+
+  case class FailedToFetch(name: String, reason: FailReason) extends Event
+
+  case class ProjectMerged(name: String) extends Event
+
+  case class FailedToMerge(name: String, reason: FailReason) extends Event
+
   case class UnableToProcessProjectInThisState(project: String, stateName: String) extends Event
 
   case class NoPendingEdits(projectName: String) extends Event

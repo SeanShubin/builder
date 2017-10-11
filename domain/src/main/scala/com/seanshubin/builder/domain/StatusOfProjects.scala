@@ -35,7 +35,7 @@ object StatusOfProjects {
     val inLocalNotGithub = (local.toSet -- github.toSet).map((_, ProjectState.InLocalNotGithub)).toMap
     val map = inLocalAndGithub ++ inGithubNotLocal ++ inLocalNotGithub
     StatusOfProjects(map)
-    val onlyLookAt = Set("hello", "hello-web")
+    val onlyLookAt = Set("hello", "hello-web", "utility")
     val filteredMap = for {
       (key, value) <- map
       if onlyLookAt.contains(key)

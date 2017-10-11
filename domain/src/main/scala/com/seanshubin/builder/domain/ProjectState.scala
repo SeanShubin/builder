@@ -20,6 +20,8 @@ object ProjectState {
 
   case object NoPendingEdits extends ProjectState
 
+  case object Fetched extends ProjectState
+
   case object HasPendingEdits extends OneOfTheFinishedStates
 
   case object CloneSuccess extends ProjectState

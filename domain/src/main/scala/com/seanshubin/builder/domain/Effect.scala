@@ -39,14 +39,28 @@ object Effect {
   case class Clone(projectName: String) extends Effect {
     override def applyEffect(dispatcher: Dispatcher, actorRef: ActorRef[Event])(implicit executionContext: ExecutionContext): Unit = {
       val handler = new DispatchResultHandler(actorRef)
-      dispatcher.clone(projectName).onComplete(handler.finishedCloning(projectName))
+      dispatcher.clone(projectName).onComplete(handler.finishedClone(projectName))
     }
   }
 
   case class Build(projectName: String) extends Effect {
     override def applyEffect(dispatcher: Dispatcher, actorRef: ActorRef[Event])(implicit executionContext: ExecutionContext): Unit = {
       val handler = new DispatchResultHandler(actorRef)
-      dispatcher.build(projectName).onComplete(handler.finishedBuilding(projectName))
+      dispatcher.build(projectName).onComplete(handler.finishedBuild(projectName))
+    }
+  }
+
+  case class Fetch(projectName: String) extends Effect {
+    override def applyEffect(dispatcher: Dispatcher, actorRef: ActorRef[Event])(implicit executionContext: ExecutionContext): Unit = {
+      val handler = new DispatchResultHandler(actorRef)
+      dispatcher.fetch(projectName).onComplete(handler.finishedFetch(projectName))
+    }
+  }
+
+  case class Merge(projectName: String) extends Effect {
+    override def applyEffect(dispatcher: Dispatcher, actorRef: ActorRef[Event])(implicit executionContext: ExecutionContext): Unit = {
+      val handler = new DispatchResultHandler(actorRef)
+      dispatcher.merge(projectName).onComplete(handler.finishedMerge(projectName))
     }
   }
 

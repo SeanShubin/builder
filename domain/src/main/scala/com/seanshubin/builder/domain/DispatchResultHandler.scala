@@ -20,7 +20,7 @@ class DispatchResultHandler(actorRef: ActorRef[Event]) {
     }
   }
 
-  def finishedCloning(projectName: String): Try[ProcessOutput] => Unit = {
+  def finishedClone(projectName: String): Try[ProcessOutput] => Unit = {
     case Success(processOutput) =>
       if (processOutput.exitCode == 0) {
         actorRef ! ProjectCloned(projectName)
@@ -31,7 +31,7 @@ class DispatchResultHandler(actorRef: ActorRef[Event]) {
       actorRef ! FailedToClone(projectName, FailReason.ExceptionThrown(exception))
   }
 
-  def finishedBuilding(projectName: String): Try[ProcessOutput] => Unit = {
+  def finishedBuild(projectName: String): Try[ProcessOutput] => Unit = {
     case Success(processOutput) =>
       if (processOutput.exitCode == 0) {
         actorRef ! ProjectBuilt(projectName)
@@ -40,6 +40,28 @@ class DispatchResultHandler(actorRef: ActorRef[Event]) {
       }
     case Failure(exception) =>
       actorRef ! FailedToBuild(projectName, FailReason.ExceptionThrown(exception))
+  }
+
+  def finishedFetch(projectName: String): Try[ProcessOutput] => Unit = {
+    case Success(processOutput) =>
+      if (processOutput.exitCode == 0) {
+        actorRef ! ProjectFetched(projectName)
+      } else {
+        actorRef ! FailedToFetch(projectName, FailReason.ExitCode(processOutput.exitCode))
+      }
+    case Failure(exception) =>
+      actorRef ! FailedToFetch(projectName, FailReason.ExceptionThrown(exception))
+  }
+
+  def finishedMerge(projectName: String): Try[ProcessOutput] => Unit = {
+    case Success(processOutput) =>
+      if (processOutput.exitCode == 0) {
+        actorRef ! ProjectMerged(projectName)
+      } else {
+        actorRef ! FailedToMerge(projectName, FailReason.ExitCode(processOutput.exitCode))
+      }
+    case Failure(exception) =>
+      actorRef ! FailedToMerge(projectName, FailReason.ExceptionThrown(exception))
   }
 
   def finishedCheckingForPendingEdits(projectName: String): Try[ProcessOutput] => Unit = {
