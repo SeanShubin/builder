@@ -61,7 +61,8 @@ object State {
     override def handlePartially(): PartialFunction[Event, (State, Seq[Effect])] = {
       case NoPendingEdits(projectName) => update(projectName, ProjectState.NoPendingEdits, Effect.Fetch(projectName))
       case ProjectFetched(projectName) => update(projectName, ProjectState.Fetched, Effect.Merge(projectName))
-      case ProjectMerged(projectName) => update(projectName, ProjectState.Fetched, Effect.Build(projectName))
+      case ProjectMerged(projectName) => update(projectName, ProjectState.Merged, Effect.Push(projectName))
+      case ProjectPushed(projectName) => update(projectName, ProjectState.Pushed, Effect.Build(projectName))
       case HasPendingEdits(projectName) => update(projectName, ProjectState.HasPendingEdits)
       case FailedToClone(projectName, _) => update(projectName, ProjectState.FailedToClone)
       case FailedToBuild(projectName, _) => update(projectName, ProjectState.FailedToBuild)

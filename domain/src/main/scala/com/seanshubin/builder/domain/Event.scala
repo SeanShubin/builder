@@ -32,6 +32,10 @@ object Event {
 
   case class FailedToMerge(name: String, reason: FailReason) extends Event
 
+  case class ProjectPushed(name: String) extends Event
+
+  case class FailedToPush(name: String, reason: FailReason) extends Event
+
   case class UnableToProcessProjectInThisState(project: String, stateName: String) extends Event
 
   case class NoPendingEdits(projectName: String) extends Event

@@ -64,6 +64,17 @@ class DispatchResultHandler(actorRef: ActorRef[Event]) {
       actorRef ! FailedToMerge(projectName, FailReason.ExceptionThrown(exception))
   }
 
+  def finishedPush(projectName: String): Try[ProcessOutput] => Unit = {
+    case Success(processOutput) =>
+      if (processOutput.exitCode == 0) {
+        actorRef ! ProjectPushed(projectName)
+      } else {
+        actorRef ! FailedToPush(projectName, FailReason.ExitCode(processOutput.exitCode))
+      }
+    case Failure(exception) =>
+      actorRef ! FailedToPush(projectName, FailReason.ExceptionThrown(exception))
+  }
+
   def finishedCheckingForPendingEdits(projectName: String): Try[ProcessOutput] => Unit = {
     case Success(processOutput) =>
       if (processOutput.exitCode == 0) {

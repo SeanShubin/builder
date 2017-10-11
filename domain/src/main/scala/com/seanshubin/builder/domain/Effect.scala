@@ -64,6 +64,13 @@ object Effect {
     }
   }
 
+  case class Push(projectName: String) extends Effect {
+    override def applyEffect(dispatcher: Dispatcher, actorRef: ActorRef[Event])(implicit executionContext: ExecutionContext): Unit = {
+      val handler = new DispatchResultHandler(actorRef)
+      dispatcher.push(projectName).onComplete(handler.finishedPush(projectName))
+    }
+  }
+
   case class MissingFromGithub(project: String) extends Effect {
     override def applyEffect(dispatcher: Dispatcher, actorRef: ActorRef[Event])(implicit executionContext: ExecutionContext): Unit = {
       val handler = new DispatchResultHandler(actorRef)

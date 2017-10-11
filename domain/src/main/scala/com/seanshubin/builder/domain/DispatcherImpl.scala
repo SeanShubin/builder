@@ -26,7 +26,7 @@ class DispatcherImpl(githubProjectFinder: ProjectFinder,
   override def clone(projectName: String): Future[ProcessOutput] = {
     val command = Seq("git", "clone", s"https://github.com/SeanShubin/$projectName.git")
     val logDirectoryName = commandToLogDirectoryName(command)
-    val logger = loggerFactory.createProjectCommand(logDirectoryName, projectName)
+    val logger = loggerFactory.createProjectCommand(projectName, logDirectoryName)
     val environment = Map[String, String]()
     val input = ProcessInput(command, baseDirectory, environment)
     processLauncher.launch(input, logger)
@@ -73,7 +73,7 @@ class DispatcherImpl(githubProjectFinder: ProjectFinder,
     val environment = Map[String, String]()
     val input = ProcessInput(command, directory, environment)
     val logDirectoryName = commandToLogDirectoryName(command)
-    val logger = loggerFactory.createProjectCommand(logDirectoryName, projectName)
+    val logger = loggerFactory.createProjectCommand(projectName, logDirectoryName)
     processLauncher.launch(input, logger)
   }
 

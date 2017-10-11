@@ -22,6 +22,10 @@ object ProjectState {
 
   case object Fetched extends ProjectState
 
+  case object Merged extends ProjectState
+
+  case object Pushed extends ProjectState
+
   case object HasPendingEdits extends OneOfTheFinishedStates
 
   case object CloneSuccess extends ProjectState
