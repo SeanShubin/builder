@@ -23,35 +23,39 @@ class DispatcherImpl(githubProjectFinder: ProjectFinder,
     githubProjectFinder.findProjects()
   }
 
-  override def cloneProject(name: String): Future[ProcessOutput] = {
-    val command = Seq("git", "clone", s"https://github.com/SeanShubin/$name.git")
-    val logger = loggerFactory.createProjectCommand("clone", name)
+  override def clone(projectName: String): Future[ProcessOutput] = {
+    val command = Seq("git", "clone", s"https://github.com/SeanShubin/$projectName.git")
+    val logDirectoryName = commandToLogDirectoryName(command)
+    val logger = loggerFactory.createProjectCommand(logDirectoryName, projectName)
     val environment = Map[String, String]()
     val input = ProcessInput(command, baseDirectory, environment)
     processLauncher.launch(input, logger)
   }
 
-  override def buildProject(name: String): Future[ProcessOutput] = {
+  override def build(projectName: String): Future[ProcessOutput] = {
     val mvnCleanVerify = Seq("mvn", "clean", "verify")
     val settingsAnnotation = systemSpecific.mavenSettings match {
       case Some(mavenSettings) => Seq("--settings", mavenSettings)
       case None => Seq()
     }
     val mavenCommand = mvnCleanVerify ++ settingsAnnotation
-    val logger = loggerFactory.createProjectCommand("build", name)
-    val directory = baseDirectory.resolve(name)
-    val environment = Map[String, String]()
-    val input = ProcessInput(mavenCommand, directory, environment)
-    processLauncher.launch(input, logger)
+    execProjectCommand(projectName, mavenCommand: _*)
   }
 
-  override def checkForPendingEdits(name: String): Future[ProcessOutput] = {
-    val command = Seq("git", "status", "-s")
-    val directory = baseDirectory.resolve(name)
-    val environment = Map[String, String]()
-    val input = ProcessInput(command, directory, environment)
-    val logger = loggerFactory.createProjectCommand("status", name)
-    processLauncher.launch(input, logger)
+  override def checkForPendingEdits(projectName: String): Future[ProcessOutput] = {
+    execProjectCommand(projectName, "git", "status", "-s")
+  }
+
+  override def fetch(projectName: String): Future[ProcessOutput] = {
+    execProjectCommand(projectName, "git", "fetch")
+  }
+
+  override def merge(projectName: String): Future[ProcessOutput] = {
+    execProjectCommand(projectName, "git", "merge")
+  }
+
+  override def push(projectName: String): Future[ProcessOutput] = {
+    execProjectCommand(projectName, "git", "push")
   }
 
   override def done(): Unit = {
@@ -63,4 +67,20 @@ class DispatcherImpl(githubProjectFinder: ProjectFinder,
   override def statusSummary(statusOfProjects: StatusOfProjects): Unit = statusSummaryFunction(statusOfProjects)
 
   override def unsupportedEventFromState(eventName: String, stateName: String): Unit = unsupportedEventFromStateFunction(eventName, stateName)
+
+  private def execProjectCommand(projectName: String, command: String*): Future[ProcessOutput] = {
+    val directory = baseDirectory.resolve(projectName)
+    val environment = Map[String, String]()
+    val input = ProcessInput(command, directory, environment)
+    val logDirectoryName = commandToLogDirectoryName(command)
+    val logger = loggerFactory.createProjectCommand(logDirectoryName, projectName)
+    processLauncher.launch(input, logger)
+  }
+
+  private def commandToLogDirectoryName(command: Seq[String]): String = {
+    val alpha = ('a' to 'z') ++ ('A' to 'Z')
+    val allAlpha: String => Boolean = s => s.forall(alpha.contains)
+    val relevantCommandParts = command.filter(allAlpha)
+    relevantCommandParts.mkString("-")
+  }
 }

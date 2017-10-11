@@ -39,14 +39,14 @@ object Effect {
   case class Clone(projectName: String) extends Effect {
     override def applyEffect(dispatcher: Dispatcher, actorRef: ActorRef[Event])(implicit executionContext: ExecutionContext): Unit = {
       val handler = new DispatchResultHandler(actorRef)
-      dispatcher.cloneProject(projectName).onComplete(handler.finishedCloning(projectName))
+      dispatcher.clone(projectName).onComplete(handler.finishedCloning(projectName))
     }
   }
 
   case class Build(projectName: String) extends Effect {
     override def applyEffect(dispatcher: Dispatcher, actorRef: ActorRef[Event])(implicit executionContext: ExecutionContext): Unit = {
       val handler = new DispatchResultHandler(actorRef)
-      dispatcher.buildProject(projectName).onComplete(handler.finishedBuilding(projectName))
+      dispatcher.build(projectName).onComplete(handler.finishedBuilding(projectName))
     }
   }
 

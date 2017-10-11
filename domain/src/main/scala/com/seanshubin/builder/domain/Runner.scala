@@ -15,7 +15,7 @@ class Runner(clock: Clock,
              notifyStartAndEndTime: (Instant, Instant) => Unit) extends Runnable {
   override def run(): Unit = {
     val startTime = clock.instant()
-    actorSystem ! Event.Initialize
+    actorSystem ! Event.Start
     try {
       Await.ready(done, duration)
       val endTime = clock.instant()

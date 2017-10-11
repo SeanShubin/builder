@@ -25,7 +25,7 @@ object State {
 
   case object Initial extends State {
     override def handlePartially(): PartialFunction[Event, (State, Seq[Effect])] = {
-      case Initialize =>
+      case Start =>
         val effects = Seq(
           Effect.FindLocalProjects,
           Effect.FindRemoteProjects
