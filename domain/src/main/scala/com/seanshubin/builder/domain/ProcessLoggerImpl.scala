@@ -46,8 +46,9 @@ class ProcessLoggerImpl(files: FilesContract,
     withPrintWriter(path) { printWriter =>
       printWriter.println(line)
     }
-    val topDirectory = directory.getFileName
-    rootLogger(s"$topDirectory $line")
+    val directoryName = directory.getParent.getFileName
+
+    rootLogger(s"$directoryName $line")
   }
 
   private def withPrintWriter(path: Path)(block: PrintWriter => Unit): Unit = {
