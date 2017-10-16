@@ -2,7 +2,7 @@ package com.seanshubin.builder.core
 
 import java.nio.file.Path
 
-import com.seanshubin.up_to_date.logic.{Configuration => UpToDateConfiguration}
+import com.seanshubin.uptodate.logic.{Configuration => UpToDateConfiguration}
 
 case class Configuration(githubUserName: String,
                          reportDirectory: Path,

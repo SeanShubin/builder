@@ -19,9 +19,9 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.seanshubin</groupId>
-                <artifactId>up_to_date-console</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <groupId>com.seanshubin.uptodate</groupId>
+                <artifactId>up-to-date-console</artifactId>
+                <version>0.9.0</version>
             </dependency>
             <dependency>
                 <groupId>com.seanshubin.devon</groupId>

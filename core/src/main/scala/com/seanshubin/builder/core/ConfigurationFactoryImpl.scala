@@ -4,7 +4,7 @@ import java.nio.charset.Charset
 import java.nio.file.Paths
 
 import com.seanshubin.devon.domain.DevonMarshaller
-import com.seanshubin.up_to_date.logic.{GroupAndArtifact, GroupArtifactVersion, Configuration => UpToDateConfiguration}
+import com.seanshubin.uptodate.logic.{GroupAndArtifact, GroupArtifactVersion, Configuration => UpToDateConfiguration}
 
 class ConfigurationFactoryImpl(files: FilesContract,
                                devonMarshaller: DevonMarshaller,

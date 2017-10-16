@@ -26,8 +26,8 @@
             <artifactId>http-values-client-google</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.seanshubin</groupId>
-            <artifactId>up_to_date-console</artifactId>
+            <groupId>com.seanshubin.uptodate</groupId>
+            <artifactId>up-to-date-console</artifactId>
         </dependency>
         <dependency>
             <groupId>org.scala-lang</groupId>

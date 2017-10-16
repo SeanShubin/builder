@@ -2,7 +2,7 @@ package com.seanshubin.builder.core
 
 import java.nio.file.Path
 
-import com.seanshubin.up_to_date.console.RunnerWiring
+import com.seanshubin.uptodate.console.ApplicationDependencyInjection
 
 class RunnerImpl(configuration: Configuration,
                  api: Api,
@@ -64,7 +64,7 @@ class RunnerImpl(configuration: Configuration,
   def upgradeDependencies(): Unit = {
     val originalUpToDateConfiguration = configuration.upToDateConfiguration
     val upToDateConfiguration = originalUpToDateConfiguration.copy(directoriesToSearch = Seq(githubDirectory))
-    RunnerWiring(upToDateConfiguration).runner.run()
+    ApplicationDependencyInjection.createRunner(upToDateConfiguration).run()
 
     def processProject(project: ProjectConfig): Seq[ExecutionResult] = {
       if (api.pendingLocalEdits(project.name) && project.name != "learn-spark") {
