@@ -2,6 +2,7 @@ package com.seanshubin.builder.domain
 
 import akka.typed.ActorRef
 import com.seanshubin.builder.domain.Event._
+import com.seanshubin.uptodate.logic.SummaryReport
 
 import scala.util.{Failure, Success, Try}
 
@@ -96,5 +97,16 @@ class DispatchResultHandler(actorRef: ActorRef[Event]) {
 
   def unableToProcessProjectInThisState(project: String, state: ProjectState): Unit = {
     actorRef ! UnableToProcessProjectInThisState(project, ClassUtil.getSimpleClassName(state))
+  }
+
+  def finishedUpgradingDependencies(projectName: String): Try[SummaryReport] => Unit = {
+    case Success(summaryReport) =>
+      if (summaryReport.updatesWereApplied) {
+        actorRef ! Event.UpdatesWereApplied(projectName)
+      } else {
+        actorRef ! Event.NoUpdatesWereNeeded(projectName)
+      }
+    case Failure(_) =>
+      actorRef ! Event.FailedToUpgradeDependencies(projectName)
   }
 }

@@ -1,5 +1,7 @@
 package com.seanshubin.builder.domain
 
+import com.seanshubin.uptodate.logic.SummaryReport
+
 import scala.concurrent.Future
 
 trait Dispatcher {
@@ -26,4 +28,6 @@ trait Dispatcher {
   def unsupportedEventFromState(eventName: String, stateName: String): Unit
 
   def done(): Unit
+
+  def upgradeDependencies(projectName: String): Future[SummaryReport]
 }

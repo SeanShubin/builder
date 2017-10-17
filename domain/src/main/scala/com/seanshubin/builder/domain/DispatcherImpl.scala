@@ -2,6 +2,8 @@ package com.seanshubin.builder.domain
 
 import java.nio.file.Path
 
+import com.seanshubin.uptodate.logic.SummaryReport
+
 import scala.concurrent.{ExecutionContext, Future, Promise}
 
 class DispatcherImpl(githubProjectFinder: ProjectFinder,
@@ -10,6 +12,7 @@ class DispatcherImpl(githubProjectFinder: ProjectFinder,
                      baseDirectory: Path,
                      processLauncher: ProcessLauncher,
                      loggerFactory: ProcessLoggerFactory,
+                     dependencyUpgrader: DependencyUpgrader,
                      statusUpdateFunction: StatusOfProjects => Unit,
                      statusSummaryFunction: StatusOfProjects => Unit,
                      unsupportedEventFromStateFunction: (String, String) => Unit,
@@ -67,6 +70,12 @@ class DispatcherImpl(githubProjectFinder: ProjectFinder,
   override def statusSummary(statusOfProjects: StatusOfProjects): Unit = statusSummaryFunction(statusOfProjects)
 
   override def unsupportedEventFromState(eventName: String, stateName: String): Unit = unsupportedEventFromStateFunction(eventName, stateName)
+
+  override def upgradeDependencies(projectName: String): Future[SummaryReport] = {
+    Future {
+      dependencyUpgrader.upgradeDependencies(projectName)
+    }
+  }
 
   private def execProjectCommand(projectName: String, command: String*): Future[ProcessOutput] = {
     val directory = baseDirectory.resolve(projectName)

@@ -50,6 +50,11 @@ trait DependencyInjection {
     systemSpecific,
     processLauncher,
     loggerFactory)
+  val dependencyUpgrader: DependencyUpgrader = new DependencyUpgraderImpl(
+    systemSpecific.githubDirectory,
+    logDirectory,
+    startTime
+  )
   val dispatcher: Dispatcher = new DispatcherImpl(
     githubProjectFinder,
     localProjectFinder,
@@ -57,6 +62,7 @@ trait DependencyInjection {
     baseDirectory,
     processLauncher,
     loggerFactory,
+    dependencyUpgrader,
     notifications.statusUpdate,
     notifications.statusSummary,
     notifications.unsupportedEventFromState,
