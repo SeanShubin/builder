@@ -110,7 +110,29 @@ class DispatchResultHandler(actorRef: ActorRef[Event]) {
       actorRef ! Event.FailedToUpgradeDependencies(projectName)
   }
 
-  def finishedAddCommitPushUpdates(projectName: String): Try[ProcessOutput] => Unit = {
+  def finishedAdd(projectName: String): Try[ProcessOutput] => Unit = {
+    case Success(processOutput) =>
+      if (processOutput.exitCode == 0) {
+        actorRef ! Event.UpdatesAdded(projectName)
+      } else {
+        actorRef ! Event.FailedToAddUpdates(projectName, FailReason.ExitCode(processOutput.exitCode))
+      }
+    case Failure(exception) =>
+      actorRef ! Event.FailedToAddUpdates(projectName, FailReason.ExceptionThrown(exception))
+  }
+
+  def finishedCommit(projectName: String): Try[ProcessOutput] => Unit = {
+    case Success(processOutput) =>
+      if (processOutput.exitCode == 0) {
+        actorRef ! Event.UpdatesCommitted(projectName)
+      } else {
+        actorRef ! Event.FailedToCommitUpdates(projectName, FailReason.ExitCode(processOutput.exitCode))
+      }
+    case Failure(exception) =>
+      actorRef ! Event.FailedToCommitUpdates(projectName, FailReason.ExceptionThrown(exception))
+  }
+
+  def finishedPushAfterUpdate(projectName: String): Try[ProcessOutput] => Unit = {
     case Success(processOutput) =>
       if (processOutput.exitCode == 0) {
         actorRef ! Event.UpdatesPushed(projectName)

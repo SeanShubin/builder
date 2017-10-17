@@ -78,10 +78,24 @@ object Effect {
     }
   }
 
-  case class AddCommitPushUpdates(projectName: String) extends Effect {
+  case class AddAfterUpdate(projectName: String) extends Effect {
     override def applyEffect(dispatcher: Dispatcher, actorRef: ActorRef[Event])(implicit executionContext: ExecutionContext): Unit = {
       val handler = new DispatchResultHandler(actorRef)
-      dispatcher.addCommitPushUpdates(projectName).onComplete(handler.finishedAddCommitPushUpdates(projectName))
+      dispatcher.add(projectName).onComplete(handler.finishedAdd(projectName))
+    }
+  }
+
+  case class CommitAfterUpdate(projectName: String) extends Effect {
+    override def applyEffect(dispatcher: Dispatcher, actorRef: ActorRef[Event])(implicit executionContext: ExecutionContext): Unit = {
+      val handler = new DispatchResultHandler(actorRef)
+      dispatcher.commit(projectName).onComplete(handler.finishedCommit(projectName))
+    }
+  }
+
+  case class PushAfterUpdate(projectName: String) extends Effect {
+    override def applyEffect(dispatcher: Dispatcher, actorRef: ActorRef[Event])(implicit executionContext: ExecutionContext): Unit = {
+      val handler = new DispatchResultHandler(actorRef)
+      dispatcher.push(projectName).onComplete(handler.finishedPushAfterUpdate(projectName))
     }
   }
 

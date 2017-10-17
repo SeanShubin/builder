@@ -17,6 +17,10 @@ trait Dispatcher {
 
   def merge(projectName: String): Future[ProcessOutput]
 
+  def add(projectName: String): Future[ProcessOutput]
+
+  def commit(projectName: String): Future[ProcessOutput]
+
   def push(projectName: String): Future[ProcessOutput]
 
   def checkForPendingEdits(projectName: String): Future[ProcessOutput]
@@ -30,6 +34,4 @@ trait Dispatcher {
   def done(): Unit
 
   def upgradeDependencies(projectName: String): Future[SummaryReport]
-
-  def addCommitPushUpdates(projectName: String): Future[ProcessOutput]
 }

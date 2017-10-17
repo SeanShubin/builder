@@ -52,6 +52,14 @@ object Event {
 
   case class UpdatesPushed(projectName: String) extends Event
 
+  case class UpdatesCommitted(projectName: String) extends Event
+
+  case class UpdatesAdded(projectName: String) extends Event
+
+  case class FailedToAddUpdates(projectName: String, reason: FailReason) extends Event
+
+  case class FailedToCommitUpdates(projectName: String, reason: FailReason) extends Event
+
   case class FailedToPushUpdates(projectNames: String, reason: FailReason) extends Event
 
 }

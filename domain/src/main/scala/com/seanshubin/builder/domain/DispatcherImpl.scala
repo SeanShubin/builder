@@ -77,17 +77,12 @@ class DispatcherImpl(githubProjectFinder: ProjectFinder,
     }
   }
 
-  override def addCommitPushUpdates(projectName: String): Future[ProcessOutput] = {
-    val stream = Stream(
-      execProjectCommand(projectName, "git", "add", "--all"),
-      execProjectCommand(projectName, "git", "commit", "-m", "Automatically upgraded dependencies to latest"),
-      execProjectCommand(projectName, "git", "push")
-    )
-    execChainedCommands(stream)
+  override def add(projectName: String): Future[ProcessOutput] = {
+    execProjectCommand(projectName, "git", "add", "--all")
   }
 
-  private def execChainedCommands(stream: Stream[Future[ProcessOutput]]): Future[ProcessOutput] = {
-    ???
+  override def commit(projectName: String): Future[ProcessOutput] = {
+    execProjectCommand(projectName, "git", "commit", "-m", "Automatically upgraded maven dependencies to latest")
   }
 
   private def execProjectCommand(projectName: String, command: String*): Future[ProcessOutput] = {
