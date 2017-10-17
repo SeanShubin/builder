@@ -76,8 +76,15 @@ object Effect {
       val handler = new DispatchResultHandler(actorRef)
       dispatcher.upgradeDependencies(projectName).onComplete(handler.finishedUpgradingDependencies(projectName))
     }
-
   }
+
+  case class AddCommitPushUpdates(projectName: String) extends Effect {
+    override def applyEffect(dispatcher: Dispatcher, actorRef: ActorRef[Event])(implicit executionContext: ExecutionContext): Unit = {
+      val handler = new DispatchResultHandler(actorRef)
+      dispatcher.addCommitPushUpdates(projectName).onComplete(handler.finishedAddCommitPushUpdates(projectName))
+    }
+  }
+
   case class MissingFromGithub(project: String) extends Effect {
     override def applyEffect(dispatcher: Dispatcher, actorRef: ActorRef[Event])(implicit executionContext: ExecutionContext): Unit = {
       val handler = new DispatchResultHandler(actorRef)

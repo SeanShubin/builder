@@ -63,7 +63,7 @@ object State {
       case ProjectFetched(projectName) => update(projectName, ProjectState.Fetched, Effect.Merge(projectName))
       case ProjectMerged(projectName) => update(projectName, ProjectState.Merged, Effect.Push(projectName))
       case ProjectPushed(projectName) => update(projectName, ProjectState.Pushed, Effect.UpgradeDependencies(projectName))
-      case UpdatesWereApplied(projectName) => update(projectName, ProjectState.Upgraded, Effect.Build(projectName))
+      case UpdatesWereApplied(projectName) => update(projectName, ProjectState.Upgraded, Effect.AddCommitPushUpdates(projectName))
       case NoUpdatesWereNeeded(projectName) => update(projectName, ProjectState.Upgraded, Effect.Build(projectName))
       case HasPendingEdits(projectName) => update(projectName, ProjectState.HasPendingEdits)
       case FailedToClone(projectName, _) => update(projectName, ProjectState.FailedToClone)

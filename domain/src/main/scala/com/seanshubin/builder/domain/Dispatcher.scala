@@ -30,4 +30,6 @@ trait Dispatcher {
   def done(): Unit
 
   def upgradeDependencies(projectName: String): Future[SummaryReport]
+
+  def addCommitPushUpdates(projectName: String): Future[ProcessOutput]
 }
