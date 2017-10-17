@@ -132,4 +132,10 @@ object Effect {
     }
   }
 
+  case class LogFailure(action: String, projectName: String, failReason: FailReason) extends Effect {
+    override def applyEffect(dispatcher: Dispatcher, actorRef: ActorRef[Event])(implicit executionContext: ExecutionContext): Unit = {
+      dispatcher.logFailure(action, projectName, failReason)
+    }
+  }
+
 }

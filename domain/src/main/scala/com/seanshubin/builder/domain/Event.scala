@@ -48,7 +48,7 @@ object Event {
 
   case class NoUpdatesWereNeeded(projectName: String) extends Event
 
-  case class FailedToUpgradeDependencies(projectName: String) extends Event
+  case class FailedToUpgradeDependencies(projectName: String, reason: FailReason) extends Event
 
   case class UpdatesPushed(projectName: String) extends Event
 

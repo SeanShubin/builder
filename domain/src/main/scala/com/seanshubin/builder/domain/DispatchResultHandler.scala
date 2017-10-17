@@ -106,8 +106,8 @@ class DispatchResultHandler(actorRef: ActorRef[Event]) {
       } else {
         actorRef ! Event.NoUpdatesWereNeeded(projectName)
       }
-    case Failure(_) =>
-      actorRef ! Event.FailedToUpgradeDependencies(projectName)
+    case Failure(exception) =>
+      actorRef ! Event.FailedToUpgradeDependencies(projectName, FailReason.ExceptionThrown(exception))
   }
 
   def finishedAdd(projectName: String): Try[ProcessOutput] => Unit = {

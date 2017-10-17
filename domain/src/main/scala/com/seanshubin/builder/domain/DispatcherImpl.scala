@@ -85,6 +85,12 @@ class DispatcherImpl(githubProjectFinder: ProjectFinder,
     execProjectCommand(projectName, "git", "commit", "-m", "Automatically upgraded maven dependencies to latest")
   }
 
+
+  override def logFailure(command: String, projectName: String, failReason: FailReason): Unit = {
+    val logger = loggerFactory.createProjectCommand(projectName, command)
+    logger.unexpected(failReason)
+  }
+
   private def execProjectCommand(projectName: String, command: String*): Future[ProcessOutput] = {
     val directory = baseDirectory.resolve(projectName)
     val environment = Map[String, String]()

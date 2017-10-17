@@ -34,4 +34,6 @@ trait Dispatcher {
   def done(): Unit
 
   def upgradeDependencies(projectName: String): Future[SummaryReport]
+
+  def logFailure(action: String, projectName: String, failReason: FailReason): Unit
 }

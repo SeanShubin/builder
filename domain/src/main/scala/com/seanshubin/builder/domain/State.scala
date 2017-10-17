@@ -69,10 +69,11 @@ object State {
       case UpdatesPushed(projectName) => update(projectName, ProjectState.PushedUpgrade, Effect.Build(projectName))
       case NoUpdatesWereNeeded(projectName) => update(projectName, ProjectState.Upgraded, Effect.Build(projectName))
       case HasPendingEdits(projectName) => update(projectName, ProjectState.HasPendingEdits)
-      case FailedToClone(projectName, _) => update(projectName, ProjectState.FailedToClone)
-      case FailedToBuild(projectName, _) => update(projectName, ProjectState.FailedToBuild)
+      case FailedToClone(projectName, failReason) => update(projectName, ProjectState.FailedToClone, Effect.LogFailure("clone", projectName, failReason))
+      case FailedToBuild(projectName, failReason) => update(projectName, ProjectState.FailedToBuild, Effect.LogFailure("build", projectName, failReason))
       case ProjectBuilt(projectName) => update(projectName, ProjectState.BuildSuccess)
       case ProjectCloned(projectName) => update(projectName, ProjectState.CloneSuccess, Effect.Build(projectName))
+      case FailedToUpgradeDependencies(projectName, failReason) => update(projectName, ProjectState.FailedToUpdateDependencies, Effect.LogFailure("upgrade", projectName, failReason))
     }
 
     def update(project: String, newProjectState: ProjectState, newEffects: Effect*): (State, Seq[Effect]) = {

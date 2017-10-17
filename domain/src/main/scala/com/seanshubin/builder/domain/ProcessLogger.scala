@@ -8,4 +8,6 @@ trait ProcessLogger {
   def emitOutLine(line: String): Unit
 
   def emitErrLine(line: String): Unit
+
+  def unexpected(failReason: FailReason): Unit
 }

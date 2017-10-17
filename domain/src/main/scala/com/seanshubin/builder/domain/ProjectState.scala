@@ -38,6 +38,8 @@ object ProjectState {
 
   case object FailedToBuild extends OneOfTheFinishedStates
 
+  case object FailedToUpdateDependencies extends OneOfTheFinishedStates
+
   case object AddedUpgrade extends ProjectState
 
   case object CommittedUpgrade extends ProjectState

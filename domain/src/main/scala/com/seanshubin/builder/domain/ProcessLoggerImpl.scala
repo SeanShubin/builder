@@ -4,6 +4,7 @@ import java.io.PrintWriter
 import java.nio.file.{Path, StandardOpenOption}
 import java.time.Duration
 
+import com.seanshubin.builder.domain.FailReason.{ExceptionThrown, ExitCode}
 import com.seanshubin.builder.domain.ProcessLoggerImpl.ProcessOutputReport
 import com.seanshubin.devon.domain.DevonMarshallerWiring
 
@@ -16,6 +17,7 @@ class ProcessLoggerImpl(files: FilesContract,
   private val errPath = createPath("stream.err.txt")
   private val inputPath = createPath("process.input.txt")
   private val outputPath = createPath("process.output.txt")
+  private val unexpectedPath = createPath("unexpected.txt")
   files.createDirectories(directory)
 
   override def emitInput(input: ProcessInput): Unit = {
@@ -33,6 +35,15 @@ class ProcessLoggerImpl(files: FilesContract,
 
   override def emitErrLine(line: String): Unit = {
     emit(errPath, line)
+  }
+
+  override def unexpected(failReason: FailReason): Unit = {
+    failReason match {
+      case ExitCode(exitCode) => emit(unexpectedPath, s"exit code $exitCode")
+      case ExceptionThrown(exception) =>
+        val exceptionString = ExceptionUtil.toStringWithStackTrace(exception)
+        emit(unexpectedPath, exceptionString)
+    }
   }
 
   private def emitDevon[T: universe.TypeTag](path: Path, data: T): Unit = {
