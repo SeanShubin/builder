@@ -14,7 +14,7 @@ object ProjectState {
 
   case object InGithubNotLocal extends ProjectState
 
-  case object InLocalNotGithub extends ProjectState
+  case object InLocalNotGithub extends OneOfTheFinishedStates
 
   case object InLocalAndGithub extends ProjectState
 

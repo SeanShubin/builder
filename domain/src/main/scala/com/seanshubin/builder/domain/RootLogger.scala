@@ -2,14 +2,11 @@ package com.seanshubin.builder.domain
 
 import java.io.PrintWriter
 import java.nio.file.{Path, StandardOpenOption}
-import java.time.Instant
 
-class RootLogger(baseDirectory: Path,
-                 startTime: Instant,
+class RootLogger(directory: Path,
                  emitToView: String => Unit,
                  files: FilesContract,
                  system: SystemContract) extends (String => Unit) {
-  val directory = baseDirectory.resolve(startTime.toString)
   files.createDirectories(directory)
   val path = directory.resolve("root.txt")
 

@@ -21,26 +21,29 @@ trait DependencyInjection {
   val done: Promise[Unit] = Promise()
   val userName: String = "SeanShubin"
   val baseDirectory: Path = systemSpecific.githubDirectory
-  val logDirectory: Path = baseDirectory.resolve("builder/logs")
+  val clock: Clock = Clock.systemUTC()
+  val startTime: Instant = clock.instant()
+  val logDirectory: Path = baseDirectory.resolve("builder/logs").resolve(PathUtil.makeFileNameSafeForOperatingSystem(startTime.toString))
+  val pathToStoreState: Path = logDirectory.resolve("current-status.txt")
   val sender: Sender = new HttpSender
   val jsonMarshaller: JsonMarshaller = JacksonJsonMarshaller
   val emitToView: String => Unit = println
-  val clock: Clock = Clock.systemUTC()
-  val startTime: Instant = clock.instant()
-  val rootLogger: String => Unit = new RootLogger(logDirectory, startTime, emitToView, files, system)
-  val notifications: Notifications = new LineEmittingNotifications(rootLogger)
+  val rootLogger: String => Unit = new RootLogger(logDirectory, emitToView, files, system)
+  val charset: Charset = StandardCharsets.UTF_8
+  val statefulLogger: StatefulLogger = new StatefulLoggerImpl(pathToStoreState, files, charset)
+  val notifications: Notifications = new LineEmittingNotifications(rootLogger, statefulLogger)
   val createProcessBuilder: () => ProcessBuilderContract = ProcessBuilderDelegate.apply _
   val futureRunner: FutureRunner = new ExecutionContextFutureRunner(notifications.unhandledException(_))
-  val charset: Charset = StandardCharsets.UTF_8
   val processLauncher: ProcessLauncher = new ProcessLauncherImpl(
     createProcessBuilder,
+    systemSpecific,
     futureRunner,
     clock,
     charset,
     notifications.processLaunched)
   val notifySignal: Signal => Unit = notifications.signal
   val notifyEvent: Event => Unit = notifications.event
-  val loggerFactory = new ProcessLoggerFactoryImpl(files, logDirectory, startTime, rootLogger)
+  val loggerFactory = new ProcessLoggerFactoryImpl(files, logDirectory, rootLogger)
   val githubProjectFinder: ProjectFinder = new GithubProjectFinder(
     userName,
     sender,
@@ -52,8 +55,7 @@ trait DependencyInjection {
     loggerFactory)
   val dependencyUpgrader: DependencyUpgrader = new DependencyUpgraderImpl(
     systemSpecific.githubDirectory,
-    logDirectory,
-    startTime
+    logDirectory
   )
   val dispatcher: Dispatcher = new DispatcherImpl(
     githubProjectFinder,

@@ -74,6 +74,7 @@ object State {
       case ProjectBuilt(projectName) => update(projectName, ProjectState.BuildSuccess)
       case ProjectCloned(projectName) => update(projectName, ProjectState.CloneSuccess, Effect.Build(projectName))
       case FailedToUpgradeDependencies(projectName, failReason) => update(projectName, ProjectState.FailedToUpdateDependencies, Effect.LogFailure("upgrade", projectName, failReason))
+      case MissingFromGithub(projectName) => update(projectName, ProjectState.InLocalNotGithub)
     }
 
     def update(project: String, newProjectState: ProjectState, newEffects: Effect*): (State, Seq[Effect]) = {

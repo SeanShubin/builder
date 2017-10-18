@@ -9,7 +9,7 @@ class LocalProjectFinder(systemSpecific: SystemSpecific,
                           implicit executionContext: ExecutionContext) extends ProjectFinder {
   override def findProjects(): Future[Seq[String]] = {
     val logger = loggerFactory.createAction("find")
-    val command = systemSpecific.commandPrefix ++ systemSpecific.directoryListingCommand
+    val command = systemSpecific.directoryListingCommand
     val directory = systemSpecific.githubDirectory
     val environment = Map[String, String]()
     val input = ProcessInput(command, directory, environment)

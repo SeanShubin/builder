@@ -8,13 +8,15 @@ import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.{ExecutionContext, Future}
 
 class ProcessLauncherImpl(createProcessBuilder: () => ProcessBuilderContract,
+                          systemSpecific: SystemSpecific,
                           futureRunner: FutureRunner,
                           clock: Clock,
                           charset: Charset,
                           launched: ProcessInput => Unit)
                          (implicit executionContext: ExecutionContext) extends ProcessLauncher {
-  override def launch(input: ProcessInput,
+  override def launch(originalInput: ProcessInput,
                       logger: ProcessLogger): Future[ProcessOutput] = {
+    val input = originalInput.addCommandPrefix(systemSpecific.commandPrefix)
     logger.emitInput(input)
     launched(input)
     val processBuilder = createProcessBuilder()

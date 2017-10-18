@@ -5,7 +5,7 @@ import java.time.{Duration, Instant}
 import akka.typed.Signal
 import com.seanshubin.devon.domain.DevonMarshallerWiring
 
-class LineEmittingNotifications(emit: String => Unit) extends Notifications {
+class LineEmittingNotifications(emit: String => Unit, statefulLogger: StatefulLogger) extends Notifications {
   override def projectsFoundInGithub(names: Seq[String]): Unit = {
     names.map(x => s"project found in github: $x").foreach(emit)
   }
@@ -37,12 +37,17 @@ class LineEmittingNotifications(emit: String => Unit) extends Notifications {
   }
 
   override def statusUpdate(statusOfProjects: StatusOfProjects): Unit = {
-    val report = StatusReport.fromStatusOfProjects(statusOfProjects)
-    DevonMarshallerWiring.Default.valueToPretty(report).foreach(emit)
+    val reportOfUpdates = StatusReport.fromStatusOfProjects(statusOfProjects)
+    val reportOfSummary = statusOfProjects.byStateName
+    val updateLines = DevonMarshallerWiring.Default.valueToPretty(reportOfUpdates)
+    val summaryLines = DevonMarshallerWiring.Default.valueToPretty(reportOfSummary)
+    updateLines.foreach(emit)
+    statefulLogger.emitLines(updateLines ++ summaryLines)
   }
 
   override def statusSummary(statusOfProjects: StatusOfProjects): Unit = {
-    DevonMarshallerWiring.Default.valueToPretty(statusOfProjects.byStateName).foreach(emit)
+    val summaryLines = DevonMarshallerWiring.Default.valueToPretty(statusOfProjects.byStateName)
+    summaryLines.foreach(emit)
   }
 
   override def startAndEndTime(start: Instant, end: Instant): Unit = {
