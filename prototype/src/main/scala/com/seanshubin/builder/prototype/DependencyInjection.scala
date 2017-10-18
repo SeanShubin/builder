@@ -18,7 +18,7 @@ class DependencyInjection {
     dispatcher,
     notifications.signal _,
     notifications.event _)
-  val actorSystem: ActorSystem[Event] = ActorSystem("behavior", behavior)
+  val actorSystem: ActorSystem[Event] = ActorSystem(behavior, "behavior")
   val duration: Duration = Duration(5, TimeUnit.SECONDS)
   val runnable: Runnable = new Runner(actorSystem, done.future, duration)
 }

@@ -68,7 +68,7 @@ trait DependencyInjection {
     notifications.unsupportedEventFromState,
     done)
   val stateMachine: Behavior[Event] = new StateMachine(dispatcher, notifySignal, notifyEvent)
-  val actorSystem: ActorSystem[Event] = ActorSystem("coordinator", stateMachine)
+  val actorSystem: ActorSystem[Event] = ActorSystem(stateMachine, "coordinator")
   val eventBuilder = new EventBuilder(actorSystem)
   val duration = Duration(1, TimeUnit.HOURS)
   val cleaner: Cleaner = new CleanerImpl(actorSystem)
