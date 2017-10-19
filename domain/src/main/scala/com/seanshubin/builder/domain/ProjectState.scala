@@ -18,19 +18,19 @@ object ProjectState {
 
   case object InLocalAndGithub extends ProjectState
 
-  case object NoPendingEdits extends ProjectState
+  case object Fetching extends ProjectState
 
-  case object Fetched extends ProjectState
+  case object Merging extends ProjectState
 
-  case object Merged extends ProjectState
+  case object PushingAfterMerge extends ProjectState
 
-  case object Pushed extends ProjectState
+  case object Upgrading extends ProjectState
 
-  case object Upgraded extends ProjectState
+  case object Adding extends ProjectState
 
   case object HasPendingEdits extends OneOfTheFinishedStates
 
-  case object CloneSuccess extends ProjectState
+  case object BuildingAfterClone extends ProjectState
 
   case object BuildSuccess extends OneOfTheFinishedStates
 
@@ -40,10 +40,12 @@ object ProjectState {
 
   case object FailedToUpdateDependencies extends OneOfTheFinishedStates
 
-  case object AddedUpgrade extends ProjectState
+  case object Committing extends ProjectState
 
-  case object CommittedUpgrade extends ProjectState
+  case object PushingAfterUpgrade extends ProjectState
 
-  case object PushedUpgrade extends ProjectState
+  case object BuildingAfterUpgrade extends ProjectState
+
+  case object Building extends ProjectState
 
 }
