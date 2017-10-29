@@ -9,7 +9,7 @@ class DependencyUpgraderImpl(baseDirectory: Path,
                              baseLogDirectory: Path) extends DependencyUpgrader {
   override def upgradeDependencies(projectName: String): SummaryReport = {
     val path = baseDirectory.resolve(projectName)
-    val logDir = baseLogDirectory.resolve("up-to-date").resolve(projectName)
+    val logDir = baseLogDirectory.resolve("command").resolve(projectName).resolve("up-to-date")
     val upToDateCacheDir = baseLogDirectory.resolve("up-to-date-cache")
     val buggyJackson = GroupArtifactVersion(
       group = "com.fasterxml.jackson.module",
