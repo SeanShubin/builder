@@ -49,4 +49,7 @@ object ProjectState {
   case object BuildingAfterUpgrade extends ProjectState
 
   case object Building extends ProjectState
+
+  case object Ignored extends OneOfTheFinishedStates
+
 }

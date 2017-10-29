@@ -76,6 +76,7 @@ object State {
       case FailedToUpgradeDependencies(projectName, failReason) => update(projectName, ProjectState.FailedToUpdateDependencies, Effect.LogFailure("upgrade", projectName, failReason))
       case MissingFromGithub(projectName) => update(projectName, ProjectState.InLocalNotGithub)
       case FailedToMerge(projectName, failReason) => update(projectName, ProjectState.FailedToMerge, Effect.LogFailure("merge", projectName, failReason))
+      case Ignored(projectName) => update(projectName, ProjectState.Ignored)
     }
 
     def update(project: String, newProjectState: ProjectState, newEffects: Effect*): (State, Seq[Effect]) = {

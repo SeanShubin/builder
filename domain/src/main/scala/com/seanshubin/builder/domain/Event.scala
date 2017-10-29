@@ -62,4 +62,6 @@ object Event {
 
   case class FailedToPushUpdates(projectNames: String, reason: FailReason) extends Event
 
+  case class Ignored(projectNames: String) extends Event
+
 }

@@ -80,7 +80,11 @@ class DispatchResultHandler(actorRef: ActorRef[Event]) {
     case Success(processOutput) =>
       if (processOutput.exitCode == 0) {
         if (processOutput.outputLines.isEmpty) {
-          actorRef ! Event.NoPendingEdits(projectName)
+          if(ProjectOverrides.shouldBuild(projectName)){
+            actorRef ! Event.NoPendingEdits(projectName)
+          } else {
+            actorRef ! Event.Ignored(projectName)
+          }
         } else {
           actorRef ! Event.HasPendingEdits(projectName)
         }
@@ -108,6 +112,10 @@ class DispatchResultHandler(actorRef: ActorRef[Event]) {
       }
     case Failure(exception) =>
       actorRef ! Event.FailedToUpgradeDependencies(projectName, FailReason.ExceptionThrown(exception))
+  }
+
+  def skipUpgradingDependencies(projectName: String): Unit = {
+    actorRef ! Event.NoUpdatesWereNeeded(projectName)
   }
 
   def finishedAdd(projectName: String): Try[ProcessOutput] => Unit = {

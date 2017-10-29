@@ -74,7 +74,11 @@ object Effect {
   case class UpgradeDependencies(projectName: String) extends Effect {
     override def applyEffect(dispatcher: Dispatcher, actorRef: ActorRef[Event])(implicit executionContext: ExecutionContext): Unit = {
       val handler = new DispatchResultHandler(actorRef)
-      dispatcher.upgradeDependencies(projectName).onComplete(handler.finishedUpgradingDependencies(projectName))
+      if(ProjectOverrides.shouldUpgrade(projectName)){
+        dispatcher.upgradeDependencies(projectName).onComplete(handler.finishedUpgradingDependencies(projectName))
+      } else {
+        handler.skipUpgradingDependencies(projectName)
+      }
     }
   }
 
