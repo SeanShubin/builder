@@ -75,6 +75,7 @@ object State {
       case ProjectCloned(projectName) => update(projectName, ProjectState.BuildingAfterClone, Effect.Build(projectName))
       case FailedToUpgradeDependencies(projectName, failReason) => update(projectName, ProjectState.FailedToUpdateDependencies, Effect.LogFailure("upgrade", projectName, failReason))
       case MissingFromGithub(projectName) => update(projectName, ProjectState.InLocalNotGithub)
+      case FailedToMerge(projectName, failReason) => update(projectName, ProjectState.FailedToMerge, Effect.LogFailure("merge", projectName, failReason))
     }
 
     def update(project: String, newProjectState: ProjectState, newEffects: Effect*): (State, Seq[Effect]) = {
