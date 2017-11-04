@@ -30,9 +30,11 @@ object ProjectState {
 
   case object HasPendingEdits extends OneOfTheFinishedStates
 
-  case object BuildingAfterClone extends ProjectState
+  case object UpgradingAfterClone extends ProjectState
 
   case object BuildSuccess extends OneOfTheFinishedStates
+
+  case object UpgradeAndBuildSuccess extends OneOfTheFinishedStates
 
   case object FailedToClone extends OneOfTheFinishedStates
 

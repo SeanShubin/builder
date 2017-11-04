@@ -71,8 +71,13 @@ object State {
       case HasPendingEdits(projectName) => update(projectName, ProjectState.HasPendingEdits)
       case FailedToClone(projectName, failReason) => update(projectName, ProjectState.FailedToClone, Effect.LogFailure("clone", projectName, failReason))
       case FailedToBuild(projectName, failReason) => update(projectName, ProjectState.FailedToBuild, Effect.LogFailure("build", projectName, failReason))
-      case ProjectBuilt(projectName) => update(projectName, ProjectState.BuildSuccess)
-      case ProjectCloned(projectName) => update(projectName, ProjectState.BuildingAfterClone, Effect.Build(projectName))
+      case ProjectBuilt(projectName) =>
+        if (statusOfProjects.map(projectName) == ProjectState.BuildingAfterUpgrade) {
+          update(projectName, ProjectState.UpgradeAndBuildSuccess)
+        } else {
+          update(projectName, ProjectState.BuildSuccess)
+        }
+      case ProjectCloned(projectName) => update(projectName, ProjectState.UpgradingAfterClone, Effect.UpgradeDependencies(projectName))
       case FailedToUpgradeDependencies(projectName, failReason) => update(projectName, ProjectState.FailedToUpdateDependencies, Effect.LogFailure("upgrade", projectName, failReason))
       case MissingFromGithub(projectName) => update(projectName, ProjectState.InLocalNotGithub)
       case FailedToMerge(projectName, failReason) => update(projectName, ProjectState.FailedToMerge, Effect.LogFailure("merge", projectName, failReason))
