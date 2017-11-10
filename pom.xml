@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><project>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.seanshubin</groupId>
     <artifactId>builder</artifactId>
@@ -9,8 +10,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <modules>
-        <module>core</module>
-        <module>console</module>
         <module>domain</module>
         <module>process</module>
         <module>prototype</module>
@@ -18,9 +17,9 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.seanshubin.uptodate</groupId>
-                <artifactId>up-to-date-console</artifactId>
-                <version>0.9.0</version>
+                <groupId>org.scala-lang</groupId>
+                <artifactId>scala-library</artifactId>
+                <version>2.12.4</version>
             </dependency>
             <dependency>
                 <groupId>com.seanshubin.devon</groupId>
@@ -28,30 +27,14 @@
                 <version>1.1.1</version>
             </dependency>
             <dependency>
-                <groupId>com.seanshubin.devon</groupId>
-                <artifactId>devon-tokenizer</artifactId>
-                <version>1.1.1</version>
+                <groupId>com.seanshubin.uptodate</groupId>
+                <artifactId>up-to-date-console</artifactId>
+                <version>0.9.0</version>
             </dependency>
             <dependency>
-                <groupId>com.seanshubin.http.values</groupId>
-                <artifactId>http-values-client-google</artifactId>
-                <version>1.0.1</version>
-            </dependency>
-            <dependency>
-                <groupId>org.scala-lang</groupId>
-                <artifactId>scala-library</artifactId>
-                <version>2.12.4</version>
-            </dependency>
-            <dependency>
-                <groupId>com.typesafe.akka</groupId>
-                <artifactId>akka-typed_2.12</artifactId>
-                <version>2.5.6</version>
-            </dependency>
-            <dependency>
-                <groupId>org.easymock</groupId>
-                <artifactId>easymock</artifactId>
-                <version>3.5</version>
-                <scope>test</scope>
+                <groupId>com.fasterxml.jackson.module</groupId>
+                <artifactId>jackson-module-scala_2.12</artifactId>
+                <version>2.9.1</version>
             </dependency>
             <dependency>
                 <groupId>org.scalatest</groupId>
@@ -60,9 +43,14 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>com.fasterxml.jackson.module</groupId>
-                <artifactId>jackson-module-scala_2.12</artifactId>
-                <version>2.9.1</version>
+                <groupId>com.typesafe.akka</groupId>
+                <artifactId>akka-typed_2.12</artifactId>
+                <version>2.5.6</version>
+            </dependency>
+            <dependency>
+                <groupId>com.seanshubin.http.values</groupId>
+                <artifactId>http-values-client-google</artifactId>
+                <version>1.0.1</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
