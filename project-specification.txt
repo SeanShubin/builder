@@ -1,0 +1,46 @@
+{
+  prefix [com seanshubin]
+  name [builder]
+  description 'The builder Sean uses for his personal projects'
+  version 0.1-SNAPSHOT
+  developer {
+    name 'Sean Shubin'
+    githubName SeanShubin
+    mavenUserName SeanShubin
+    organization 'Sean Shubin'
+    url http://seanshubin.com/
+  }
+  dependencies {
+    devon {
+                    group com.seanshubin.devon
+                    artifact devon-domain
+     }
+      up-to-date {
+                    group com.seanshubin.uptodate
+                    artifact up-to-date-console
+       }
+       jackson {
+                    group com.fasterxml.jackson.module
+                    artifact jackson-module-scala_2.12
+         }
+         akka {
+                    group com.typesafe.akka
+                    artifact akka-typed_2.12
+           }
+           http-client {
+                    group com.seanshubin.http.values
+                    artifact http-values-client-google
+             }
+
+  }
+  modules {
+    domain    [devon up-to-date jackson akka http-client process]
+    process   []
+    prototype [akka]
+  }
+  primary domain
+  detangler [domain]
+  consoleEntryPoint {
+    domain com.seanshubin.builder.domain.EntryPoint
+  }
+}
