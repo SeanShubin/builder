@@ -54,4 +54,5 @@ object ProjectState {
 
   case object Ignored extends OneOfTheFinishedStates
 
+  case object FailedToGetPendingEdits extends OneOfTheFinishedStates
 }

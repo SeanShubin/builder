@@ -160,7 +160,8 @@ sealed trait State {
   }
 
   def unsupported(message: String): Nothing = {
-    throw new RuntimeException(s"unsupported event: $message")
+    val state = ClassUtil.getSimpleClassName(this)
+    throw new RuntimeException(s"from state $state, unsupported event: $message")
   }
 }
 
@@ -273,6 +274,11 @@ object State {
       } else {
         update(projectName, ProjectState.BuildSuccess)
       }
+    }
+
+
+    override def failedToGetPendingEdits(projectName: String, failReason: FailReason): (State, Seq[Effect]) = {
+      update(projectName, ProjectState.FailedToGetPendingEdits, Effect.LogFailure("get pending edits", projectName, failReason))
     }
 
     def update(project: String, newProjectState: ProjectState, newEffects: Effect*): (State, Seq[Effect]) = {
