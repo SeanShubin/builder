@@ -294,6 +294,10 @@ object State {
       val effects = Seq(statusUpdateEffect) ++ newEffects ++ doneEffects
       (Processing(newStatus), effects)
     }
+
+    override def failedToPush(projectName: String, failReason: FailReason): (State, Seq[Effect]) = {
+      update(projectName, ProjectState.FailedToPush, Effect.LogFailure("push", projectName, failReason))
+    }
   }
 
   def beginProcessing(localProjectNames: Seq[String], remoteProjectNames: Seq[String]): (State, Seq[Effect]) = {
