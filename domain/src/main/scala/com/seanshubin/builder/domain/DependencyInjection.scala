@@ -1,7 +1,7 @@
 package com.seanshubin.builder.domain
 
 import java.nio.charset.{Charset, StandardCharsets}
-import java.nio.file.Path
+import java.nio.file.{Path, Paths}
 import java.time.{Clock, Instant}
 import java.util.concurrent.TimeUnit
 
@@ -23,7 +23,7 @@ trait DependencyInjection {
   val baseDirectory: Path = systemSpecific.githubDirectory
   val clock: Clock = Clock.systemUTC()
   val startTime: Instant = clock.instant()
-  val logDirectory: Path = baseDirectory.resolve("builder/logs").resolve(PathUtil.makeFileNameSafeForOperatingSystem(startTime.toString))
+  val logDirectory: Path = Paths.get("logs").resolve(PathUtil.makeFileNameSafeForOperatingSystem(startTime.toString))
   val pathToStoreState: Path = logDirectory.resolve("current-status.txt")
   val sender: Sender = new HttpSender
   val jsonMarshaller: JsonMarshaller = JacksonJsonMarshaller

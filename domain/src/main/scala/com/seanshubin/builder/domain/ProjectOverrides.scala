@@ -3,7 +3,9 @@ package com.seanshubin.builder.domain
 object ProjectOverrides {
   private val projectsNotToBuild = Set(
     "learn-java-module",
-    "parser")
+    "parser",
+    "kotlin-tryme"
+  )
 
   private val projectsNotToUpgrade = Set("learn-spark")
 
